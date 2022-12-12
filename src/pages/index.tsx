@@ -1,3 +1,4 @@
+import { NumberInput } from 'components/NumberInput';
 import { TextInput } from 'components/TextInput';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
@@ -269,6 +270,24 @@ export default function Home() {
             }}
           >
             <TextInput
+              id="id"
+              label="ID"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+            <TextInput
+              id="name"
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextInput
+              id="description"
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <TextInput
               id="file-name"
               label="File name"
               suffix=".zip"
@@ -293,27 +312,6 @@ export default function Home() {
                 }}
               />
             </div>
-            <div>
-              Pack format: <pre style={{ display: 'inline' }}>{packFormat}</pre>
-            </div>
-            <TextInput
-              id="description"
-              label="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <TextInput
-              id="id"
-              label="ID"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
-            <TextInput
-              id="name"
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
           </div>
         </div>
 
@@ -363,20 +361,24 @@ export default function Home() {
                         updatePainting(id, { artist: e.target.value });
                       }}
                     />
-                    <TextInput
+                    <NumberInput
                       id={`painting-width-${id}`}
                       label="Width"
-                      value={painting.width.toString()}
+                      min={1}
+                      max={8}
+                      value={painting.width}
                       onChange={(e) => {
                         updatePainting(id, {
                           width: parseInt(e.target.value, 10),
                         });
                       }}
                     />
-                    <TextInput
+                    <NumberInput
                       id={`painting-height-${id}`}
                       label="Height"
-                      value={painting.height.toString()}
+                      min={1}
+                      max={8}
+                      value={painting.height}
                       onChange={(e) => {
                         updatePainting(id, {
                           height: parseInt(e.target.value, 10),
