@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100;200;300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+html {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: var(--text-font);
+  font-weight: var(--text-weight);
+  line-height: var(--font-lineheight-3);
+  color: var(--text-2);
+  background-color: var(--surface-1);
+  caret-color: var(--accent);
+  accent-color: var(--accent);
+
+  transition: all 0.15s var(--ease-out-3);
+}
+
+body,
+div#root,
+div.app,
+div#__next {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  scrollbar-gutter: stable both-edges;
+  min-block-size: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:where(:focus-visible) {
+  outline-color: var(--text-1);
+  outline-width: 2px;
+  outline-offset: 0;
+  outline-style: solid;
+}
+
+:where(:not(dialog)) {
+  margin: 0;
+}
+
+:where(:not(fieldset, progress, meter)) {
+  border-style: solid;
+  border-width: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  --text-font: var(--header-text-font);
+  --text-weight: var(--header-text-weight);
+  color: var(--text-1);
+  line-height: var(--font-lineheight-1);
+}
+
+h3,
+h4,
+h5,
+h6 {
+  max-inline-size: var(--size-header-3);
+}
+
+h1 {
+  font-size: var(--font-size-8);
+  max-inline-size: var(--size-header-1);
+}
+
+h2 {
+  font-size: var(--font-size-6);
+  max-inline-size: var(--size-header-2);
+}
+
+h3 {
+  font-size: var(--font-size-5);
+}
+
+h4 {
+  font-size: var(--font-size-4);
+}
+
+h5 {
+  font-size: var(--font-size-3);
+}
+
+h6 {
+  font-size: var(--font-size-2);
+}
+
+a,
+u,
+ins,
+abbr {
+  text-underline-offset: 1px;
+}
+
+a {
+  margin-block: calc(var(--size-1) * -1);
+  margin-inline: calc(var(--size-1) * -1);
+  padding-block: var(--size-1);
+  padding-inline: var(--size-1);
+
+  &:not(:hover, :focus-visible) {
+    text-decoration: inherit;
+  }
+
+  &[href] {
+    color: var(--link);
+
+    &:visited {
+      color: var(--link-visited);
+    }
+  }
+}
+
+a[href],
+area,
+button,
+label[for],
+select,
+summary,
+[tabindex]:not([tabindex*='-']) {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+abbr {
+  text-decoration-color: var(--blue-5);
+}
+
+mark {
+  border-radius: var(--radius-2);
+  padding-inline: var(--size-1);
+}
+
+p {
+  max-inline-size: var(--size-content-3);
+}
+
+p,
+ul,
+ol,
+dl {
+  font-size: var(--font-size-2);
+}
+
+blockquote {
+  display: grid;
+  gap: var(--size-3);
+  max-inline-size: var(--size-content-2);
+  padding-block: var(--size-3);
+  padding-inline: var(--size-4);
+  border-inline-start-width: var(--border-size-3);
+}
+
+details {
+  background: var(--surface-2);
+  border-radius: var(--radius-2);
+  padding-block: var(--size-2);
+  padding-inline: var(--size-3);
+}
+
+summary {
+  background: var(--surface-3);
+  border-radius: var(--radius-2);
+  margin: calc(var(--size-2) * -1) calc(var(--size-3) * -1);
+  padding: var(--size-2) var(--size-3);
+  font-weight: var(--font-weight-7);
+
+  details[open] > & {
+    border-end-end-radius: 0;
+    border-end-start-radius: 0;
+    margin-bottom: var(--size-2);
+  }
+}
+
+hr {
+  background-color: var(--surface-3);
+  height: var(--border-size-2);
+  margin-block: var(--size-4);
+}
+
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+}
+
+kbd {
+  white-space: nowrap;
+}
+
+kbd,
+var {
+  border-color: var(--surface-4);
+  border-radius: var(--radius-2);
+  border-width: var(--border-size-1);
+  padding: var(--size-1) var(--size-2);
+}
+
+code {
+  :not(pre) > & {
+    white-space: nowrap;
+    background: var(--surface-2);
+    border-radius: var(--radius-2);
+    padding: var(--size-1) var(--size-2);
+  }
+}
+
+pre {
+  max-inline-size: max-content;
+  min-inline-size: 0;
+  white-space: pre;
+}
+
+fieldset {
+  border: var(--border-size-1) solid var(--surface-4);
+  border-radius: var(--radius-2);
+}
+
+textarea,
+select,
+input:not(button, button[type], input[type='button'], input[type='submit'], input[type='reset']) {
+  background-color: var(--input);
+  border-radius: var(--radius-2);
+}
+
+input,
+textarea {
+  padding-block: var(--size-1);
+  padding-inline: var(--size-2);
+}
+
+input,
+button,
+textarea,
+select,
+input[type='file']::-webkit-file-upload-button {
+  color: inherit;
+  font: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  block-size: var(--size-3);
+  inline-size: var(--size-3);
+}
+
+input[type='file'] {
+  align-self: flex-start;
+  border: var(--border-size-1) solid var(--surface-2);
+  border-radius: var(--radius-2);
+  box-shadow: var(--inner-shadow-4);
+  color: var(--text-2);
+  cursor: auto;
+  max-inline-size: 100%;
+  padding: 0;
+}
