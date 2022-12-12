@@ -1,3 +1,4 @@
+import { TextInput } from 'components/TextInput';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
@@ -17,6 +18,7 @@ import {
   Paintings,
   paintingsAtom,
 } from 'utils/store';
+import styles from './index.module.scss';
 
 const blobToBase64 = (blob: Blob): Promise<string | undefined> => {
   const reader = new FileReader();
@@ -227,153 +229,150 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '1rem',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: 'var(--size-8)',
-        }}
-      >
-        <div
-          {...getRootProps()}
-          style={{
-            height: '120px',
-            width: '300px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            border: 'var(--border-size-1) solid var(--text-2)',
-            borderRadius: 'var(--radius-3)',
-            cursor: 'pointer',
-            padding: 'var(--size-3) var(--size-4)',
-          }}
-        >
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Drop the files here ...</p>
-          ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
-          )}
-        </div>
+      <main className={styles['page-wrapper']}>
+        <div className={styles['page-column']}>
+          <div {...getRootProps()} className={styles['drop-target']}>
+            <input {...getInputProps()} />
+            {isDragActive ? (
+              <p>Drop the files here ...</p>
+            ) : (
+              <p>Drag 'n' drop some files here, or click to select files</p>
+            )}
+          </div>
 
-        {!fileName ? null : (
-          <>
-            <input type="button" value="Download" onClick={download} />
+          <button
+            type="button"
+            onClick={download}
+            className={styles['download-button']}
+          >
+            Download
+          </button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.25rem',
+            }}
+          >
+            <TextInput
+              id="file-name"
+              label="File name"
+              suffix=".zip"
+              value={fileName}
+              onChange={(e) => setFileName(e.target.value)}
+            />
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'column',
+                flexDirection: 'row',
                 gap: '0.25rem',
               }}
             >
-              <div>
-                <label htmlFor="file-name">File name:</label>
-                <div>
-                  <input
-                    id="file-name"
-                    type="text"
-                    value={fileName}
-                    onChange={(e) => setFileName(e.target.value)}
-                  />
-                  <span>.zip</span>
-                </div>
-              </div>
-              <div
+              <span>Icon:</span>
+              <img
+                src={icon}
                 style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: '0.25rem',
+                  imageRendering: 'pixelated',
+                  height: '1.5rem',
+                  width: 'auto',
+                  objectFit: 'contain',
                 }}
-              >
-                <span>Icon:</span>
-                <img
-                  src={icon}
-                  style={{
-                    imageRendering: 'pixelated',
-                    height: '1.5rem',
-                    width: 'auto',
-                    objectFit: 'contain',
-                  }}
-                />
-              </div>
-              <div>
-                Pack format:{' '}
-                <pre style={{ display: 'inline' }}>{packFormat}</pre>
-              </div>
-              <div>
-                Description:{' '}
-                <pre style={{ display: 'inline' }}>'{description}'</pre>
-              </div>
-              <div>
-                ID: <pre style={{ display: 'inline' }}>{id}</pre>
-              </div>
-              <div>
-                Name: <pre style={{ display: 'inline' }}>'{name}'</pre>
-              </div>
-              <div>Paintings:</div>
+              />
+            </div>
+            <div>
+              Pack format: <pre style={{ display: 'inline' }}>{packFormat}</pre>
+            </div>
+            <TextInput
+              id="description"
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <TextInput
+              id="id"
+              label="ID"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+            <TextInput
+              id="name"
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+        </div>
 
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  paddingInlineStart: '2rem',
-                  gap: '0.25rem',
-                }}
-              >
-                {Object.entries(paintings).map(([id, painting]) => (
+        <div className={styles['page-column']}>
+          <div style={{ fontSize: 'var(--font-size-5)' }}>Paintings:</div>
+
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              paddingInlineStart: '2rem',
+              gap: '0.25rem',
+              border: 'var(--border-size-1) solid var(--surface-3)',
+              borderRadius: 'var(--radius-3)',
+              padding: 'var(--size-3) var(--size-4)',
+            }}
+          >
+            {Object.keys(paintings).length === 0 ? (
+              <div>No paintings</div>
+            ) : null}
+            {Object.entries(paintings).map(([id, painting], index) => (
+              <>
+                <div
+                  key={id}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '1.5rem',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                  }}
+                >
                   <div
-                    key={id}
                     style={{
                       display: 'flex',
-                      flexDirection: 'row',
-                      gap: '1.5rem',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
+                      flexDirection: 'column',
+                      justifyContent: 'center',
                     }}
                   >
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <div>ID: {id}</div>
-                      <div>Name: {painting.name}</div>
-                      <div>Artist: {painting.artist}</div>
-                      <div>Width: {painting.width}</div>
-                      <div>Height: {painting.height}</div>
-                    </div>
-                    <div
-                      style={{
-                        width: '16rem',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <img
-                        src={paintingImages[id]}
-                        style={{
-                          imageRendering: 'pixelated',
-                          width: `calc(100% * ${painting.width / 8})`,
-                          maxWidth: '100%',
-                          height: 'auto',
-                          objectFit: 'contain',
-                        }}
-                      />
-                    </div>
+                    <div>ID: {id}</div>
+                    <div>Name: {painting.name}</div>
+                    <div>Artist: {painting.artist}</div>
+                    <div>Width: {painting.width}</div>
+                    <div>Height: {painting.height}</div>
                   </div>
-                ))}
-              </div>
-            </div>
-          </>
-        )}
+                  <div
+                    style={{
+                      width: '16rem',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img
+                      src={paintingImages[id]}
+                      style={{
+                        imageRendering: 'pixelated',
+                        width: `calc(100% * ${painting.width / 8})`,
+                        maxWidth: '100%',
+                        height: 'auto',
+                        objectFit: 'contain',
+                      }}
+                    />
+                  </div>
+                </div>
+                {index === Object.entries(paintings).length - 1 ? null : (
+                  <hr style={{ height: 'var(--border-size-1)' }} />
+                )}
+              </>
+            ))}
+          </div>
+        </div>
       </main>
     </>
   );

@@ -1,0 +1,76 @@
+.page-wrapper {
+  display: grid;
+  height: 100%;
+  gap: 2rem;
+  grid-template-columns: repeat(2, 1fr);
+  padding: var(--size-8) var(--size-4);
+  width: min(1600px, 80%);
+  min-width: min(36em, 100%);
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.page-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+  justify-content: center;
+  padding: var(--size-8);
+}
+
+.drop-target {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 120px;
+  width: 300px;
+  border: var(--border-size-1) dashed var(--accent);
+  border-radius: var(--radius-3);
+  cursor: pointer;
+  padding: var(--size-3) var(--size-4);
+}
+
+.download-button {
+  position: relative;
+  display: inline-block;
+  background-color: var(--accent);
+  padding: var(--size-2) var(--size-3);
+  border-radius: var(--radius-2);
+  cursor: pointer;
+  transition: all 0.05s var(--ease-in-out-2);
+  transition-property: box-shadow, transform;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: var(--radius-2);
+    background: var(--smoke);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.075s var(--ease-in-out-2);
+  }
+
+  &:hover {
+    box-shadow: var(--shadow-3);
+    transform: scale(1.05);
+
+    &::before {
+      opacity: 0.1;
+    }
+  }
+
+  &:active {
+    box-shadow: var(--shadow-2);
+    transform: scale(0.97);
+
+    &::before {
+      opacity: 0;
+    }
+  }
+}
