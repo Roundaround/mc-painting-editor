@@ -3,7 +3,7 @@ import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
-import { useCallback, useMemo } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
@@ -15,6 +15,7 @@ import {
   nameAtom,
   packFormatAtom,
   packSchema,
+  Painting,
   Paintings,
   paintingsAtom,
 } from 'utils/store';
@@ -52,7 +53,7 @@ export default function Home() {
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
 
-  const onFileDrop = useCallback(
+  const onZipFileDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) {
         return;
@@ -152,6 +153,27 @@ export default function Home() {
     ]
   );
 
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: onZipFileDrop,
+    accept: {
+      'application/zip': ['.zip'],
+    },
+    maxFiles: 1,
+  });
+
+  const updatePainting = useCallback(
+    (id: string, painting: Partial<Painting>) => {
+      setPaintings((paintings) => ({
+        ...paintings,
+        [id]: {
+          ...paintings[id],
+          ...painting,
+        },
+      }));
+    },
+    [paintings]
+  );
+
   const paintingImages = useMemo(() => {
     const images: Record<string, string> = {};
     for (const [key, painting] of Object.entries(paintings)) {
@@ -161,14 +183,6 @@ export default function Home() {
     }
     return images;
   }, [paintings]);
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    onDrop: onFileDrop,
-    accept: {
-      'application/zip': ['.zip'],
-    },
-    maxFiles: 1,
-  });
 
   const download = useCallback(() => {
     const zip = new JSZip();
@@ -304,26 +318,17 @@ export default function Home() {
         </div>
 
         <div className={styles['page-column']}>
-          <div style={{ fontSize: 'var(--font-size-5)' }}>Paintings:</div>
+          <div style={{ fontSize: 'var(--font-size-5)' }}>
+            Paintings ({Object.keys(paintings).length})
+          </div>
 
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              paddingInlineStart: '2rem',
-              gap: '0.25rem',
-              border: 'var(--border-size-1) solid var(--surface-3)',
-              borderRadius: 'var(--radius-3)',
-              padding: 'var(--size-3) var(--size-4)',
-            }}
-          >
+          <div className={styles['painting-list']}>
             {Object.keys(paintings).length === 0 ? (
               <div>No paintings</div>
             ) : null}
             {Object.entries(paintings).map(([id, painting], index) => (
-              <>
+              <Fragment key={id}>
                 <div
-                  key={id}
                   style={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -339,11 +344,45 @@ export default function Home() {
                       justifyContent: 'center',
                     }}
                   >
-                    <div>ID: {id}</div>
-                    <div>Name: {painting.name}</div>
-                    <div>Artist: {painting.artist}</div>
-                    <div>Width: {painting.width}</div>
-                    <div>Height: {painting.height}</div>
+                    <div>
+                      ID: <pre style={{ display: 'inline' }}>{id}</pre>
+                    </div>
+                    <TextInput
+                      id={`painting-name-${id}`}
+                      label="Name"
+                      value={painting.name || ''}
+                      onChange={(e) => {
+                        updatePainting(id, { name: e.target.value });
+                      }}
+                    />
+                    <TextInput
+                      id={`painting-artist-${id}`}
+                      label="Artist"
+                      value={painting.artist || ''}
+                      onChange={(e) => {
+                        updatePainting(id, { artist: e.target.value });
+                      }}
+                    />
+                    <TextInput
+                      id={`painting-width-${id}`}
+                      label="Width"
+                      value={painting.width.toString()}
+                      onChange={(e) => {
+                        updatePainting(id, {
+                          width: parseInt(e.target.value, 10),
+                        });
+                      }}
+                    />
+                    <TextInput
+                      id={`painting-height-${id}`}
+                      label="Height"
+                      value={painting.height.toString()}
+                      onChange={(e) => {
+                        updatePainting(id, {
+                          height: parseInt(e.target.value, 10),
+                        });
+                      }}
+                    />
                   </div>
                   <div
                     style={{
@@ -358,18 +397,18 @@ export default function Home() {
                       src={paintingImages[id]}
                       style={{
                         imageRendering: 'pixelated',
-                        width: `calc(100% * ${painting.width / 8})`,
+                        width: `calc(16rem * ${painting.width / 8})`,
                         maxWidth: '100%',
-                        height: 'auto',
-                        objectFit: 'contain',
+                        height: `calc(16rem * ${painting.height / 8})`,
+                        maxHeight: '100%',
                       }}
                     />
                   </div>
                 </div>
                 {index === Object.entries(paintings).length - 1 ? null : (
-                  <hr style={{ height: 'var(--border-size-1)' }} />
+                  <hr style={{ height: 'var(--border-size-1)', margin: '0' }} />
                 )}
-              </>
+              </Fragment>
             ))}
           </div>
         </div>

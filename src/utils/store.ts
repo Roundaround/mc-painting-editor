@@ -32,8 +32,10 @@ export const mcmetaSchema = z.object({
     })),
 });
 
+export type Painting = z.output<typeof paintingSchema> & { data?: string };
+
 export interface Paintings {
-  [key: string]: z.output<typeof paintingSchema> & { data?: string };
+  [key: string]: Painting;
 }
 
 export const fileNameAtom = atom('');

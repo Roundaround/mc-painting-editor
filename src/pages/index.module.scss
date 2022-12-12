@@ -74,3 +74,15 @@
     }
   }
 }
+
+.painting-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-4);
+  width: 100%;
+  padding: var(--size-3) var(--size-4);
+  border: var(--border-size-1) solid var(--surface-3);
+  box-shadow: var(--shadow-2);
+  max-height: 780px;
+  overflow-y: auto;
+}
