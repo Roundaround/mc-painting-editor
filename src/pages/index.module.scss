@@ -5,7 +5,7 @@
   grid-template-columns: repeat(2, 1fr);
   padding: var(--size-8) var(--size-4);
   width: min(1600px, 80%);
-  min-width: min(36em, 100%);
+  min-width: min(32em, 100%);
   max-width: 100%;
   margin-inline: auto;
 }
@@ -76,6 +76,7 @@
 }
 
 .icon-input {
+  position: relative;
   height: 8rem;
   width: 8rem;
   border: var(--border-size-1) solid var(--surface-3);
@@ -83,12 +84,41 @@
   background-size: 100% 100%;
   box-sizing: content-box;
   margin: calc(-1 * var(--border-size-1));
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    user-select: none;
+    background-color: hsl(var(--gray-1-hsl) / 0.4);
+    background-image: url('/edit.svg');
+    background-position: center center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 0.075s var(--ease-in-out-2);
+  }
+
+  &:hover {
+    &::before {
+      opacity: 1;
+    }
+  }
 }
 
 .icon-input--show-transparency {
   border: none;
   background-image: url('/transparency.png');
   margin: 0;
+}
+
+.icon-input--empty {
+  &::before {
+    opacity: 0.5;
+  }
 }
 
 .painting-list {

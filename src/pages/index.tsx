@@ -343,37 +343,17 @@ export default function Home() {
             >
               <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
               <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                }}
-              >
-                <label
-                  htmlFor="icon-transparency"
-                  style={{ fontSize: 'var(--font-size-0)' }}
-                >
-                  Show patterned background
-                </label>
-                <input
-                  type="checkbox"
-                  id="icon-transparency"
-                  checked={showIconBackground}
-                  onChange={(e) => setShowIconBackground(e.target.checked)}
-                />
-              </div>
-              <div
                 className={[
                   styles['icon-input'],
                   showIconBackground
                     ? styles['icon-input--show-transparency']
                     : '',
+                  !icon ? styles['icon-input--empty'] : '',
                 ].join(' ')}
                 {...getRootPropsForIcon()}
               >
                 <input {...getInputPropsForIcon()} />
-                {icon === undefined || icon === '' ? null : (
+                {!icon ? null : (
                   <img
                     src={icon}
                     style={{
@@ -385,6 +365,29 @@ export default function Home() {
                   />
                 )}
               </div>
+              {!icon ? null : (
+                <div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  }}
+                >
+                  <label
+                    htmlFor="icon-transparency"
+                    style={{ fontSize: 'var(--font-size-0)' }}
+                  >
+                    Show patterned background
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="icon-transparency"
+                    checked={showIconBackground}
+                    onChange={(e) => setShowIconBackground(e.target.checked)}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>
