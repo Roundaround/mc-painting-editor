@@ -1,4 +1,5 @@
 import { useDropzone } from 'react-dropzone';
+import styles from './PaintingGrid.module.scss';
 
 export interface PaintingGridProps {
   maxHeight: number;
@@ -23,15 +24,10 @@ export const PaintingGrid = (props: PaintingGridProps) => {
 
   return (
     <div
+      className={styles['wrapper']}
       style={{
-        position: 'relative',
         height: `${maxHeight * 2}rem`,
         width: `${maxWidth * 2}rem`,
-        backgroundImage: 'url("/grid-square.png")',
-        backgroundSize: '2rem 2rem',
-        backgroundRepeat: 'repeat',
-        border: `${2 / 16}rem solid var(--smoke)`,
-        boxSizing: 'content-box',
       }}
       {...getRootProps()}
     >
