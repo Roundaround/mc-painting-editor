@@ -128,10 +128,10 @@ export default function Home() {
             zipEntry.name.lastIndexOf('/') + 1,
             zipEntry.name.lastIndexOf('.')
           );
-          // loadedPaintings[key] = {
-          //   ...(loadedPaintings[key] || getDefaultPainting(key)),
-          //   data,
-          // };
+          loadedPaintings[key] = {
+            ...(loadedPaintings[key] || getDefaultPainting(key)),
+            data,
+          };
         }
       }
 
