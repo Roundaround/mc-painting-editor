@@ -75,6 +75,22 @@
   }
 }
 
+.icon-input {
+  height: 8rem;
+  width: 8rem;
+  border: var(--border-size-1) solid var(--surface-3);
+  image-rendering: pixelated;
+  background-size: 100% 100%;
+  box-sizing: content-box;
+  margin: calc(-1 * var(--border-size-1));
+}
+
+.icon-input--show-transparency {
+  border: none;
+  background-image: url('/transparency.png');
+  margin: 0;
+}
+
 .painting-list {
   display: flex;
   flex-direction: column;
@@ -83,6 +99,6 @@
   padding: var(--size-3) var(--size-4);
   border: var(--border-size-1) solid var(--surface-3);
   box-shadow: var(--shadow-2);
-  max-height: 780px;
+  max-height: calc(min(780px, 100vh) - 2 * var(--size-8));
   overflow-y: auto;
 }

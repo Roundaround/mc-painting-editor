@@ -89,7 +89,7 @@ export default function Home() {
 
       for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
         if (zipEntry.dir) {
-          return;
+          continue;
         }
 
         if (zipEntry.name === 'pack.mcmeta') {
@@ -354,7 +354,7 @@ export default function Home() {
                   htmlFor="icon-transparency"
                   style={{ fontSize: 'var(--font-size-0)' }}
                 >
-                  Show transparency background
+                  Show patterned background
                 </label>
                 <input
                   type="checkbox"
@@ -364,22 +364,12 @@ export default function Home() {
                 />
               </div>
               <div
-                style={{
-                  height: '8rem',
-                  width: '8rem',
-                  border: showIconBackground
-                    ? undefined
-                    : 'var(--border-size-1) solid var(--surface-3)',
-                  backgroundImage: showIconBackground
-                    ? 'url("/transparency.png")'
-                    : undefined,
-                  imageRendering: 'pixelated',
-                  backgroundSize: '100%',
-                  boxSizing: 'content-box',
-                  margin: showIconBackground
-                    ? undefined
-                    : 'calc(-1 * var(--border-size-1))',
-                }}
+                className={[
+                  styles['icon-input'],
+                  showIconBackground
+                    ? styles['icon-input--show-transparency']
+                    : '',
+                ].join(' ')}
                 {...getRootPropsForIcon()}
               >
                 <input {...getInputPropsForIcon()} />

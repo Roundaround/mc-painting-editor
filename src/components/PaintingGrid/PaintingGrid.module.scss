@@ -1,5 +1,7 @@
 .wrapper {
   position: relative;
+  height: var(--painting-grid-height);
+  width: var(--painting-grid-width);
   background-image: url('/grid-square.png');
   background-size: 2rem 2rem;
   background-repeat: repeat;
@@ -17,7 +19,7 @@
     width: 100%;
     pointer-events: none;
     user-select: none;
-    background-color: hsl(var(--gray-1-hsl) / 0.35);
+    background-color: hsl(var(--gray-1-hsl) / 0.4);
     background-image: url('/edit.svg');
     background-position: center center;
     background-repeat: no-repeat;

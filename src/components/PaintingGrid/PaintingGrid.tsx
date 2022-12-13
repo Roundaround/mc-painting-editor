@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { useDropzone } from 'react-dropzone';
 import styles from './PaintingGrid.module.scss';
 
@@ -26,9 +27,9 @@ export const PaintingGrid = (props: PaintingGridProps) => {
     <div
       className={styles['wrapper']}
       style={{
-        height: `${maxHeight * 2}rem`,
-        width: `${maxWidth * 2}rem`,
-      }}
+        '--painting-grid-height': `${maxHeight * 2}rem`,
+        '--painting-grid-width': `${maxWidth * 2}rem`,
+      } as CSSProperties}
       {...getRootProps()}
     >
       <input {...getInputProps()} />
