@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
-import { Fragment, useCallback, useMemo } from 'react';
+import { Fragment, useCallback, useMemo, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
@@ -53,6 +53,7 @@ export default function Home() {
   const [id, setId] = useAtom(idAtom);
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
+  const [showIconBackground, setShowIconBackground] = useState(true);
 
   const onZipFileDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -154,10 +155,40 @@ export default function Home() {
     ]
   );
 
-  const { getRootProps, getInputProps } = useDropzone({
+  const onIconFileDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) {
+        return;
+      }
+
+      const file = acceptedFiles[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        setIcon(reader.result as string);
+      };
+    },
+    [setIcon]
+  );
+
+  const {
+    getRootProps: getRootPropsForZip,
+    getInputProps: getInputPropsForZip,
+  } = useDropzone({
     onDrop: onZipFileDrop,
     accept: {
       'application/zip': ['.zip'],
+    },
+    maxFiles: 1,
+  });
+
+  const {
+    getRootProps: getRootPropsForIcon,
+    getInputProps: getInputPropsForIcon,
+  } = useDropzone({
+    onDrop: onIconFileDrop,
+    accept: {
+      'image/png': ['.png'],
     },
     maxFiles: 1,
   });
@@ -204,7 +235,16 @@ export default function Home() {
         id,
         name,
         paintings: Object.values(paintings).map(
-          ({ data, ...painting }) => painting
+          ({ data, name, artist, ...painting }) => {
+            const result: Painting = painting;
+            if (name) {
+              result.name = name;
+            }
+            if (artist) {
+              result.artist = artist;
+            }
+            return result;
+          }
         ),
       })
     );
@@ -246,11 +286,11 @@ export default function Home() {
 
       <main className={styles['page-wrapper']}>
         <div className={styles['page-column']}>
-          <div {...getRootProps()} className={styles['drop-target']}>
-            <input {...getInputProps()} />
-            <p>
+          <div {...getRootPropsForZip()} className={styles['drop-target']}>
+            <input {...getInputPropsForZip()} />
+            <div>
               Drag or click to upload an existing pack in <pre>.zip</pre> format
-            </p>
+            </div>
           </div>
 
           <button
@@ -295,20 +335,66 @@ export default function Home() {
             <div
               style={{
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
                 gap: '0.25rem',
               }}
             >
-              <span>Icon:</span>
-              <img
-                src={icon}
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
                 style={{
-                  imageRendering: 'pixelated',
-                  height: '1.5rem',
-                  width: 'auto',
-                  objectFit: 'contain',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: '0.25rem',
                 }}
-              />
+              >
+                <label
+                  htmlFor="icon-transparency"
+                  style={{ fontSize: 'var(--font-size-0)' }}
+                >
+                  Show transparency background
+                </label>
+                <input
+                  type="checkbox"
+                  id="icon-transparency"
+                  checked={showIconBackground}
+                  onChange={(e) => setShowIconBackground(e.target.checked)}
+                />
+              </div>
+              <div
+                style={{
+                  height: '8rem',
+                  width: '8rem',
+                  border: showIconBackground
+                    ? undefined
+                    : 'var(--border-size-1) solid var(--surface-3)',
+                  backgroundImage: showIconBackground
+                    ? 'url("/transparency.png")'
+                    : undefined,
+                  imageRendering: 'pixelated',
+                  backgroundSize: '4rem',
+                  backgroundRepeat: 'repeat',
+                  boxSizing: 'content-box',
+                  margin: showIconBackground
+                    ? undefined
+                    : 'calc(-1 * var(--border-size-1))',
+                }}
+                {...getRootPropsForIcon()}
+              >
+                <input {...getInputPropsForIcon()} />
+                {icon === undefined || icon === '' ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
