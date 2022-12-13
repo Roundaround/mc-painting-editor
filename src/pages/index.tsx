@@ -1,6 +1,7 @@
 import { NumberInput } from 'components/NumberInput';
 import { PaintingGrid } from 'components/PaintingGrid';
 import { TextInput } from 'components/TextInput';
+import { Tooltip, TooltipDirection } from 'components/Tooltip';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
@@ -294,13 +295,22 @@ export default function Home() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={download}
-            className={styles['download-button']}
+          <Tooltip
+            content={
+              <span style={{ whiteSpace: 'nowrap' }}>
+                Download the currently configured resource pack
+              </span>
+            }
+            direction={TooltipDirection.RIGHT}
           >
-            Download
-          </button>
+            <button
+              type="button"
+              onClick={download}
+              className={styles['download-button']}
+            >
+              Download
+            </button>
+          </Tooltip>
           <div
             style={{
               display: 'flex',
