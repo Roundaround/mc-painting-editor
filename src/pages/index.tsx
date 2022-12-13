@@ -374,8 +374,7 @@ export default function Home() {
                     ? 'url("/transparency.png")'
                     : undefined,
                   imageRendering: 'pixelated',
-                  backgroundSize: '4rem',
-                  backgroundRepeat: 'repeat',
+                  backgroundSize: '100%',
                   boxSizing: 'content-box',
                   margin: showIconBackground
                     ? undefined
