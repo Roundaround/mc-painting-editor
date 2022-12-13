@@ -10,7 +10,6 @@ import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
   fileNameAtom,
-  getDefaultPainting,
   iconAtom,
   idAtom,
   mcmetaSchema,
@@ -402,6 +401,16 @@ export default function Home() {
                     imageData={paintingImages[id]}
                     height={painting.height}
                     width={painting.width}
+                    onUpload={(acceptedFiles) => {
+                      const reader = new FileReader();
+                      reader.onload = () => {
+                        const data = reader.result;
+                        if (typeof data === 'string') {
+                          updatePainting(id, { data });
+                        }
+                      };
+                      reader.readAsDataURL(acceptedFiles[0]);
+                    }}
                   />
                 </div>
                 {index === Object.entries(paintings).length - 1 ? null : (

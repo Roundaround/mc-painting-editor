@@ -1,13 +1,23 @@
+import { useDropzone } from 'react-dropzone';
+
 export interface PaintingGridProps {
   maxHeight: number;
   maxWidth: number;
   imageData: string;
   height: number;
   width: number;
+  onUpload: (acceptedFiles: File[]) => void;
 }
 
 export const PaintingGrid = (props: PaintingGridProps) => {
-  const { maxHeight, maxWidth, imageData, height, width } = props;
+  const { maxHeight, maxWidth, imageData, height, width, onUpload } = props;
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: onUpload,
+    accept: {
+      'image/png': ['.png'],
+    },
+    maxFiles: 1,
+  });
 
   return (
     <div
@@ -19,7 +29,9 @@ export const PaintingGrid = (props: PaintingGridProps) => {
         backgroundSize: '2rem 2rem',
         backgroundRepeat: 'repeat',
       }}
+      {...getRootProps()}
     >
+      <input {...getInputProps()} />
       <img
         src={imageData}
         style={{
