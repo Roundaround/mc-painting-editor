@@ -1,16 +1,16 @@
-import { NumberInput } from 'components/NumberInput';
-import { PaintingGrid } from 'components/PaintingGrid';
+import { PaintingList } from 'components/PaintingList';
 import { TextInput } from 'components/TextInput';
 import { Tooltip, TooltipDirection } from 'components/Tooltip';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
-import { Fragment, useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
   getDefaultPainting,
+  getPaintingImage,
   iconAtom,
   idAtom,
   mcmetaSchema,
@@ -19,7 +19,7 @@ import {
   packSchema,
   Painting,
   Paintings,
-  paintingsAtom,
+  paintingsAtom
 } from 'utils/store';
 import styles from './index.module.scss';
 
@@ -31,19 +31,6 @@ const blobToBase64 = (blob: Blob): Promise<string | undefined> => {
       resolve((reader.result as string | null) || undefined);
     };
   });
-};
-
-const generateBlankImage = (width: number, height: number) => {
-  const canvas = document.createElement('canvas');
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) {
-    throw new Error('Could not get canvas context');
-  }
-  ctx.fillStyle = 'rgb(42, 93, 183)';
-  ctx.fillRect(0, 0, width, height);
-  return canvas.toDataURL();
 };
 
 export default function Home() {
@@ -187,33 +174,10 @@ export default function Home() {
     onDrop: onIconFileDrop,
     noDragEventsBubbling: true,
     accept: {
-      'image/png': ['.png'],
+      'image/png': [],
     },
     maxFiles: 1,
   });
-
-  const updatePainting = useCallback(
-    (id: string, painting: Partial<Painting>) => {
-      setPaintings((paintings) => ({
-        ...paintings,
-        [id]: {
-          ...paintings[id],
-          ...painting,
-        },
-      }));
-    },
-    [paintings]
-  );
-
-  const paintingImages = useMemo(() => {
-    const images: Record<string, string> = {};
-    for (const [key, painting] of Object.entries(paintings)) {
-      images[key] =
-        painting.data ||
-        generateBlankImage(16 * painting.width, 16 * painting.height);
-    }
-    return images;
-  }, [paintings]);
 
   const download = useCallback(() => {
     const zip = new JSZip();
@@ -253,7 +217,7 @@ export default function Home() {
     });
 
     for (const painting of Object.values(paintings)) {
-      const data = paintingImages[painting.id];
+      const data = getPaintingImage(painting);
       zip.file(
         `assets/${id}/textures/painting/${painting.id}.png`,
         data.replace('data:image/png;base64,', ''),
@@ -264,7 +228,7 @@ export default function Home() {
     zip.generateAsync({ type: 'blob' }).then((content) => {
       saveAs(content, `${name}.zip`);
     });
-  }, [packFormat, description, id, name, paintings, icon, paintingImages]);
+  }, [packFormat, description, id, name, paintings, icon]);
 
   return (
     <>
@@ -276,110 +240,7 @@ export default function Home() {
 
       <main className={styles['page-wrapper']} {...getRootPropsForZip()}>
         <div className={styles['page-column']}>
-          <div style={{ fontSize: 'var(--font-size-5)' }}>
-            Paintings ({Object.keys(paintings).length})
-          </div>
-
-          <div className={styles['painting-list']}>
-            {Object.keys(paintings).length === 0 ? (
-              <div>No paintings</div>
-            ) : null}
-            {Object.entries(paintings).map(([id, painting], index) => (
-              <Fragment key={id}>
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: '1.5rem',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      height: '100%',
-                    }}
-                  >
-                    <div>
-                      ID: <pre>{id}</pre>
-                    </div>
-                    <div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: 'var(--size-1)',
-                      }}
-                    >
-                      <TextInput
-                        id={`painting-name-${id}`}
-                        label="Name"
-                        value={painting.name || ''}
-                        onChange={(e) => {
-                          updatePainting(id, { name: e.target.value });
-                        }}
-                      />
-                      <TextInput
-                        id={`painting-artist-${id}`}
-                        label="Artist"
-                        value={painting.artist || ''}
-                        onChange={(e) => {
-                          updatePainting(id, { artist: e.target.value });
-                        }}
-                      />
-                      <NumberInput
-                        id={`painting-width-${id}`}
-                        label="Width"
-                        min={1}
-                        max={8}
-                        value={painting.width}
-                        onChange={(e) => {
-                          updatePainting(id, {
-                            width: parseInt(e.target.value, 10),
-                          });
-                        }}
-                      />
-                      <NumberInput
-                        id={`painting-height-${id}`}
-                        label="Height"
-                        min={1}
-                        max={8}
-                        value={painting.height}
-                        onChange={(e) => {
-                          updatePainting(id, {
-                            height: parseInt(e.target.value, 10),
-                          });
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <PaintingGrid
-                    maxHeight={8}
-                    maxWidth={8}
-                    hasImage={painting.data !== undefined}
-                    imageData={paintingImages[id]}
-                    height={painting.height}
-                    width={painting.width}
-                    onUpload={(acceptedFiles) => {
-                      const reader = new FileReader();
-                      reader.onload = () => {
-                        const data = reader.result;
-                        if (typeof data === 'string') {
-                          updatePainting(id, { data });
-                        }
-                      };
-                      reader.readAsDataURL(acceptedFiles[0]);
-                    }}
-                  />
-                </div>
-                {index === Object.entries(paintings).length - 1 ? null : (
-                  <hr style={{ height: 'var(--border-size-1)', margin: '0' }} />
-                )}
-              </Fragment>
-            ))}
-          </div>
+          <PaintingList />
         </div>
 
         <div className={styles['page-column']}>
@@ -389,7 +250,7 @@ export default function Home() {
                 Download the currently configured resource pack
               </span>
             }
-            direction={TooltipDirection.RIGHT}
+            direction={TooltipDirection.BOTTOM}
           >
             <button
               type="button"

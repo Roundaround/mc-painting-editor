@@ -16,19 +16,6 @@
   padding: var(--size-8);
 }
 
-.drop-target {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 120px;
-  width: 300px;
-  border: var(--border-size-1) dashed var(--accent);
-  border-radius: var(--radius-3);
-  // cursor: pointer;
-  padding: var(--size-3) var(--size-4);
-}
-
 .download-button {
   position: relative;
   display: inline-block;
@@ -106,16 +93,4 @@
   &::before {
     opacity: 0.5;
   }
-}
-
-.painting-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size-4);
-  width: 100%;
-  padding: var(--size-3) var(--size-4);
-  border: var(--border-size-1) solid var(--surface-3);
-  box-shadow: var(--shadow-2);
-  max-height: calc(min(780px, 100vh) - 2 * var(--size-8));
-  overflow-y: auto;
 }

@@ -1,0 +1,1 @@
+export { PaintingList } from './PaintingList';

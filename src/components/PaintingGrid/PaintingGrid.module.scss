@@ -10,27 +10,46 @@
   background-color: transparent;
   transition: background-color;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-    user-select: none;
-    background-color: hsl(var(--gray-1-hsl) / 0.4);
-    background-image: url('/edit.svg');
-    background-position: center center;
-    background-repeat: no-repeat;
-    opacity: 0;
-    transition: opacity 0.075s var(--ease-in-out-2);
-  }
-
   &:hover {
-
-    &::before {
+    .edit-overlay {
       opacity: 1;
     }
   }
+}
+
+.edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+  background-color: hsl(var(--gray-1-hsl) / 0.4);
+  background-image: url('/edit.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 0.075s var(--ease-in-out-2);
+}
+
+.drag-instructions {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+  padding: var(--size-1) var(--size-2);
+  background-color: var(--surface-3);
+  border-radius: var(--radius-2);
+  text-align: center;
+}
+
+.painting {
+  image-rendering: pixelated;
+  max-height: 100%;
+  max-width: 100%;
+  height: var(--painting-height);
+  width: var(--painting-width);
 }
