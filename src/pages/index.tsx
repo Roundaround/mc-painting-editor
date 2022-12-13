@@ -10,6 +10,7 @@ import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
   fileNameAtom,
+  getDefaultPainting,
   iconAtom,
   idAtom,
   mcmetaSchema,
