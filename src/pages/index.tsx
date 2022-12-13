@@ -154,7 +154,7 @@ export default function Home() {
     ]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop: onZipFileDrop,
     accept: {
       'application/zip': ['.zip'],
@@ -248,11 +248,9 @@ export default function Home() {
         <div className={styles['page-column']}>
           <div {...getRootProps()} className={styles['drop-target']}>
             <input {...getInputProps()} />
-            {isDragActive ? (
-              <p>Drop the files here ...</p>
-            ) : (
-              <p>Drag 'n' drop some files here, or click to select files</p>
-            )}
+            <p>
+              Drag or click to upload an existing pack in <pre>.zip</pre> format
+            </p>
           </div>
 
           <button
@@ -344,7 +342,7 @@ export default function Home() {
                     }}
                   >
                     <div>
-                      ID: <pre style={{ display: 'inline' }}>{id}</pre>
+                      ID: <pre>{id}</pre>
                     </div>
                     <div
                       style={{
@@ -398,6 +396,7 @@ export default function Home() {
                   <PaintingGrid
                     maxHeight={8}
                     maxWidth={8}
+                    hasImage={painting.data !== undefined}
                     imageData={paintingImages[id]}
                     height={painting.height}
                     width={painting.width}
