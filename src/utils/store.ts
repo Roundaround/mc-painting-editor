@@ -38,7 +38,6 @@ export interface Paintings {
   [key: string]: Painting;
 }
 
-export const fileNameAtom = atom('');
 export const iconAtom = atom('');
 export const packFormatAtom = atom(9);
 export const descriptionAtom = atom('');

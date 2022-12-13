@@ -6,11 +6,10 @@ import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
-import { Fragment, useCallback, useMemo, useState } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
   descriptionAtom,
-  fileNameAtom,
   getDefaultPainting,
   iconAtom,
   idAtom,
@@ -48,14 +47,12 @@ const generateBlankImage = (width: number, height: number) => {
 };
 
 export default function Home() {
-  const [fileName, setFileName] = useAtom(fileNameAtom);
   const [icon, setIcon] = useAtom(iconAtom);
   const [packFormat, setPackFormat] = useAtom(packFormatAtom);
   const [description, setDescription] = useAtom(descriptionAtom);
   const [id, setId] = useAtom(idAtom);
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
-  const [showIconBackground, setShowIconBackground] = useState(true);
 
   const onZipFileDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -64,7 +61,6 @@ export default function Home() {
       }
 
       if (
-        fileName !== '' ||
         icon !== '' ||
         description !== '' ||
         id !== '' ||
@@ -84,7 +80,7 @@ export default function Home() {
       const file = acceptedFiles[0];
       const zip = await JSZip.loadAsync(file);
 
-      setFileName(file.name.replace(/\.zip$/i, ''));
+      let packName = file.name.replace(/\.zip$/i, '');
 
       const loadedPaintings: Paintings = {};
 
@@ -104,7 +100,9 @@ export default function Home() {
           const text = await zipEntry.async('text');
           const pack = packSchema.parse(JSON.parse(text));
           setId(pack.id);
-          setName(pack.name || '');
+          if (pack.name) {
+            packName = pack.name;
+          }
 
           for (const painting of pack.paintings) {
             loadedPaintings[painting.id] = {
@@ -137,10 +135,10 @@ export default function Home() {
         }
       }
 
+      setName(packName);
       setPaintings(loadedPaintings);
     },
     [
-      setFileName,
       setPackFormat,
       setDescription,
       setId,
@@ -153,7 +151,6 @@ export default function Home() {
       name,
       paintings,
       icon,
-      fileName,
     ]
   );
 
@@ -173,11 +170,10 @@ export default function Home() {
     [setIcon]
   );
 
-  const {
-    getRootProps: getRootPropsForZip,
-    getInputProps: getInputPropsForZip,
-  } = useDropzone({
+  const { getRootProps: getRootPropsForZip } = useDropzone({
     onDrop: onZipFileDrop,
+    noClick: true,
+    noKeyboard: true,
     accept: {
       'application/zip': ['.zip'],
     },
@@ -189,6 +185,7 @@ export default function Home() {
     getInputProps: getInputPropsForIcon,
   } = useDropzone({
     onDrop: onIconFileDrop,
+    noDragEventsBubbling: true,
     accept: {
       'image/png': ['.png'],
     },
@@ -265,18 +262,9 @@ export default function Home() {
     }
 
     zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, `${fileName}.zip`);
+      saveAs(content, `${name}.zip`);
     });
-  }, [
-    packFormat,
-    description,
-    id,
-    name,
-    paintings,
-    icon,
-    fileName,
-    paintingImages,
-  ]);
+  }, [packFormat, description, id, name, paintings, icon, paintingImages]);
 
   return (
     <>
@@ -286,122 +274,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles['page-wrapper']}>
-        <div className={styles['page-column']}>
-          <div {...getRootPropsForZip()} className={styles['drop-target']}>
-            <input {...getInputPropsForZip()} />
-            <div>
-              Drag or click to upload an existing pack in <pre>.zip</pre> format
-            </div>
-          </div>
-
-          <Tooltip
-            content={
-              <span style={{ whiteSpace: 'nowrap' }}>
-                Download the currently configured resource pack
-              </span>
-            }
-            direction={TooltipDirection.RIGHT}
-          >
-            <button
-              type="button"
-              onClick={download}
-              className={styles['download-button']}
-            >
-              Download
-            </button>
-          </Tooltip>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '0.25rem',
-            }}
-          >
-            <TextInput
-              id="id"
-              label="ID"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-            />
-            <TextInput
-              id="name"
-              label="Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <TextInput
-              id="description"
-              label="Description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <TextInput
-              id="file-name"
-              label="File name"
-              suffix=".zip"
-              value={fileName}
-              onChange={(e) => setFileName(e.target.value)}
-            />
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '0.25rem',
-              }}
-            >
-              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
-              <div
-                className={[
-                  styles['icon-input'],
-                  showIconBackground
-                    ? styles['icon-input--show-transparency']
-                    : '',
-                  !icon ? styles['icon-input--empty'] : '',
-                ].join(' ')}
-                {...getRootPropsForIcon()}
-              >
-                <input {...getInputPropsForIcon()} />
-                {!icon ? null : (
-                  <img
-                    src={icon}
-                    style={{
-                      imageRendering: 'pixelated',
-                      height: '8rem',
-                      width: 'auto',
-                      objectFit: 'contain',
-                    }}
-                  />
-                )}
-              </div>
-              {!icon ? null : (
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: '0.25rem',
-                  }}
-                >
-                  <label
-                    htmlFor="icon-transparency"
-                    style={{ fontSize: 'var(--font-size-0)' }}
-                  >
-                    Show patterned background
-                  </label>
-                  <input
-                    type="checkbox"
-                    id="icon-transparency"
-                    checked={showIconBackground}
-                    onChange={(e) => setShowIconBackground(e.target.checked)}
-                  />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
+      <main className={styles['page-wrapper']} {...getRootPropsForZip()}>
         <div className={styles['page-column']}>
           <div style={{ fontSize: 'var(--font-size-5)' }}>
             Paintings ({Object.keys(paintings).length})
@@ -506,6 +379,81 @@ export default function Home() {
                 )}
               </Fragment>
             ))}
+          </div>
+        </div>
+
+        <div className={styles['page-column']}>
+          <Tooltip
+            content={
+              <span style={{ whiteSpace: 'nowrap' }}>
+                Download the currently configured resource pack
+              </span>
+            }
+            direction={TooltipDirection.RIGHT}
+          >
+            <button
+              type="button"
+              onClick={download}
+              className={styles['download-button']}
+            >
+              Download
+            </button>
+          </Tooltip>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.25rem',
+            }}
+          >
+            <TextInput
+              id="id"
+              label="ID"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+            />
+            <TextInput
+              id="name"
+              label="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <TextInput
+              id="description"
+              label="Description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  styles['icon-input'],
+                  !icon ? styles['icon-input--empty'] : '',
+                ].join(' ')}
+                {...getRootPropsForIcon()}
+              >
+                <input {...getInputPropsForIcon()} />
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </main>
