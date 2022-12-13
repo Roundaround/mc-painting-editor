@@ -1,4 +1,5 @@
 import { NumberInput } from 'components/NumberInput';
+import { PaintingGrid } from 'components/PaintingGrid';
 import { TextInput } from 'components/TextInput';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
@@ -40,7 +41,7 @@ const generateBlankImage = (width: number, height: number) => {
   if (!ctx) {
     throw new Error('Could not get canvas context');
   }
-  ctx.fillStyle = '#eee';
+  ctx.fillStyle = 'rgb(42, 93, 183)';
   ctx.fillRect(0, 0, width, height);
   return canvas.toDataURL();
 };
@@ -127,10 +128,10 @@ export default function Home() {
             zipEntry.name.lastIndexOf('/') + 1,
             zipEntry.name.lastIndexOf('.')
           );
-          loadedPaintings[key] = {
-            ...(loadedPaintings[key] || getDefaultPainting(key)),
-            data,
-          };
+          // loadedPaintings[key] = {
+          //   ...(loadedPaintings[key] || getDefaultPainting(key)),
+          //   data,
+          // };
         }
       }
 
@@ -339,73 +340,69 @@ export default function Home() {
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'center',
+                      justifyContent: 'space-between',
+                      height: '100%',
                     }}
                   >
                     <div>
                       ID: <pre style={{ display: 'inline' }}>{id}</pre>
                     </div>
-                    <TextInput
-                      id={`painting-name-${id}`}
-                      label="Name"
-                      value={painting.name || ''}
-                      onChange={(e) => {
-                        updatePainting(id, { name: e.target.value });
-                      }}
-                    />
-                    <TextInput
-                      id={`painting-artist-${id}`}
-                      label="Artist"
-                      value={painting.artist || ''}
-                      onChange={(e) => {
-                        updatePainting(id, { artist: e.target.value });
-                      }}
-                    />
-                    <NumberInput
-                      id={`painting-width-${id}`}
-                      label="Width"
-                      min={1}
-                      max={8}
-                      value={painting.width}
-                      onChange={(e) => {
-                        updatePainting(id, {
-                          width: parseInt(e.target.value, 10),
-                        });
-                      }}
-                    />
-                    <NumberInput
-                      id={`painting-height-${id}`}
-                      label="Height"
-                      min={1}
-                      max={8}
-                      value={painting.height}
-                      onChange={(e) => {
-                        updatePainting(id, {
-                          height: parseInt(e.target.value, 10),
-                        });
-                      }}
-                    />
-                  </div>
-                  <div
-                    style={{
-                      width: '16rem',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <img
-                      src={paintingImages[id]}
+                    <div
                       style={{
-                        imageRendering: 'pixelated',
-                        width: `calc(16rem * ${painting.width / 8})`,
-                        maxWidth: '100%',
-                        height: `calc(16rem * ${painting.height / 8})`,
-                        maxHeight: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 'var(--size-1)',
                       }}
-                    />
+                    >
+                      <TextInput
+                        id={`painting-name-${id}`}
+                        label="Name"
+                        value={painting.name || ''}
+                        onChange={(e) => {
+                          updatePainting(id, { name: e.target.value });
+                        }}
+                      />
+                      <TextInput
+                        id={`painting-artist-${id}`}
+                        label="Artist"
+                        value={painting.artist || ''}
+                        onChange={(e) => {
+                          updatePainting(id, { artist: e.target.value });
+                        }}
+                      />
+                      <NumberInput
+                        id={`painting-width-${id}`}
+                        label="Width"
+                        min={1}
+                        max={8}
+                        value={painting.width}
+                        onChange={(e) => {
+                          updatePainting(id, {
+                            width: parseInt(e.target.value, 10),
+                          });
+                        }}
+                      />
+                      <NumberInput
+                        id={`painting-height-${id}`}
+                        label="Height"
+                        min={1}
+                        max={8}
+                        value={painting.height}
+                        onChange={(e) => {
+                          updatePainting(id, {
+                            height: parseInt(e.target.value, 10),
+                          });
+                        }}
+                      />
+                    </div>
                   </div>
+                  <PaintingGrid
+                    maxHeight={8}
+                    maxWidth={8}
+                    imageData={paintingImages[id]}
+                    height={painting.height}
+                    width={painting.width}
+                  />
                 </div>
                 {index === Object.entries(paintings).length - 1 ? null : (
                   <hr style={{ height: 'var(--border-size-1)', margin: '0' }} />
