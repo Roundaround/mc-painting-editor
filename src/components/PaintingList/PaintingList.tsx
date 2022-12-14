@@ -1,6 +1,6 @@
 import { Button } from 'components/Button';
 import { PaintingListItem } from 'components/PaintingListItem';
-import { useAtom, useAtomValue } from 'jotai';
+import { useAtom } from 'jotai';
 import { Fragment, useCallback, useMemo } from 'react';
 import { getDefaultPainting, paintingsAtom } from 'utils/store';
 import styles from './PaintingList.module.scss';
@@ -46,7 +46,11 @@ export function PaintingList() {
         {paintingIds.length > 0 ? null : <div>No paintings...yet!</div>}
         {paintingIds.map((id, index) => (
           <Fragment key={id}>
-            <PaintingListItem id={id} />
+            <PaintingListItem
+              id={id}
+              isFirst={index === 0}
+              isLast={index === paintingIds.length - 1}
+            />
             {index === paintingIds.length - 1 ? null : (
               <hr style={{ height: 'var(--border-size-1)', margin: '0' }} />
             )}

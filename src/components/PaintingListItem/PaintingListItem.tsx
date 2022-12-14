@@ -1,3 +1,4 @@
+import { Button } from 'components/Button';
 import { NumberInput } from 'components/NumberInput';
 import { PaintingGrid } from 'components/PaintingGrid';
 import { TextInput } from 'components/TextInput';
@@ -12,10 +13,12 @@ import {
 
 export interface PaintingListItemProps {
   id: string;
+  isFirst: boolean;
+  isLast: boolean;
 }
 
 export function PaintingListItem(props: PaintingListItemProps) {
-  const { id } = props;
+  const { id, isFirst, isLast } = props;
 
   const [paintings, setPaintings] = useAtom(paintingsAtom);
   const painting = useMemo(() => paintings[id], [id, paintings]);
@@ -46,22 +49,47 @@ export function PaintingListItem(props: PaintingListItemProps) {
     });
   }, [id, setPaintings]);
 
-  const changePaintingId = useCallback(
-    (newId: string) => {
-      setPaintings((paintings) => {
-        const result: Paintings = {};
-        for (const [key, painting] of Object.entries(paintings)) {
-          if (key === id) {
-            result[newId] = painting;
+  const moveUp = useCallback(() => {
+    setPaintings((paintings) => {
+      const result: Paintings = {};
+      const keys = Object.keys(paintings);
+      const index = keys.indexOf(id);
+      if (index > 0) {
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          if (i === index - 1) {
+            result[key] = paintings[keys[i + 1]];
+          } else if (i === index) {
+            result[key] = paintings[keys[i - 1]];
           } else {
-            result[key] = painting;
+            result[key] = paintings[key];
           }
         }
-        return result;
-      });
-    },
-    [id, setPaintings]
-  );
+      }
+      return result;
+    });
+  }, [id, setPaintings]);
+
+  const moveDown = useCallback(() => {
+    setPaintings((paintings) => {
+      const result: Paintings = {};
+      const keys = Object.keys(paintings);
+      const index = keys.indexOf(id);
+      if (index < keys.length - 1) {
+        for (let i = 0; i < keys.length; i++) {
+          const key = keys[i];
+          if (i === index) {
+            result[key] = paintings[keys[i + 1]];
+          } else if (i === index + 1) {
+            result[key] = paintings[keys[i - 1]];
+          } else {
+            result[key] = paintings[key];
+          }
+        }
+      }
+      return result;
+    });
+  }, [id, setPaintings]);
 
   return (
     <>
@@ -74,6 +102,30 @@ export function PaintingListItem(props: PaintingListItemProps) {
           justifyContent: 'space-between',
         }}
       >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--size-1)',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            height: '100%',
+          }}
+        >
+          <Button onClick={removePainting}>Remove</Button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--size-1)',
+              alignItems: 'stretch',
+              flex: '0 0 auto',
+            }}
+          >
+            {isFirst ? null : <Button onClick={moveUp}>Up</Button>}
+            {isLast ? null : <Button onClick={moveDown}>Down</Button>}
+          </div>
+        </div>
         <div
           style={{
             display: 'flex',
