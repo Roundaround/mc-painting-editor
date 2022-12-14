@@ -1,3 +1,4 @@
+import { Button } from 'components/Button';
 import { PaintingListItem } from 'components/PaintingListItem';
 import { useAtom, useAtomValue } from 'jotai';
 import { Fragment, useCallback, useMemo } from 'react';
@@ -34,13 +35,7 @@ export function PaintingList() {
         <div style={{ fontSize: 'var(--font-size-5)' }}>
           Paintings ({paintingIds.length})
         </div>
-        <button
-          className={styles['button']}
-          type="button"
-          onClick={(e) => addPainting()}
-        >
-          Add Painting
-        </button>
+        <Button onClick={addPainting}>Add Painting</Button>
       </div>
       <div
         className={[

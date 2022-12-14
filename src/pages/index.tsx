@@ -1,6 +1,7 @@
+import { Button } from 'components/Button';
 import { PaintingList } from 'components/PaintingList';
 import { TextInput } from 'components/TextInput';
-import { Tooltip, TooltipDirection } from 'components/Tooltip';
+import { TooltipDirection } from 'components/Tooltip';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
@@ -19,7 +20,7 @@ import {
   packSchema,
   Painting,
   Paintings,
-  paintingsAtom
+  paintingsAtom,
 } from 'utils/store';
 import styles from './index.module.scss';
 
@@ -244,22 +245,19 @@ export default function Home() {
         </div>
 
         <div className={styles['page-column']}>
-          <Tooltip
-            content={
-              <span style={{ whiteSpace: 'nowrap' }}>
-                Download the currently configured resource pack
-              </span>
-            }
-            direction={TooltipDirection.BOTTOM}
+          <Button
+            onClick={download}
+            tooltip={{
+              content: (
+                <span style={{ whiteSpace: 'nowrap' }}>
+                  Download the currently configured resource pack
+                </span>
+              ),
+              direction: TooltipDirection.BOTTOM,
+            }}
           >
-            <button
-              type="button"
-              onClick={download}
-              className={styles['download-button']}
-            >
-              Download
-            </button>
-          </Tooltip>
+            Download
+          </Button>
           <div
             style={{
               display: 'flex',
