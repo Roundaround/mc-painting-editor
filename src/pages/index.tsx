@@ -245,19 +245,6 @@ export default function Home() {
         </div>
 
         <div className={styles['page-column']}>
-          <Button
-            onClick={download}
-            tooltip={{
-              content: (
-                <span style={{ whiteSpace: 'nowrap' }}>
-                  Download the currently configured resource pack
-                </span>
-              ),
-              direction: TooltipDirection.BOTTOM,
-            }}
-          >
-            Download
-          </Button>
           <div
             style={{
               display: 'flex',
@@ -314,6 +301,19 @@ export default function Home() {
               </div>
             </div>
           </div>
+          <Button
+            onClick={download}
+            tooltip={{
+              content: (
+                <span style={{ whiteSpace: 'nowrap' }}>
+                  Download the currently configured resource pack
+                </span>
+              ),
+              direction: TooltipDirection.TOP,
+            }}
+          >
+            Download
+          </Button>
         </div>
       </main>
     </>
