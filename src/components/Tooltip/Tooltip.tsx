@@ -1,4 +1,3 @@
-import styles from './Tooltip.module.scss';
 import {
   ReactNode,
   RefObject,
@@ -9,6 +8,7 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import styles from './Tooltip.module.scss';
 
 export enum TooltipVariant {
   SUCCESS = 'success',
@@ -29,6 +29,7 @@ const defaultProps = {
   direction: TooltipDirection.TOP,
   inline: false,
   directTabbable: true,
+  noWrap: false,
 };
 
 export interface TooltipProps {
@@ -39,6 +40,7 @@ export interface TooltipProps {
   direction?: TooltipDirection;
   inline?: boolean;
   directTabbable?: boolean;
+  noWrap?: boolean;
 }
 
 export function Tooltip(props: TooltipProps & typeof defaultProps) {
@@ -50,6 +52,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     children,
     content,
     directTabbable,
+    noWrap,
   } = props;
 
   const [boundingRect, updateBoundingRect, anchorRef] =
@@ -86,6 +89,9 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     const result = [styles['tooltip'], styles[`tooltip--${direction}`]];
     if (variant) {
       result.push(styles[`tooltip--${variant}`]);
+    }
+    if (noWrap) {
+      result.push(styles['tooltip--nowrap']);
     }
     return result.join(' ');
   }, [variant, direction]);

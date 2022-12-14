@@ -97,3 +97,7 @@
     border-left-color: var(--tooltip-background-color);
   }
 }
+
+.tooltip--nowrap {
+  white-space: nowrap;
+}

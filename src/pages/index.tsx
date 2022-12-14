@@ -1,4 +1,4 @@
-import { Button } from 'components/Button';
+import { Button, ButtonStyle } from 'components/Button';
 import { PaintingList } from 'components/PaintingList';
 import { TextInput } from 'components/TextInput';
 import { TooltipDirection } from 'components/Tooltip';
@@ -302,6 +302,7 @@ export default function Home() {
           </div>
           <Button
             onClick={download}
+            style={ButtonStyle.LARGE}
             tooltip={{
               content: (
                 <span style={{ whiteSpace: 'nowrap' }}>

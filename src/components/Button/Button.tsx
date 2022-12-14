@@ -4,23 +4,36 @@ import styles from './Button.module.scss';
 
 type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
 
+export enum ButtonStyle {
+  DEFAULT = 'default',
+  LARGE = 'large',
+  ICON = 'icon',
+}
+
+const defaultProps = {
+  style: ButtonStyle.DEFAULT,
+};
+
 export interface ButtonProps {
   onClick: () => void;
   children: React.ReactNode;
   tooltip?: ReactNode | TooltipPropsSansChildren;
+  style?: ButtonStyle;
 }
 
-export const Button = (props: ButtonProps) => {
-  const { onClick, children, tooltip } = props;
+export const Button = (props: ButtonProps & typeof defaultProps) => {
+  const { onClick, children, tooltip, style } = props;
 
-  const button = useMemo(
-    () => (
-      <button onClick={onClick} className={styles['button']} type="button">
-        <span className={styles['button-text']}>{children}</span>
+  const button = useMemo(() => {
+    console.log(style);
+    const classNames = [styles['button'], styles[`button--${style}`]].join(' ');
+
+    return (
+      <button onClick={onClick} className={classNames} type="button">
+        {children}
       </button>
-    ),
-    [onClick, children]
-  );
+    );
+  }, [style, onClick, children]);
 
   if (tooltip === undefined) {
     return button;
@@ -29,6 +42,8 @@ export const Button = (props: ButtonProps) => {
   const tooltipProps = isTooltipProps(tooltip) ? tooltip : { content: tooltip };
   return <Tooltip {...tooltipProps}>{button}</Tooltip>;
 };
+
+Button.defaultProps = defaultProps;
 
 function isTooltipProps(
   tooltip: ReactNode | TooltipPropsSansChildren

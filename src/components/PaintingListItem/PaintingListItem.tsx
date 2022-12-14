@@ -1,4 +1,4 @@
-import { Button } from 'components/Button';
+import { Button, ButtonStyle } from 'components/Button';
 import { NumberInput } from 'components/NumberInput';
 import { PaintingGrid } from 'components/PaintingGrid';
 import { TextInput } from 'components/TextInput';
@@ -115,30 +115,6 @@ export function PaintingListItem(props: PaintingListItemProps) {
             display: 'flex',
             flexDirection: 'column',
             gap: 'var(--size-1)',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-            height: '100%',
-          }}
-        >
-          <Button onClick={remove}>Remove</Button>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--size-1)',
-              alignItems: 'stretch',
-              flex: '0 0 auto',
-            }}
-          >
-            {isFirst ? null : <Button onClick={moveUp}>Up</Button>}
-            {isLast ? null : <Button onClick={moveDown}>Down</Button>}
-          </div>
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--size-1)',
           }}
         >
           <TextInput
@@ -208,6 +184,60 @@ export function PaintingListItem(props: PaintingListItemProps) {
             reader.readAsDataURL(acceptedFiles[0]);
           }}
         />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 'var(--size-2)',
+            justifyContent: 'space-between',
+            alignItems: 'stretch',
+            height: '100%',
+          }}
+        >
+          <Button
+            onClick={remove}
+            style={ButtonStyle.ICON}
+            tooltip={{
+              content: 'Remove',
+            }}
+          >
+            <i className="fas fa-trash" />
+          </Button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 'var(--size-2)',
+              alignItems: 'stretch',
+              flex: '0 0 auto',
+            }}
+          >
+            {isFirst ? null : (
+              <Button
+                onClick={moveUp}
+                style={ButtonStyle.ICON}
+                tooltip={{
+                  content: 'Move Up',
+                  noWrap: true,
+                }}
+              >
+                <i className="fas fa-arrow-up" />
+              </Button>
+            )}
+            {isLast ? null : (
+              <Button
+                onClick={moveDown}
+                style={ButtonStyle.ICON}
+                tooltip={{
+                  content: 'Move Down',
+                  noWrap: true,
+                }}
+              >
+                <i className="fas fa-arrow-down" />
+              </Button>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );
