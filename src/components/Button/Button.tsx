@@ -20,25 +20,16 @@ export const Button = (props: ButtonProps) => {
     [onClick, children]
   );
 
-  const tooltipProps = useMemo(() => {
-    if (tooltip === undefined) {
-      return undefined;
-    } else if (isTooltipProps(tooltip)) {
-      return tooltip;
-    } else {
-      return { children: tooltip };
-    }
-  }, [tooltip]);
+  if (tooltip === undefined) {
+    return button;
+  }
 
-  return tooltip === undefined ? (
-    button
-  ) : (
-    <Tooltip {...tooltipProps}>{button}</Tooltip>
-  );
+  const tooltipProps = isTooltipProps(tooltip) ? tooltip : { content: tooltip };
+  return <Tooltip {...tooltipProps}>{button}</Tooltip>;
 };
 
 function isTooltipProps(
   tooltip: ReactNode | TooltipProps
 ): tooltip is TooltipProps {
-  return (tooltip as TooltipProps).children !== undefined;
+  return (tooltip as TooltipProps).content !== undefined;
 }
