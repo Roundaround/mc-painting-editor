@@ -3,7 +3,8 @@ import { PaintingListItem } from 'components/PaintingListItem';
 import { TooltipDirection } from 'components/Tooltip';
 import { useAtom } from 'jotai';
 import { Fragment, useCallback, useMemo } from 'react';
-import { getDefaultPainting, paintingsAtom } from 'utils/store';
+import { getDefaultPainting } from 'utils/painting';
+import { paintingsAtom } from 'utils/store';
 import styles from './PaintingList.module.scss';
 
 export function PaintingList() {

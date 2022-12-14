@@ -4,12 +4,8 @@ import { PaintingGrid } from 'components/PaintingGrid';
 import { TextInput } from 'components/TextInput';
 import { useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
-import {
-  getDefaultPainting,
-  getPaintingImage,
-  Painting,
-  paintingsAtom,
-} from 'utils/store';
+import { getDefaultPainting, getPaintingImage, Painting } from 'utils/painting';
+import { paintingsAtom } from 'utils/store';
 
 export interface PaintingListItemProps {
   id: string;

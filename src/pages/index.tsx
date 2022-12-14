@@ -9,30 +9,17 @@ import Link from 'next/link';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Blocks } from 'react-loader-spinner';
+import { readFile } from 'utils/files';
+import { getPaintingImage, Painting } from 'utils/painting';
 import {
   descriptionAtom,
-  getDefaultPainting,
-  getPaintingImage,
   iconAtom,
   idAtom,
-  mcmetaSchema,
   nameAtom,
   packFormatAtom,
-  packSchema,
-  Painting,
   paintingsAtom,
 } from 'utils/store';
 import styles from './index.module.scss';
-
-const blobToBase64 = (blob: Blob): Promise<string | undefined> => {
-  const reader = new FileReader();
-  reader.readAsDataURL(blob);
-  return new Promise((resolve) => {
-    reader.onloadend = () => {
-      resolve((reader.result as string | null) || undefined);
-    };
-  });
-};
 
 export default function Home() {
   const [loading, setLoading] = useState(false);
@@ -44,7 +31,7 @@ export default function Home() {
   const [paintings, setPaintings] = useAtom(paintingsAtom);
 
   const onZipFileDrop = useCallback(
-    async (acceptedFiles: File[]) => {
+    (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) {
         return;
       }
@@ -68,67 +55,16 @@ export default function Home() {
 
       setLoading(true);
 
-      const file = acceptedFiles[0];
-      const zip = await JSZip.loadAsync(file);
-
-      let packName = file.name.replace(/\.zip$/i, '');
-
-      const loadedPaintings = new Map<string, Painting>();
-
-      for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
-        if (zipEntry.dir) {
-          continue;
-        }
-
-        if (zipEntry.name === 'pack.mcmeta') {
-          const text = await zipEntry.async('text');
-          const mcmeta = mcmetaSchema.parse(JSON.parse(text));
-          setPackFormat(mcmeta.pack.packFormat);
-          setDescription(mcmeta.pack.description || '');
-        }
-
-        if (zipEntry.name === 'custompaintings.json') {
-          const text = await zipEntry.async('text');
-          const pack = packSchema.parse(JSON.parse(text));
-          setId(pack.id);
-          if (pack.name) {
-            packName = pack.name;
-          }
-
-          for (const painting of pack.paintings) {
-            loadedPaintings.set(painting.id, {
-              ...loadedPaintings.get(painting.id),
-              ...painting,
-            });
-          }
-        }
-
-        if (zipEntry.name === 'pack.png') {
-          const blob = await zipEntry.async('blob');
-          const data = await blobToBase64(
-            new Blob([blob], { type: 'image/png' })
-          );
-          setIcon(data || '');
-        } else if (zipEntry.name.endsWith('.png')) {
-          const blob = await zipEntry.async('blob');
-          const data = await blobToBase64(
-            new Blob([blob], { type: 'image/png' })
-          );
-
-          const key = zipEntry.name.substring(
-            zipEntry.name.lastIndexOf('/') + 1,
-            zipEntry.name.lastIndexOf('.')
-          );
-          loadedPaintings.set(key, {
-            ...(loadedPaintings.get(key) || getDefaultPainting(key)),
-            data,
-          });
-        }
-      }
-
-      setName(packName);
-      setPaintings(loadedPaintings);
-      setLoading(false);
+      readFile(acceptedFiles[0], {
+        setPackFormat,
+        setDescription,
+        setId,
+        setName,
+        setPaintings,
+        setIcon,
+      }).finally(() => {
+        setLoading(false);
+      });
     },
     [
       setPackFormat,
