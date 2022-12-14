@@ -2,10 +2,12 @@ import { Tooltip, TooltipProps } from 'components/Tooltip';
 import { ReactNode, useMemo } from 'react';
 import styles from './Button.module.scss';
 
+type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
+
 export interface ButtonProps {
   onClick: () => void;
   children: React.ReactNode;
-  tooltip?: ReactNode | TooltipProps;
+  tooltip?: ReactNode | TooltipPropsSansChildren;
 }
 
 export const Button = (props: ButtonProps) => {
@@ -29,7 +31,7 @@ export const Button = (props: ButtonProps) => {
 };
 
 function isTooltipProps(
-  tooltip: ReactNode | TooltipProps
-): tooltip is TooltipProps {
-  return (tooltip as TooltipProps).content !== undefined;
+  tooltip: ReactNode | TooltipPropsSansChildren
+): tooltip is TooltipPropsSansChildren {
+  return (tooltip as TooltipPropsSansChildren).content !== undefined;
 }

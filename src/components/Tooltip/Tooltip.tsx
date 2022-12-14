@@ -32,12 +32,12 @@ const defaultProps = {
 };
 
 export interface TooltipProps {
+  content: ReactNode;
+  children: ReactNode;
   delay?: number;
   variant?: TooltipVariant;
   direction?: TooltipDirection;
   inline?: boolean;
-  children?: ReactNode;
-  content?: ReactNode;
   directTabbable?: boolean;
 }
 
