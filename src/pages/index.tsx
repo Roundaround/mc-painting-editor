@@ -1,7 +1,6 @@
 import { Button, ButtonStyle } from 'components/Button';
 import { PaintingList } from 'components/PaintingList';
 import { TextInput } from 'components/TextInput';
-import { TooltipDirection } from 'components/Tooltip';
 import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
@@ -158,10 +157,11 @@ export default function Home() {
     [setIcon]
   );
 
-  const { getRootProps: getRootPropsForZip } = useDropzone({
-    onDrop: onZipFileDrop,
-    noClick: true,
-    noKeyboard: true,
+  const {
+    getRootProps: getRootPropsForZip,
+    getInputProps: getInputPropsForZip,
+  } = useDropzone({
+    onDropAccepted: onZipFileDrop,
     accept: {
       'application/zip': ['.zip'],
     },
@@ -172,8 +172,7 @@ export default function Home() {
     getRootProps: getRootPropsForIcon,
     getInputProps: getInputPropsForIcon,
   } = useDropzone({
-    onDrop: onIconFileDrop,
-    noDragEventsBubbling: true,
+    onDropAccepted: onIconFileDrop,
     accept: {
       'image/png': [],
     },
@@ -239,12 +238,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles['page-wrapper']} {...getRootPropsForZip()}>
+      <main className={styles['page-wrapper']}>
         <div className={styles['page-column']}>
           <PaintingList />
         </div>
 
         <div className={styles['page-column']}>
+          <div className={styles['zip-input']} {...getRootPropsForZip()}>
+            <input {...getInputPropsForZip()} />
+            <p>
+              Edit an existing pack by dragging it here or clicking to select
+              one for upload!
+            </p>
+          </div>
           <div
             style={{
               display: 'flex',
@@ -304,21 +310,18 @@ export default function Home() {
           <Button
             onClick={download}
             style={ButtonStyle.LARGE}
-            tooltip={{
-              content: (
-                <span style={{ whiteSpace: 'nowrap' }}>
-                  Download the currently configured resource pack
-                </span>
-              ),
-              direction: TooltipDirection.TOP,
-            }}
+            tooltip={
+              <span style={{ whiteSpace: 'nowrap' }}>
+                Download the currently configured resource pack
+              </span>
+            }
           >
             Download
           </Button>
         </div>
       </main>
       <footer className={styles['page-footer']}>
-        Made with ❤️ by Roundaround for use with the{' '}
+        Made with ❤️ by Roundaround for use with the
         <Link href="https://modrinth.com/mod/roundaround-custom-paintings">
           Custom Paintings
         </Link>
