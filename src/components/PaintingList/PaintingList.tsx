@@ -1,4 +1,4 @@
-import { Button } from 'components/Button';
+import { Button, ButtonStyle } from 'components/Button';
 import { PaintingListItem } from 'components/PaintingListItem';
 import { useAtom } from 'jotai';
 import { Fragment, useCallback, useMemo } from 'react';
@@ -29,15 +29,23 @@ export function PaintingList() {
           paddingInline: 'var(--size-2)',
           display: 'flex',
           flexDirection: 'row',
-          gap: 'var(--size-2)',
+          gap: 'var(--size-4)',
           alignItems: 'center',
-          justifyContent: 'space-between',
         }}
       >
         <div style={{ fontSize: 'var(--font-size-5)' }}>
           Paintings ({paintingIds.length})
         </div>
-        <Button onClick={addPainting}>Add Painting</Button>
+        <Button
+          onClick={addPainting}
+          style={ButtonStyle.ICON}
+          tooltip={{
+            content: 'Add a painting',
+            noWrap: true,
+          }}
+        >
+          <i className="fas fa-plus" />
+        </Button>
       </div>
       <div
         className={[

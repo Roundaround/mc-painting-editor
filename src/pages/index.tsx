@@ -240,10 +240,6 @@ export default function Home() {
 
       <main className={styles['page-wrapper']}>
         <div className={styles['page-column']}>
-          <PaintingList />
-        </div>
-
-        <div className={styles['page-column']}>
           <div className={styles['zip-input']} {...getRootPropsForZip()}>
             <input {...getInputPropsForZip()} />
             <p>
@@ -318,6 +314,9 @@ export default function Home() {
           >
             Download
           </Button>
+        </div>
+        <div className={styles['page-column']}>
+          <PaintingList />
         </div>
       </main>
       <footer className={styles['page-footer']}>

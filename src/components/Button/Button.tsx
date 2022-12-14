@@ -25,7 +25,6 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
   const { onClick, children, tooltip, style } = props;
 
   const button = useMemo(() => {
-    console.log(style);
     const classNames = [styles['button'], styles[`button--${style}`]].join(' ');
 
     return (
