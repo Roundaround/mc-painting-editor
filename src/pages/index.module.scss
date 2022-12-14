@@ -1,3 +1,17 @@
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: hsl(var(--gray-0-hsl) / 0.5);
+  z-index: 1000;
+}
+
 .page-wrapper {
   display: grid;
   height: 100%;

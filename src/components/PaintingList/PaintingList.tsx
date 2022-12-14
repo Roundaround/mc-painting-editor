@@ -1,5 +1,6 @@
 import { Button, ButtonStyle } from 'components/Button';
 import { PaintingListItem } from 'components/PaintingListItem';
+import { TooltipDirection } from 'components/Tooltip';
 import { useAtom } from 'jotai';
 import { Fragment, useCallback, useMemo } from 'react';
 import { getDefaultPainting, paintingsAtom } from 'utils/store';
@@ -42,6 +43,7 @@ export function PaintingList() {
           tooltip={{
             content: 'Add a painting',
             noWrap: true,
+            direction: TooltipDirection.BOTTOM,
           }}
         >
           <i className="fas fa-plus" />
