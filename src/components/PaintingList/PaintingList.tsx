@@ -1,25 +1,46 @@
 import { PaintingListItem } from 'components/PaintingListItem';
-import { useAtomValue } from 'jotai';
-import { Fragment, useMemo } from 'react';
-import { paintingsAtom } from 'utils/store';
+import { useAtom, useAtomValue } from 'jotai';
+import { Fragment, useCallback, useMemo } from 'react';
+import { getDefaultPainting, paintingsAtom } from 'utils/store';
 import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
-  const paintings = useAtomValue(paintingsAtom);
+  const [paintings, setPaintings] = useAtom(paintingsAtom);
   const paintingIds = useMemo(() => Object.keys(paintings), [paintings]);
+
+  const addPainting = useCallback(() => {
+    setPaintings((paintings) => {
+      const id = `painting-${Object.keys(paintings).length + 1}`;
+      return {
+        ...paintings,
+        [id]: getDefaultPainting(id),
+      };
+    });
+  }, [setPaintings]);
 
   return (
     <>
       <div
         style={{
+          width: '100%',
+          paddingInline: 'var(--size-2)',
           display: 'flex',
           flexDirection: 'row',
           gap: 'var(--size-2)',
+          alignItems: 'center',
+          justifyContent: 'space-between',
         }}
       >
         <div style={{ fontSize: 'var(--font-size-5)' }}>
           Paintings ({paintingIds.length})
         </div>
+        <button
+          className={styles['button']}
+          type="button"
+          onClick={(e) => addPainting()}
+        >
+          Add Painting
+        </button>
       </div>
       <div
         className={[
