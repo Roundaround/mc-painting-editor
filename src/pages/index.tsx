@@ -6,6 +6,7 @@ import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
+import Link from 'next/link';
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import {
@@ -316,6 +317,13 @@ export default function Home() {
           </Button>
         </div>
       </main>
+      <footer className={styles['page-footer']}>
+        Made with ❤️ by Roundaround for use with the{' '}
+        <Link href="https://modrinth.com/mod/roundaround-custom-paintings">
+          Custom Paintings
+        </Link>
+        Minecraft mod
+      </footer>
     </>
   );
 }
