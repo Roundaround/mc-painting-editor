@@ -19,7 +19,6 @@ import {
   packFormatAtom,
   packSchema,
   Painting,
-  Paintings,
   paintingsAtom,
 } from 'utils/store';
 import styles from './index.module.scss';
@@ -53,7 +52,7 @@ export default function Home() {
         description !== '' ||
         id !== '' ||
         name !== '' ||
-        Object.keys(paintings).length > 0
+        paintings.size > 0
       ) {
         if (
           !confirm(
@@ -70,7 +69,7 @@ export default function Home() {
 
       let packName = file.name.replace(/\.zip$/i, '');
 
-      const loadedPaintings: Paintings = {};
+      const loadedPaintings = new Map<string, Painting>();
 
       for (const [relativePath, zipEntry] of Object.entries(zip.files)) {
         if (zipEntry.dir) {
@@ -93,10 +92,10 @@ export default function Home() {
           }
 
           for (const painting of pack.paintings) {
-            loadedPaintings[painting.id] = {
-              ...loadedPaintings[painting.id],
+            loadedPaintings.set(painting.id, {
+              ...loadedPaintings.get(painting.id),
               ...painting,
-            };
+            });
           }
         }
 
@@ -116,10 +115,10 @@ export default function Home() {
             zipEntry.name.lastIndexOf('/') + 1,
             zipEntry.name.lastIndexOf('.')
           );
-          loadedPaintings[key] = {
-            ...(loadedPaintings[key] || getDefaultPainting(key)),
+          loadedPaintings.set(key, {
+            ...(loadedPaintings.get(key) || getDefaultPainting(key)),
             data,
-          };
+          });
         }
       }
 
@@ -198,7 +197,7 @@ export default function Home() {
       JSON.stringify({
         id,
         name,
-        paintings: Object.values(paintings).map(
+        paintings: Array.from(paintings.values()).map(
           ({ data, name, artist, ...painting }) => {
             const result: Painting = painting;
             if (name) {
@@ -217,7 +216,7 @@ export default function Home() {
       base64: true,
     });
 
-    for (const painting of Object.values(paintings)) {
+    for (const painting of paintings.values()) {
       const data = getPaintingImage(painting);
       zip.file(
         `assets/${id}/textures/painting/${painting.id}.png`,

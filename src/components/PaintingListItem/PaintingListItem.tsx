@@ -5,9 +5,9 @@ import { TextInput } from 'components/TextInput';
 import { useAtom } from 'jotai';
 import { useCallback, useMemo } from 'react';
 import {
+  getDefaultPainting,
   getPaintingImage,
   Painting,
-  Paintings,
   paintingsAtom,
 } from 'utils/store';
 
@@ -21,73 +21,81 @@ export function PaintingListItem(props: PaintingListItemProps) {
   const { id, isFirst, isLast } = props;
 
   const [paintings, setPaintings] = useAtom(paintingsAtom);
-  const painting = useMemo(() => paintings[id], [id, paintings]);
+  const painting = useMemo(
+    () => paintings.get(id) || getDefaultPainting(id),
+    [id, paintings]
+  );
   const paintingImage = useMemo(() => getPaintingImage(painting), [painting]);
 
-  const updatePainting = useCallback(
-    (painting: Partial<Painting>) => {
-      setPaintings((paintings) => ({
-        ...paintings,
-        [id]: {
-          ...paintings[id],
-          ...painting,
-        },
-      }));
+  const update = useCallback(
+    (partialPainting: Partial<Painting>) => {
+      setPaintings((paintings) => {
+        return new Map(paintings).set(id, {
+          ...(paintings.get(id) || getDefaultPainting(id)),
+          ...partialPainting,
+        });
+      });
     },
     [id, setPaintings]
   );
 
-  const removePainting = useCallback(() => {
+  const remove = useCallback(() => {
     setPaintings((paintings) => {
-      const result: Paintings = {};
-      for (const [key, painting] of Object.entries(paintings)) {
-        if (key !== id) {
-          result[key] = painting;
-        }
-      }
-      return result;
+      const newPaintings = new Map(paintings);
+      newPaintings.delete(id);
+      return newPaintings;
     });
   }, [id, setPaintings]);
 
   const moveUp = useCallback(() => {
     setPaintings((paintings) => {
-      const result: Paintings = {};
-      const keys = Object.keys(paintings);
-      const index = keys.indexOf(id);
-      if (index > 0) {
-        for (let i = 0; i < keys.length; i++) {
-          const key = keys[i];
-          if (i === index - 1) {
-            result[key] = paintings[keys[i + 1]];
-          } else if (i === index) {
-            result[key] = paintings[keys[i - 1]];
-          } else {
-            result[key] = paintings[key];
-          }
-        }
+      const newPaintings = new Map(paintings);
+      const painting = newPaintings.get(id);
+      if (!painting) {
+        return newPaintings;
       }
-      return result;
+
+      const paintingIds = Array.from(newPaintings.keys());
+      const index = paintingIds.indexOf(id);
+      if (index === 0) {
+        return newPaintings;
+      }
+
+      const prevId = paintingIds[index - 1];
+      const prevPainting = newPaintings.get(prevId);
+      if (!prevPainting) {
+        return newPaintings;
+      }
+
+      newPaintings.set(id, prevPainting);
+      newPaintings.set(prevId, painting);
+      return newPaintings;
     });
   }, [id, setPaintings]);
 
   const moveDown = useCallback(() => {
     setPaintings((paintings) => {
-      const result: Paintings = {};
-      const keys = Object.keys(paintings);
-      const index = keys.indexOf(id);
-      if (index < keys.length - 1) {
-        for (let i = 0; i < keys.length; i++) {
-          const key = keys[i];
-          if (i === index) {
-            result[key] = paintings[keys[i + 1]];
-          } else if (i === index + 1) {
-            result[key] = paintings[keys[i - 1]];
-          } else {
-            result[key] = paintings[key];
-          }
-        }
+      const newPaintings = new Map(paintings);
+      const painting = newPaintings.get(id);
+      if (!painting) {
+        return newPaintings;
       }
-      return result;
+
+      const paintingIds = Array.from(newPaintings.keys());
+      const index = paintingIds.indexOf(id);
+      if (index === paintingIds.length - 1) {
+        return newPaintings;
+      }
+
+      const nextId = paintingIds[index + 1];
+      const nextPainting = newPaintings.get(nextId);
+      if (!nextPainting) {
+        return newPaintings;
+      }
+
+      newPaintings.set(id, nextPainting);
+      newPaintings.set(nextId, painting);
+      return newPaintings;
     });
   }, [id, setPaintings]);
 
@@ -112,7 +120,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             height: '100%',
           }}
         >
-          <Button onClick={removePainting}>Remove</Button>
+          <Button onClick={remove}>Remove</Button>
           <div
             style={{
               display: 'flex',
@@ -138,7 +146,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             label="ID"
             value={painting.id}
             onChange={(e) => {
-              updatePainting({ id: e.target.value });
+              update({ id: e.target.value });
             }}
           />
           <TextInput
@@ -146,7 +154,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             label="Name"
             value={painting.name || ''}
             onChange={(e) => {
-              updatePainting({ name: e.target.value });
+              update({ name: e.target.value });
             }}
           />
           <TextInput
@@ -154,7 +162,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             label="Artist"
             value={painting.artist || ''}
             onChange={(e) => {
-              updatePainting({ artist: e.target.value });
+              update({ artist: e.target.value });
             }}
           />
           <NumberInput
@@ -164,7 +172,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             max={8}
             value={painting.width}
             onChange={(e) => {
-              updatePainting({
+              update({
                 width: parseInt(e.target.value, 10),
               });
             }}
@@ -176,7 +184,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             max={8}
             value={painting.height}
             onChange={(e) => {
-              updatePainting({
+              update({
                 height: parseInt(e.target.value, 10),
               });
             }}
@@ -194,7 +202,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             reader.onload = () => {
               const data = reader.result;
               if (typeof data === 'string') {
-                updatePainting({ data });
+                update({ data });
               }
             };
             reader.readAsDataURL(acceptedFiles[0]);

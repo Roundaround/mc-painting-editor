@@ -7,15 +7,17 @@ import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
   const [paintings, setPaintings] = useAtom(paintingsAtom);
-  const paintingIds = useMemo(() => Object.keys(paintings), [paintings]);
+  const paintingIds = useMemo(() => Array.from(paintings.keys()), [paintings]);
 
   const addPainting = useCallback(() => {
     setPaintings((paintings) => {
-      const id = `painting-${Object.keys(paintings).length + 1}`;
-      return {
-        ...paintings,
-        [id]: getDefaultPainting(id),
-      };
+      let nextNum = paintings.size + 1;
+      while (paintings.has(`painting-${nextNum}`)) {
+        nextNum++;
+      }
+
+      const id = `painting-${nextNum}`;
+      return new Map(paintings).set(id, getDefaultPainting(id));
     });
   }, [setPaintings]);
 

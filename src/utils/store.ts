@@ -9,7 +9,7 @@ export const paintingSchema = z.object({
   width: z.number().min(1).max(8).default(1),
 });
 
-export const getDefaultPainting = (id: string) =>
+export const getDefaultPainting = (id: string): Painting =>
   paintingSchema.parse({
     id,
   });
@@ -47,15 +47,14 @@ const generateBlankImage = (width: number, height: number) => {
   return canvas.toDataURL();
 };
 
-export function getPaintingImage(painting: Painting) {
+export function getPaintingImage(painting?: Painting) {
   return (
-    painting.data ||
-    generateBlankImage(painting.width * 16, painting.height * 16)
+    painting?.data ||
+    generateBlankImage(
+      (painting?.width || 1) * 16,
+      (painting?.height || 1) * 16
+    )
   );
-}
-
-export interface Paintings {
-  [key: string]: Painting;
 }
 
 export const iconAtom = atom('');
@@ -63,4 +62,4 @@ export const packFormatAtom = atom(9);
 export const descriptionAtom = atom('');
 export const idAtom = atom('');
 export const nameAtom = atom('');
-export const paintingsAtom = atom<Paintings>({});
+export const paintingsAtom = atom(new Map<string, Painting>());
