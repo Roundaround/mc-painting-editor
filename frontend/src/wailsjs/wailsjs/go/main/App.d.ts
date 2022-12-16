@@ -3,4 +3,4 @@
 
 export function Greet(arg1:string):Promise<string>;
 
-export function Ping():Promise<string>;
+export function SelectZipFile():Promise<string>;

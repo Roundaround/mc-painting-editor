@@ -1,4 +1,4 @@
-module changeme
+module mcpaintingeditor
 
 go 1.18
 

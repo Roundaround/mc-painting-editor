@@ -1,8 +1,13 @@
 package main
 
 import (
+	"archive/zip"
 	"context"
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // App struct
@@ -43,6 +48,70 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-func (a *App) Ping() string {
-	return "pong"
+// export const paintingSchema = z.object({
+//   id: z.string(),
+//   name: z.string().optional(),
+//   artist: z.string().optional(),
+//   height: z.number().min(1).max(8).default(1),
+//   width: z.number().min(1).max(8).default(1),
+// });
+
+// export const packSchema = z.object({
+//   id: z.string(),
+//   name: z.string().optional(),
+//   paintings: z.array(paintingSchema).default([]),
+// });
+
+type Painting struct {
+	ID     string `json:"id"`
+	Name   string `json:"name"`
+	Artist string `json:"artist"`
+	Height int    `json:"height"`
+	Width  int    `json:"width"`
+}
+
+type Pack struct {
+	ID        string     `json:"id"`
+	Name      string     `json:"name"`
+	Paintings []Painting `json:"paintings"`
+}
+
+func (a *App) SelectZipFile() string {
+	zipFile, err := runtime.OpenFileDialog(a.ctx, runtime.OpenDialogOptions{
+		Title:   "Select a zip file",
+		Filters: []runtime.FileFilter{{DisplayName: "Zip Files", Pattern: "*.zip"}},
+	})
+	if err != nil {
+		return err.Error()
+	}
+
+	archive, err := zip.OpenReader(zipFile)
+	defer archive.Close()
+
+	for _, f := range archive.File {
+		if f.FileInfo().IsDir() {
+			continue
+		}
+
+		if f.Name != "custompaintings.json" {
+			continue
+		}
+
+		fileFromArchive, err := f.Open()
+		if err != nil {
+			panic(err)
+		}
+
+		byteValue, _ := ioutil.ReadAll(fileFromArchive)
+
+		// Parse file as pack json
+		var pack Pack
+		json.Unmarshal(byteValue, &pack)
+
+		runtime.EventsEmit(a.ctx, "setName", pack.Name)
+
+		fileFromArchive.Close()
+	}
+
+	return zipFile
 }

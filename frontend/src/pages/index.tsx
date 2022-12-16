@@ -6,7 +6,7 @@ import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Blocks } from 'react-loader-spinner';
 import { readFile } from 'utils/files';
@@ -19,6 +19,8 @@ import {
   packFormatAtom,
   paintingsAtom,
 } from 'utils/store';
+import { SelectZipFile } from 'wailsjs/wailsjs/go/main/App';
+import { EventsOn } from 'wailsjs/wailsjs/runtime/runtime';
 import styles from './index.module.scss';
 
 export default function Home() {
@@ -29,6 +31,16 @@ export default function Home() {
   const [id, setId] = useAtom(idAtom);
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
+
+  useEffect(() => {
+    const cancelSetName = EventsOn('setName', setName);
+
+    return () => {
+      if (cancelSetName) {
+        cancelSetName();
+      }
+    };
+  }, [setName]);
 
   const onZipFileDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -102,6 +114,8 @@ export default function Home() {
     getRootProps: getRootPropsForZip,
     getInputProps: getInputPropsForZip,
   } = useDropzone({
+    noClick: true,
+    noKeyboard: true,
     onDropAccepted: onZipFileDrop,
     accept: {
       'application/zip': ['.zip'],
@@ -190,7 +204,11 @@ export default function Home() {
 
       <main className={styles['page-wrapper']}>
         <div className={styles['page-column']}>
-          <div className={styles['zip-input']} {...getRootPropsForZip()}>
+          <div
+            className={styles['zip-input']}
+            {...getRootPropsForZip()}
+            onClick={() => SelectZipFile().then(console.log)}
+          >
             <input {...getInputPropsForZip()} />
             <p>
               Edit an existing pack by dragging it here or clicking to select
