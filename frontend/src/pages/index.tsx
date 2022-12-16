@@ -6,7 +6,7 @@ import { useAtom } from 'jotai';
 import JSZip from 'jszip';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Blocks } from 'react-loader-spinner';
 import { readFile } from 'utils/files';
@@ -20,7 +20,7 @@ import {
   paintingsAtom,
 } from 'utils/store';
 import { SelectZipFile } from 'wailsjs/wailsjs/go/main/App';
-import { EventsOn } from 'wailsjs/wailsjs/runtime/runtime';
+import { EventsOff, EventsOnce } from 'wailsjs/wailsjs/runtime/runtime';
 import styles from './index.module.scss';
 
 export default function Home() {
@@ -32,15 +32,40 @@ export default function Home() {
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
 
-  useEffect(() => {
-    const cancelSetName = EventsOn('setName', setName);
+  const onSelectZipFile = useCallback(() => {
+    EventsOnce('setIcon', (icon: string) => {
+      console.log(icon);
+      setIcon(icon);
+    });
+    EventsOnce('setPackFormat', (packFormat: number) => {
+      setPackFormat(packFormat);
+    });
+    EventsOnce('setDescription', (description: string) => {
+      setDescription(description);
+    });
+    EventsOnce('setId', (id: string) => {
+      setId(id);
+    });
+    EventsOnce('setName', (name: string) => {
+      setName(name);
+    });
+    EventsOnce('setPaintings', (paintings: Painting[]) => {
+      setPaintings(
+        new Map(paintings.map((painting) => [painting.id, painting]))
+      );
+    });
 
-    return () => {
-      if (cancelSetName) {
-        cancelSetName();
-      }
-    };
-  }, [setName]);
+    SelectZipFile().then(() => {
+      EventsOff(
+        'setIcon',
+        'setPackFormat',
+        'setDescription',
+        'setId',
+        'setName',
+        'setPaintings'
+      );
+    });
+  }, [setIcon, setPackFormat, setDescription, setId, setName, setPaintings]);
 
   const onZipFileDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -207,7 +232,7 @@ export default function Home() {
           <div
             className={styles['zip-input']}
             {...getRootPropsForZip()}
-            onClick={() => SelectZipFile().then(console.log)}
+            onClick={onSelectZipFile}
           >
             <input {...getInputPropsForZip()} />
             <p>

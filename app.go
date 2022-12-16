@@ -3,9 +3,12 @@ package main
 import (
 	"archive/zip"
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"regexp"
+	"strings"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -48,32 +51,26 @@ func (a *App) Greet(name string) string {
 	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
 
-// export const paintingSchema = z.object({
-//   id: z.string(),
-//   name: z.string().optional(),
-//   artist: z.string().optional(),
-//   height: z.number().min(1).max(8).default(1),
-//   width: z.number().min(1).max(8).default(1),
-// });
-
-// export const packSchema = z.object({
-//   id: z.string(),
-//   name: z.string().optional(),
-//   paintings: z.array(paintingSchema).default([]),
-// });
-
 type Painting struct {
 	ID     string `json:"id"`
 	Name   string `json:"name"`
 	Artist string `json:"artist"`
 	Height int    `json:"height"`
 	Width  int    `json:"width"`
+	Data   string `json:"data"`
 }
 
 type Pack struct {
 	ID        string     `json:"id"`
 	Name      string     `json:"name"`
 	Paintings []Painting `json:"paintings"`
+}
+
+type Mcmeta struct {
+	Pack struct {
+		PackFormat  int    `json:"pack_format"`
+		Description string `json:"description"`
+	} `json:"pack"`
 }
 
 func (a *App) SelectZipFile() string {
@@ -88,30 +85,62 @@ func (a *App) SelectZipFile() string {
 	archive, err := zip.OpenReader(zipFile)
 	defer archive.Close()
 
+	paintingIds := []string{}
+	paintingMap := make(map[string]Painting)
+	paintingRegex := regexp.MustCompile(`painting/\w+\.png$`)
+
 	for _, f := range archive.File {
 		if f.FileInfo().IsDir() {
 			continue
 		}
 
-		if f.Name != "custompaintings.json" {
-			continue
+		fileFromArchive, _ := f.Open()
+		bytes, _ := ioutil.ReadAll(fileFromArchive)
+
+		if f.Name == "custompaintings.json" {
+			var pack Pack
+			json.Unmarshal(bytes, &pack)
+			runtime.EventsEmit(a.ctx, "setId", pack.ID)
+			runtime.EventsEmit(a.ctx, "setName", pack.Name)
+			for _, painting := range pack.Paintings {
+				if entry, ok := paintingMap[painting.ID]; ok {
+					painting.Data = entry.Data
+				}
+				paintingIds = append(paintingIds, painting.ID)
+				paintingMap[painting.ID] = painting
+			}
+		} else if f.Name == "pack.mcmeta" {
+			var mcmeta Mcmeta
+			json.Unmarshal(bytes, &mcmeta)
+			runtime.EventsEmit(a.ctx, "setPackFormat", mcmeta.Pack.PackFormat)
+			runtime.EventsEmit(a.ctx, "setDescription", mcmeta.Pack.Description)
+		} else if f.Name == "pack.png" {
+			encoded := "data:image/png;base64," + base64.StdEncoding.EncodeToString(bytes)
+			runtime.EventsEmit(a.ctx, "setIcon", encoded)
+		} else if paintingRegex.MatchString(f.Name) {
+			paintingId := f.Name[strings.LastIndex(f.Name, "/")+1 : strings.LastIndex(f.Name, ".")]
+
+			if _, ok := paintingMap[paintingId]; !ok {
+				paintingIds = append(paintingIds, paintingId)
+				paintingMap[paintingId] = Painting{ID: paintingId}
+			}
+
+			if entry, ok := paintingMap[paintingId]; ok {
+				encoded := "data:image/png;base64," + base64.StdEncoding.EncodeToString(bytes)
+				entry.Data = encoded
+				paintingMap[paintingId] = entry
+			}
 		}
-
-		fileFromArchive, err := f.Open()
-		if err != nil {
-			panic(err)
-		}
-
-		byteValue, _ := ioutil.ReadAll(fileFromArchive)
-
-		// Parse file as pack json
-		var pack Pack
-		json.Unmarshal(byteValue, &pack)
-
-		runtime.EventsEmit(a.ctx, "setName", pack.Name)
 
 		fileFromArchive.Close()
 	}
+
+	paintings := []Painting{}
+	for _, id := range paintingIds {
+		paintings = append(paintings, paintingMap[id])
+	}
+
+	runtime.EventsEmit(a.ctx, "setPaintings", paintings)
 
 	return zipFile
 }
