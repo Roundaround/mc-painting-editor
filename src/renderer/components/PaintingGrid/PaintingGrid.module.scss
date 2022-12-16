@@ -2,7 +2,7 @@
   position: relative;
   height: var(--painting-grid-height);
   width: var(--painting-grid-width);
-  background-image: url('../../../img/grid-square.png');
+  background-image: url('../../img/grid-square.png');
   background-size: 2rem 2rem;
   background-repeat: repeat;
   border: 0.125rem solid var(--smoke);
@@ -26,7 +26,7 @@
   pointer-events: none;
   user-select: none;
   background-color: hsl(var(--gray-1-hsl) / 0.4);
-  background-image: url('../../../img/edit.svg');
+  background-image: url('../../img/edit.svg');
   background-position: center center;
   background-repeat: no-repeat;
   opacity: 0;
