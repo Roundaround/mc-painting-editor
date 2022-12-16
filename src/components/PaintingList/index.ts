@@ -1,1 +1,0 @@
-export { PaintingList } from './PaintingList';

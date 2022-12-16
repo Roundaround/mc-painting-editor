@@ -1,0 +1,1 @@
+export { PaintingListItem } from './PaintingListItem';

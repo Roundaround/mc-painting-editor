@@ -1,34 +1,40 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Wails template Next.js
 
-## Getting Started
+![GitHub](https://img.shields.io/github/license/LGiki/wails-template-nextjs?style=flat-square)
 
-First, run the development server:
+A [Wails](https://github.com/wailsapp/wails) template with [Next.js](https://github.com/vercel/next.js) and TypeScript.
+
+You can develop applications using Next.js and then use Wails to package your application as a cross-platform program that is compatible with Linux, macOS and Windows. And you can easily call Go methods from JavaScript.
+
+This project uses `next export` to export the Next.js application to static HTML, and then uses Wails to package the static files into a program, so some Next.js features are unsupported, see [https://nextjs.org/docs/advanced-features/static-html-export](https://nextjs.org/docs/advanced-features/static-html-export) for details.
+
+# Screenshot
+
+![](screenshot.png)
+
+# Getting Started
+
+## Prerequisites
+
+- Go 1.17+
+- Node JS
+- NPM
+- [Wails CLI](https://wails.io/docs/next/gettingstarted/installation/)
+
+## New Project
+
+You can create a new wails project using:
 
 ```bash
-npm run dev
-# or
-yarn dev
+wails init -n "Your Project Name" -t https://github.com/LGiki/wails-template-nextjs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Building
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+If you modified the Go code, you need to run `wails generate module` to generate the wailsjs modules first. Then using `wails build` to build your application.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+You can run `wails build --help` or go to [https://wails.io/docs/next/reference/cli#build](https://wails.io/docs/next/reference/cli#build) to view all build flags.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Live Development
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+To run in live development mode, run `wails dev` in the project directory.

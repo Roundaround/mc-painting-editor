@@ -1,1 +1,0 @@
-export { PaintingGrid } from './PaintingGrid';
