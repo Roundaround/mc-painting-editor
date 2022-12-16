@@ -1,0 +1,104 @@
+.tooltip-anchor {
+  --tooltip-display: block;
+  --tooltip-anchor-border-radius: var(--radius-2);
+
+  display: var(--tooltip-display);
+  position: relative;
+  line-height: 0;
+
+  &:focus-visible {
+    border-radius: var(--tooltip-anchor-border-radius);
+  }
+}
+
+.tooltip-anchor--inline {
+  --tooltip-display: inline-block;
+}
+
+.tooltip-wrapper {
+  position: fixed;
+  height: 0;
+  width: 0;
+  top: 50%;
+  left: 50%;
+  z-index: 10;
+}
+
+.tooltip {
+  --tooltip-background-color: var(--surface-0);
+  --tooltip-foreground-color: var(--text-1);
+  --tooltip-margin: var(--size-3);
+  --tooltip-arrow: var(--size-2);
+
+  position: absolute;
+  border-radius: var(--radius-2);
+  background-color: var(--tooltip-background-color);
+  color: var(--tooltip-foreground-color);
+  padding-inline: var(--size-3);
+  padding-block: var(--size-2);
+  box-shadow: var(--shadow-2);
+
+  &::before {
+    content: ' ';
+    position: absolute;
+    left: 50%;
+    height: 0;
+    width: 0;
+    pointer-events: none;
+    border: solid transparent;
+    border-width: var(--tooltip-arrow);
+    margin-left: calc(var(--tooltip-arrow) * -1);
+  }
+}
+
+.tooltip--top {
+  top: calc(var(--tooltip-margin) * -1);
+  transform: translateX(-50%) translateY(-100%);
+
+  &::before {
+    top: 100%;
+    border-top-color: var(--tooltip-background-color);
+  }
+}
+
+.tooltip--right {
+  left: calc(100% + var(--tooltip-margin));
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+
+  &::before {
+    left: calc(var(--tooltip-arrow) * -1);
+    top: 50%;
+    transform: translateX(0) translateY(-50%);
+    border-right-color: var(--tooltip-background-color);
+  }
+}
+
+.tooltip--bottom {
+  bottom: calc(var(--tooltip-margin) * -1);
+  transform: translateX(-50%) translateY(100%);
+
+  &::before {
+    bottom: 100%;
+    border-bottom-color: var(--tooltip-background-color);
+  }
+}
+
+.tooltip--left {
+  left: auto;
+  right: calc(100% + var(--tooltip-margin));
+  top: 50%;
+  transform: translateX(0) translateY(-50%);
+
+  &::before {
+    left: auto;
+    right: calc(var(--tooltip-arrow) * -2);
+    top: 50%;
+    transform: translateX(0) translateY(-50%);
+    border-left-color: var(--tooltip-background-color);
+  }
+}
+
+.tooltip--nowrap {
+  white-space: nowrap;
+}

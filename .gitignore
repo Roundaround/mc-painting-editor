@@ -1,21 +1,29 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+# Logs
+logs
+*.log
 
-# Test binary, built with `go test -c`
-*.test
+# Runtime data
+pids
+*.pid
+*.seed
 
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+# Coverage directory used by tools like istanbul
+coverage
+.eslintcache
 
-# Dependency directories (remove the comment below to include it)
-# vendor/
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+node_modules
 
-# Go workspace file
-go.work
+# OSX
+.DS_Store
 
-# build output
-build/
+release/app/dist
+release/build
+.erb/dll
+
+.idea
+npm-debug.log.*
+*.css.d.ts
+*.sass.d.ts
+*.scss.d.ts

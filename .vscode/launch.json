@@ -2,31 +2,29 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Wails: Production mc-painting-editor",
-      "type": "go",
+      "name": "Electron: Main",
+      "type": "node",
       "request": "launch",
-      "mode": "exec",
-      "program": "${workspaceFolder}/build/bin/mc-painting-editor",
-      "preLaunchTask": "build",
-      "cwd": "${workspaceFolder}"
+      "protocol": "inspector",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start"],
+      "env": {
+        "MAIN_ARGS": "--inspect=5858 --remote-debugging-port=9223"
+      }
     },
     {
-      "name": "Wails: Debug mc-painting-editor",
-      "type": "go",
-      "request": "launch",
-      "mode": "exec",
-      "program": "${workspaceFolder}/build/bin/mc-painting-editor",
-      "preLaunchTask": "build debug",
-      "cwd": "${workspaceFolder}"
-    },
+      "name": "Electron: Renderer",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}",
+      "timeout": 15000
+    }
+  ],
+  "compounds": [
     {
-      "name": "Wails: Dev mc-painting-editor",
-      "type": "go",
-      "request": "launch",
-      "mode": "exec",
-      "program": "${workspaceFolder}/build/bin/mc-painting-editor",
-      "preLaunchTask": "build dev",
-      "cwd": "${workspaceFolder}"
+      "name": "Electron: All",
+      "configurations": ["Electron: Main", "Electron: Renderer"]
     }
   ]
 }
