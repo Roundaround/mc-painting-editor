@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react';
 import {
   getDefaultPainting,
   getPaintingImage,
-  Painting,
+  Painting
 } from '../../utils/painting';
 import { paintingsAtom } from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
@@ -170,20 +170,10 @@ export function PaintingListItem(props: PaintingListItemProps) {
         <PaintingGrid
           maxHeight={8}
           maxWidth={8}
-          hasImage={painting.data !== undefined}
-          imageData={paintingImage}
+          hasImage={painting.path !== undefined || painting.data !== undefined}
+          image={paintingImage}
           height={painting.height}
           width={painting.width}
-          onUpload={(acceptedFiles) => {
-            const reader = new FileReader();
-            reader.onload = () => {
-              const data = reader.result;
-              if (typeof data === 'string') {
-                update({ data });
-              }
-            };
-            reader.readAsDataURL(acceptedFiles[0]);
-          }}
         />
         <div
           style={{

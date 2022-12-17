@@ -40,6 +40,12 @@ const api = {
       );
       return () => ipcRenderer.off('setPaintingData', callback);
     },
+    paintingPath: (callback: (id: string, paintingPath: string) => void) => {
+      ipcRenderer.on('setPaintingPath', (event, id, paintingPath) =>
+        callback(id, paintingPath)
+      );
+      return () => ipcRenderer.off('setPaintingPath', callback);
+    },
   },
 } as const;
 

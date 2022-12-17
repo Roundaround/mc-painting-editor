@@ -13,7 +13,10 @@ export const getDefaultPainting = (id: string): Painting =>
     id,
   });
 
-export type Painting = z.output<typeof paintingSchema> & { data?: string };
+export type Painting = z.output<typeof paintingSchema> & {
+  data?: string;
+  path?: string;
+};
 
 const generateBlankImage = (width: number, height: number) => {
   const canvas = document.createElement('canvas');
@@ -30,6 +33,7 @@ const generateBlankImage = (width: number, height: number) => {
 
 export function getPaintingImage(painting?: Painting) {
   return (
+    painting?.path ||
     painting?.data ||
     generateBlankImage(
       (painting?.width || 1) * 16,

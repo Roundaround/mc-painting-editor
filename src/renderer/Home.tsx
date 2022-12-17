@@ -13,7 +13,7 @@ import {
   idAtom,
   nameAtom,
   packFormatAtom,
-  paintingsAtom
+  paintingsAtom,
 } from './utils/store';
 
 export default function Home() {
@@ -42,6 +42,23 @@ export default function Home() {
     [setPaintings]
   );
 
+  const setPaintingPath = useCallback(
+    (id: string, path: string) => {
+      setPaintings((paintings) => {
+        let painting = paintings.get(id);
+        if (!painting) {
+          // TODO: Indicate that there was an image but no matching metadata
+          painting = getDefaultPainting(id);
+        }
+        return new Map(paintings).set(id, {
+          ...painting,
+          path,
+        });
+      });
+    },
+    [setPaintings]
+  );
+
   useEffect(() => {
     const cancelIconListener = window.electron.onSet.icon(setIcon);
     const cancelPackFormatListener =
@@ -54,6 +71,8 @@ export default function Home() {
       window.electron.onSet.paintings(setPaintings);
     const cancelPaintingDataListener =
       window.electron.onSet.paintingData(setPaintingData);
+    const cancelPaintingPathListener =
+      window.electron.onSet.paintingPath(setPaintingPath);
 
     return () => {
       cancelIconListener();
@@ -63,6 +82,7 @@ export default function Home() {
       cancelNameListener();
       cancelPaintingsListener();
       cancelPaintingDataListener();
+      cancelPaintingPathListener();
     };
   }, [
     setIcon,
@@ -72,6 +92,7 @@ export default function Home() {
     setName,
     setPaintings,
     setPaintingData,
+    setPaintingPath,
   ]);
 
   const openZipFile = useCallback(() => {
@@ -138,7 +159,6 @@ export default function Home() {
 
   const {
     getRootProps: getRootPropsForZip,
-    getInputProps: getInputPropsForZip,
   } = useDropzone({
     onDropAccepted: onZipFileDrop,
     noClick: true,

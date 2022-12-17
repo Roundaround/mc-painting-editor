@@ -20,6 +20,7 @@ const config: ForgeConfig = {
   plugins: [
     new WebpackPlugin({
       mainConfig,
+      devContentSecurityPolicy: `default-src mc-painting-editor: 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:`,
       renderer: {
         config: rendererConfig,
         entryPoints: [
