@@ -6,6 +6,7 @@ import { Button, ButtonStyle } from './components/Button';
 import { PaintingList } from './components/PaintingList';
 import { TextInput } from './components/TextInput';
 import './Home.scss';
+import { getDefaultPainting } from './utils/painting';
 import {
   descriptionAtom,
   iconAtom,
@@ -24,6 +25,23 @@ export default function Home() {
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
 
+  const setPaintingData = useCallback(
+    (id: string, data: string) => {
+      setPaintings((paintings) => {
+        let painting = paintings.get(id);
+        if (!painting) {
+          // TODO: Indicate that there was an image but no matching metadata
+          painting = getDefaultPainting(id);
+        }
+        return new Map(paintings).set(id, {
+          ...painting,
+          data,
+        });
+      });
+    },
+    [setPaintings]
+  );
+
   useEffect(() => {
     const cancelIconListener = window.electron.onSet.icon(setIcon);
     const cancelPackFormatListener =
@@ -34,6 +52,8 @@ export default function Home() {
     const cancelNameListener = window.electron.onSet.name(setName);
     const cancelPaintingsListener =
       window.electron.onSet.paintings(setPaintings);
+    const cancelPaintingDataListener =
+      window.electron.onSet.paintingData(setPaintingData);
 
     return () => {
       cancelIconListener();
@@ -42,13 +62,21 @@ export default function Home() {
       cancelIdListener();
       cancelNameListener();
       cancelPaintingsListener();
+      cancelPaintingDataListener();
     };
-  }, [setIcon, setPackFormat, setDescription, setId, setName, setPaintings]);
+  }, [
+    setIcon,
+    setPackFormat,
+    setDescription,
+    setId,
+    setName,
+    setPaintings,
+    setPaintingData,
+  ]);
 
-  const requestAndReadZipFile = useCallback(() => {
+  const openZipFile = useCallback(() => {
     setLoading(true);
-    window.electron.requestAndReadZipFile().then((filename: string) => {
-      console.log(filename);
+    window.electron.openZipFile().then((filename: string) => {
       setLoading(false);
     });
   }, [setLoading]);
@@ -145,7 +173,7 @@ export default function Home() {
           <div
             className="zip-input"
             {...getRootPropsForZip()}
-            onClick={requestAndReadZipFile}
+            onClick={openZipFile}
           >
             <p>
               Edit an existing pack by dragging it here or clicking to select

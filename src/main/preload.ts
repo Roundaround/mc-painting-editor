@@ -2,8 +2,8 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { Painting } from './schemas';
 
 const api = {
-  requestAndReadZipFile(): Promise<string> {
-    return ipcRenderer.invoke('requestAndReadZipFile');
+  openZipFile(): Promise<string> {
+    return ipcRenderer.invoke('openZipFile');
   },
   onSet: {
     icon: (callback: (icon: string) => void) => {
@@ -33,6 +33,12 @@ const api = {
     paintings: (callback: (paintings: Map<string, Painting>) => void) => {
       ipcRenderer.on('setPaintings', (event, paintings) => callback(paintings));
       return () => ipcRenderer.off('setPaintings', callback);
+    },
+    paintingData: (callback: (id: string, paintingData: string) => void) => {
+      ipcRenderer.on('setPaintingData', (event, id, paintingData) =>
+        callback(id, paintingData)
+      );
+      return () => ipcRenderer.off('setPaintingData', callback);
     },
   },
 } as const;

@@ -10,7 +10,13 @@ import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
   const [paintings, setPaintings] = useAtom(paintingsAtom);
+
   const paintingIds = useMemo(() => Array.from(paintings.keys()), [paintings]);
+
+  // TODO: Indicate how many paintings have no image
+  const paintingsWithoutImages = useMemo(() => {
+    return Object.values(paintings).filter((painting) => !painting.data).length;
+  }, [paintings]);
 
   const addPainting = useCallback(() => {
     setPaintings((paintings) => {
