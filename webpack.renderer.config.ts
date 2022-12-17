@@ -17,11 +17,6 @@ rules.push({
   ],
 });
 
-rules.push({
-  test: /\.(woff(2)?|ttf|eot)?$/,
-  use: [{ loader: 'url-loader' }],
-});
-
 export const rendererConfig: Configuration = {
   module: {
     rules,
