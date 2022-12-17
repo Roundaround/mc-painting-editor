@@ -8,7 +8,6 @@ import { Button, ButtonStyle } from './components/Button';
 import { PaintingList } from './components/PaintingList';
 import { TextInput } from './components/TextInput';
 import './Home.scss';
-import { readFile } from './utils/files';
 import { getPaintingImage, Painting } from './utils/painting';
 import {
   descriptionAtom,
@@ -50,19 +49,6 @@ export default function Home() {
           return;
         }
       }
-
-      setLoading(true);
-
-      readFile(acceptedFiles[0], {
-        setPackFormat,
-        setDescription,
-        setId,
-        setName,
-        setPaintings,
-        setIcon,
-      }).finally(() => {
-        setLoading(false);
-      });
     },
     [
       setPackFormat,
@@ -117,60 +103,6 @@ export default function Home() {
     },
     maxFiles: 1,
   });
-
-  const download = useCallback(() => {
-    setLoading(true);
-
-    const zip = new JSZip();
-
-    zip.file(
-      'pack.mcmeta',
-      JSON.stringify({
-        pack: {
-          pack_format: packFormat,
-          description,
-        },
-      })
-    );
-
-    zip.file(
-      'custompaintings.json',
-      JSON.stringify({
-        id,
-        name,
-        paintings: Array.from(paintings.values()).map(
-          ({ data, name, artist, ...painting }) => {
-            const result: Painting = painting;
-            if (name) {
-              result.name = name;
-            }
-            if (artist) {
-              result.artist = artist;
-            }
-            return result;
-          }
-        ),
-      })
-    );
-
-    zip.file('pack.png', icon.replace('data:image/png;base64,', ''), {
-      base64: true,
-    });
-
-    for (const painting of paintings.values()) {
-      const data = getPaintingImage(painting);
-      zip.file(
-        `assets/${id}/textures/painting/${painting.id}.png`,
-        data.replace('data:image/png;base64,', ''),
-        { base64: true }
-      );
-    }
-
-    zip.generateAsync({ type: 'blob' }).then((content) => {
-      saveAs(content, `${name}.zip`);
-      setLoading(false);
-    });
-  }, [packFormat, description, id, name, paintings, icon]);
 
   return (
     <>
@@ -246,7 +178,7 @@ export default function Home() {
             </div>
           </div>
           <Button
-            onClick={download}
+            onClick={() => {}}
             style={ButtonStyle.LARGE}
             tooltip={
               <span style={{ whiteSpace: 'nowrap' }}>

@@ -1,5 +1,12 @@
 import { z } from 'zod';
-import { paintingSchema } from './files';
+
+export const paintingSchema = z.object({
+  id: z.string(),
+  name: z.string().optional(),
+  artist: z.string().optional(),
+  height: z.number().min(1).max(8).default(1),
+  width: z.number().min(1).max(8).default(1),
+});
 
 export const getDefaultPainting = (id: string): Painting =>
   paintingSchema.parse({
