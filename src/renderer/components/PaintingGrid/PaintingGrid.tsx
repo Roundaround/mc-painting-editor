@@ -1,4 +1,4 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useEffect } from 'react';
 import styles from './PaintingGrid.module.scss';
 
 export interface PaintingGridProps {

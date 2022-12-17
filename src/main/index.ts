@@ -72,10 +72,14 @@ app.on('activate', () => {
 });
 
 function fileUrl(filePath: string): string {
-  return url
-    .pathToFileURL(filePath)
-    .toString()
-    .replace(/^file:\/\//, 'mc-painting-editor://');
+  return (
+    url
+      .pathToFileURL(filePath)
+      .toString()
+      .replace(/^file:\/\//, 'mc-painting-editor://') +
+    '?v=' +
+    Date.now()
+  );
 }
 
 ipcMain.handle('openZipFile', async (event, arg) => {
@@ -167,9 +171,6 @@ ipcMain.handle('openZipFile', async (event, arg) => {
     zip.extractEntryTo(entry, dir, false, true);
     const filePath = path.join(appTempDir, 'paintings', filename);
     event.sender.send('setPaintingPath', key, fileUrl(filePath));
-
-    const data = entry.getData().toString('base64');
-    event.sender.send('setPaintingData', key, `data:image/png;base64,${data}`);
   }
 
   event.sender.send('setExtraPaintingImages', extraPaintingImages);

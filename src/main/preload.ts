@@ -34,12 +34,6 @@ const api = {
       ipcRenderer.on('setPaintings', (event, paintings) => callback(paintings));
       return () => ipcRenderer.off('setPaintings', callback);
     },
-    paintingData: (callback: (id: string, paintingData: string) => void) => {
-      ipcRenderer.on('setPaintingData', (event, id, paintingData) =>
-        callback(id, paintingData)
-      );
-      return () => ipcRenderer.off('setPaintingData', callback);
-    },
     paintingPath: (callback: (id: string, paintingPath: string) => void) => {
       ipcRenderer.on('setPaintingPath', (event, id, paintingPath) =>
         callback(id, paintingPath)

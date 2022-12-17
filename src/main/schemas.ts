@@ -6,6 +6,7 @@ export const paintingSchema = z.object({
   artist: z.string().optional(),
   height: z.number().min(1).max(8).default(1),
   width: z.number().min(1).max(8).default(1),
+  path: z.string().optional(),
 });
 
 export const packSchema = z.object({
@@ -26,7 +27,7 @@ export const mcmetaSchema = z.object({
     })),
 });
 
-export type Painting = z.output<typeof paintingSchema> & { data?: string };
+export type Painting = z.output<typeof paintingSchema>;
 
 export const getDefaultPainting = (id: string): Painting =>
   paintingSchema.parse({

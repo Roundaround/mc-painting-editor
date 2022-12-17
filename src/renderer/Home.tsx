@@ -25,23 +25,6 @@ export default function Home() {
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
 
-  const setPaintingData = useCallback(
-    (id: string, data: string) => {
-      setPaintings((paintings) => {
-        let painting = paintings.get(id);
-        if (!painting) {
-          // TODO: Indicate that there was an image but no matching metadata
-          painting = getDefaultPainting(id);
-        }
-        return new Map(paintings).set(id, {
-          ...painting,
-          data,
-        });
-      });
-    },
-    [setPaintings]
-  );
-
   const setPaintingPath = useCallback(
     (id: string, path: string) => {
       setPaintings((paintings) => {
@@ -69,8 +52,6 @@ export default function Home() {
     const cancelNameListener = window.electron.onSet.name(setName);
     const cancelPaintingsListener =
       window.electron.onSet.paintings(setPaintings);
-    const cancelPaintingDataListener =
-      window.electron.onSet.paintingData(setPaintingData);
     const cancelPaintingPathListener =
       window.electron.onSet.paintingPath(setPaintingPath);
 
@@ -81,7 +62,6 @@ export default function Home() {
       cancelIdListener();
       cancelNameListener();
       cancelPaintingsListener();
-      cancelPaintingDataListener();
       cancelPaintingPathListener();
     };
   }, [
@@ -91,7 +71,6 @@ export default function Home() {
     setId,
     setName,
     setPaintings,
-    setPaintingData,
     setPaintingPath,
   ]);
 
@@ -157,9 +136,7 @@ export default function Home() {
     [setIcon]
   );
 
-  const {
-    getRootProps: getRootPropsForZip,
-  } = useDropzone({
+  const { getRootProps: getRootPropsForZip } = useDropzone({
     onDropAccepted: onZipFileDrop,
     noClick: true,
     noKeyboard: true,
