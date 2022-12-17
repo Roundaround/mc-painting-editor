@@ -1,14 +1,11 @@
-import { saveAs } from 'file-saver';
 import { useAtom } from 'jotai';
-import JSZip from 'jszip';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { Blocks } from 'react-loader-spinner';
 import { Button, ButtonStyle } from './components/Button';
 import { PaintingList } from './components/PaintingList';
 import { TextInput } from './components/TextInput';
 import './Home.scss';
-import { getPaintingImage, Painting } from './utils/painting';
 import {
   descriptionAtom,
   iconAtom,
@@ -26,6 +23,25 @@ export default function Home() {
   const [id, setId] = useAtom(idAtom);
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
+
+  useEffect(() => {
+    const cancelIconListener = window.electron.onSet.icon(setIcon);
+    const cancelIdListener = window.electron.onSet.id(setId);
+    const cancelNameListener = window.electron.onSet.name(setName);
+
+    return () => {
+      cancelIconListener();
+      cancelIdListener();
+      cancelNameListener();
+    };
+  }, [setIcon, setId, setName]);
+
+  const requestAndReadZipFile = useCallback(() => {
+    setLoading(true);
+    window.electron.requestAndReadZipFile().then(() => {
+      setLoading(false);
+    });
+  }, [setLoading]);
 
   const onZipFileDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -87,6 +103,8 @@ export default function Home() {
     getInputProps: getInputPropsForZip,
   } = useDropzone({
     onDropAccepted: onZipFileDrop,
+    noClick: true,
+    noKeyboard: true,
     accept: {
       'application/zip': ['.zip'],
     },
@@ -114,8 +132,11 @@ export default function Home() {
 
       <main className="page-wrapper">
         <div className="page-column">
-          <div className="zip-input" {...getRootPropsForZip()}>
-            <input {...getInputPropsForZip()} />
+          <div
+            className="zip-input"
+            {...getRootPropsForZip()}
+            onClick={requestAndReadZipFile}
+          >
             <p>
               Edit an existing pack by dragging it here or clicking to select
               one for upload!

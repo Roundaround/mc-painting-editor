@@ -1,23 +1,25 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
 
-export type Channels = 'ipc-example';
-
-contextBridge.exposeInMainWorld('electron', {
-  ipcRenderer: {
-    sendMessage(channel: Channels, args: unknown[]) {
-      ipcRenderer.send(channel, args);
+const api = {
+  requestAndReadZipFile(): Promise<string> {
+    return ipcRenderer.invoke('requestAndReadZipFile');
+  },
+  onSet: {
+    icon: (callback: (icon: string) => void) => {
+      ipcRenderer.on('setIcon', (event, icon) => callback(icon));
+      return () => ipcRenderer.off('setIcon', callback);
     },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
-
-      return () => {
-        ipcRenderer.removeListener(channel, subscription);
-      };
+    id: (callback: (id: string) => void) => {
+      ipcRenderer.on('setId', (event, id) => callback(id));
+      return () => ipcRenderer.off('setId', callback);
     },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    name: (callback: (name: string) => void) => {
+      ipcRenderer.on('setName', (event, name) => callback(name));
+      return () => ipcRenderer.off('setName', callback);
     },
   },
-});
+} as const;
+
+export type IpcApi = typeof api;
+
+contextBridge.exposeInMainWorld('electron', api);
