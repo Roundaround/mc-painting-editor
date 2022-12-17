@@ -12,7 +12,7 @@ import {
   idAtom,
   nameAtom,
   packFormatAtom,
-  paintingsAtom,
+  paintingsAtom
 } from './utils/store';
 
 export default function Home() {
@@ -26,19 +26,29 @@ export default function Home() {
 
   useEffect(() => {
     const cancelIconListener = window.electron.onSet.icon(setIcon);
+    const cancelPackFormatListener =
+      window.electron.onSet.packFormat(setPackFormat);
+    const cancelDescriptionListener =
+      window.electron.onSet.description(setDescription);
     const cancelIdListener = window.electron.onSet.id(setId);
     const cancelNameListener = window.electron.onSet.name(setName);
+    const cancelPaintingsListener =
+      window.electron.onSet.paintings(setPaintings);
 
     return () => {
       cancelIconListener();
+      cancelPackFormatListener();
+      cancelDescriptionListener();
       cancelIdListener();
       cancelNameListener();
+      cancelPaintingsListener();
     };
-  }, [setIcon, setId, setName]);
+  }, [setIcon, setPackFormat, setDescription, setId, setName, setPaintings]);
 
   const requestAndReadZipFile = useCallback(() => {
     setLoading(true);
-    window.electron.requestAndReadZipFile().then(() => {
+    window.electron.requestAndReadZipFile().then((filename: string) => {
+      console.log(filename);
       setLoading(false);
     });
   }, [setLoading]);
