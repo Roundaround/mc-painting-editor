@@ -44,6 +44,10 @@ const api = {
       ipcRenderer.on('setLoading', (event, loading) => callback(loading));
       return () => ipcRenderer.off('setLoading', callback);
     },
+    filename: (callback: (filename: string) => void) => {
+      ipcRenderer.on('setFilename', (event, filename) => callback(filename));
+      return () => ipcRenderer.off('setFilename', callback);
+    },
   },
 } as const;
 

@@ -114,8 +114,10 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     }
 
     client.send('setExtraPaintingImages', extraPaintingImages);
+    client.send('setFilename', filename);
     return filename;
   } finally {
+    client.send('setFilename', '');
     client.send('setLoading', false);
     return '';
   }

@@ -9,11 +9,12 @@ import './Home.scss';
 import { getDefaultPainting } from './utils/painting';
 import {
   descriptionAtom,
+  filenameAtom,
   iconAtom,
   idAtom,
   nameAtom,
   packFormatAtom,
-  paintingsAtom,
+  paintingsAtom
 } from './utils/store';
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
   const [id, setId] = useAtom(idAtom);
   const [name, setName] = useAtom(nameAtom);
   const [paintings, setPaintings] = useAtom(paintingsAtom);
+  const [filename, setFilename] = useAtom(filenameAtom);
 
   const setPaintingPath = useCallback(
     (id: string, path: string) => {
@@ -55,6 +57,7 @@ export default function Home() {
     const cancelPaintingPathListener =
       window.electron.onSet.paintingPath(setPaintingPath);
     const cancelLoadingListener = window.electron.onSet.loading(setLoading);
+    const cancelFilenameListener = window.electron.onSet.filename(setFilename);
 
     return () => {
       cancelIconListener();
@@ -65,6 +68,7 @@ export default function Home() {
       cancelPaintingsListener();
       cancelPaintingPathListener();
       cancelLoadingListener();
+      cancelFilenameListener();
     };
   }, [
     setIcon,
@@ -75,6 +79,7 @@ export default function Home() {
     setPaintings,
     setPaintingPath,
     setLoading,
+    setFilename,
   ]);
 
   const onIconFileDrop = useCallback(
