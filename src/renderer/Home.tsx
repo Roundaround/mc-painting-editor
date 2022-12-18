@@ -54,6 +54,7 @@ export default function Home() {
       window.electron.onSet.paintings(setPaintings);
     const cancelPaintingPathListener =
       window.electron.onSet.paintingPath(setPaintingPath);
+    const cancelLoadingListener = window.electron.onSet.loading(setLoading);
 
     return () => {
       cancelIconListener();
@@ -63,6 +64,7 @@ export default function Home() {
       cancelNameListener();
       cancelPaintingsListener();
       cancelPaintingPathListener();
+      cancelLoadingListener();
     };
   }, [
     setIcon,
@@ -72,53 +74,8 @@ export default function Home() {
     setName,
     setPaintings,
     setPaintingPath,
+    setLoading,
   ]);
-
-  const openZipFile = useCallback(() => {
-    setLoading(true);
-    window.electron.openZipFile().then((filename: string) => {
-      setLoading(false);
-    });
-  }, [setLoading]);
-
-  const onZipFileDrop = useCallback(
-    (acceptedFiles: File[]) => {
-      if (acceptedFiles.length === 0) {
-        return;
-      }
-
-      if (
-        icon !== '' ||
-        description !== '' ||
-        id !== '' ||
-        name !== '' ||
-        paintings.size > 0
-      ) {
-        if (
-          !confirm(
-            'You have unsaved work. ' +
-              'Are you sure you want to overwrite the current pack?'
-          )
-        ) {
-          return;
-        }
-      }
-    },
-    [
-      setPackFormat,
-      setDescription,
-      setId,
-      setName,
-      setIcon,
-      setPaintings,
-      packFormat,
-      description,
-      id,
-      name,
-      paintings,
-      icon,
-    ]
-  );
 
   const onIconFileDrop = useCallback(
     (acceptedFiles: File[]) => {
@@ -135,16 +92,6 @@ export default function Home() {
     },
     [setIcon]
   );
-
-  const { getRootProps: getRootPropsForZip } = useDropzone({
-    onDropAccepted: onZipFileDrop,
-    noClick: true,
-    noKeyboard: true,
-    accept: {
-      'application/zip': ['.zip'],
-    },
-    maxFiles: 1,
-  });
 
   const {
     getRootProps: getRootPropsForIcon,
@@ -167,16 +114,6 @@ export default function Home() {
 
       <main className="page-wrapper">
         <div className="page-column">
-          <div
-            className="zip-input"
-            {...getRootPropsForZip()}
-            onClick={openZipFile}
-          >
-            <p>
-              Edit an existing pack by dragging it here or clicking to select
-              one for upload!
-            </p>
-          </div>
           <div
             style={{
               display: 'flex',

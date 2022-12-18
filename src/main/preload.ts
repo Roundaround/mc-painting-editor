@@ -40,6 +40,10 @@ const api = {
       );
       return () => ipcRenderer.off('setPaintingPath', callback);
     },
+    loading: (callback: (loading: boolean) => void) => {
+      ipcRenderer.on('setLoading', (event, loading) => callback(loading));
+      return () => ipcRenderer.off('setLoading', callback);
+    },
   },
 } as const;
 

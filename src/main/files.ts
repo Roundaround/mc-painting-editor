@@ -34,83 +34,89 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     return '';
   }
 
-  const filename = files.filePaths[0];
-  let packName = filename.substring(
-    filename.lastIndexOf('/') + 1,
-    filename.lastIndexOf('.')
-  );
+  client.send('setLoading', false);
 
-  const zip = new AdmZip(filename);
-  const entries = zip.getEntries();
+  try {
+    const filename = files.filePaths[0];
+    let packName = filename.substring(
+      filename.lastIndexOf('/') + 1,
+      filename.lastIndexOf('.')
+    );
 
-  const paintingImages: IZipEntry[] = [];
-  const extraPaintingImages: string[] = [];
+    const zip = new AdmZip(filename);
+    const entries = zip.getEntries();
 
-  for (const entry of entries) {
-    if (entry.isDirectory) {
-      continue;
-    }
+    const paintingImages: IZipEntry[] = [];
+    const extraPaintingImages: string[] = [];
 
-    if (entry.entryName === 'pack.mcmeta') {
-      const text = entry.getData().toString('utf8');
-      const mcmeta = mcmetaSchema.parse(JSON.parse(text));
-
-      client.send('setPackFormat', mcmeta.pack.packFormat);
-      if (mcmeta.pack.description) {
-        client.send('setDescription', mcmeta.pack.description);
+    for (const entry of entries) {
+      if (entry.isDirectory) {
+        continue;
       }
 
-      continue;
-    }
+      if (entry.entryName === 'pack.mcmeta') {
+        const text = entry.getData().toString('utf8');
+        const mcmeta = mcmetaSchema.parse(JSON.parse(text));
 
-    if (entry.entryName === 'custompaintings.json') {
-      const text = entry.getData().toString('utf8');
-      const pack = packSchema.parse(JSON.parse(text));
+        client.send('setPackFormat', mcmeta.pack.packFormat);
+        if (mcmeta.pack.description) {
+          client.send('setDescription', mcmeta.pack.description);
+        }
 
-      client.send('setId', pack.id);
-      if (pack.name) {
-        packName = pack.name;
+        continue;
       }
 
-      const paintings = new Map<string, Painting>();
-      for (const painting of pack.paintings) {
-        paintings.set(painting.id, painting);
-      }
-      client.send('setPaintings', paintings);
+      if (entry.entryName === 'custompaintings.json') {
+        const text = entry.getData().toString('utf8');
+        const pack = packSchema.parse(JSON.parse(text));
 
-      continue;
+        client.send('setId', pack.id);
+        if (pack.name) {
+          packName = pack.name;
+        }
+
+        const paintings = new Map<string, Painting>();
+        for (const painting of pack.paintings) {
+          paintings.set(painting.id, painting);
+        }
+        client.send('setPaintings', paintings);
+
+        continue;
+      }
+
+      if (entry.entryName === 'pack.png') {
+        zip.extractEntryTo(entry, appTempDir, false, true);
+        const filename = entry.entryName.substring(
+          entry.entryName.lastIndexOf('/') + 1
+        );
+        const filePath = path.join(appTempDir, filename);
+        client.send('setIcon', fileUrl(filePath));
+
+        continue;
+      } else if (entry.entryName.endsWith('.png')) {
+        paintingImages.push(entry);
+        continue;
+      }
     }
 
-    if (entry.entryName === 'pack.png') {
-      zip.extractEntryTo(entry, appTempDir, false, true);
+    client.send('setName', packName);
+
+    for (const entry of paintingImages) {
       const filename = entry.entryName.substring(
         entry.entryName.lastIndexOf('/') + 1
       );
-      const filePath = path.join(appTempDir, filename);
-      client.send('setIcon', fileUrl(filePath));
+      const key = filename.substring(0, filename.lastIndexOf('.'));
 
-      continue;
-    } else if (entry.entryName.endsWith('.png')) {
-      paintingImages.push(entry);
-      continue;
+      const dir = path.join(appTempDir, 'paintings');
+      zip.extractEntryTo(entry, dir, false, true);
+      const filePath = path.join(appTempDir, 'paintings', filename);
+      client.send('setPaintingPath', key, fileUrl(filePath));
     }
+
+    client.send('setExtraPaintingImages', extraPaintingImages);
+    return filename;
+  } finally {
+    client.send('setLoading', false);
+    return '';
   }
-
-  client.send('setName', packName);
-
-  for (const entry of paintingImages) {
-    const filename = entry.entryName.substring(
-      entry.entryName.lastIndexOf('/') + 1
-    );
-    const key = filename.substring(0, filename.lastIndexOf('.'));
-
-    const dir = path.join(appTempDir, 'paintings');
-    zip.extractEntryTo(entry, dir, false, true);
-    const filePath = path.join(appTempDir, 'paintings', filename);
-    client.send('setPaintingPath', key, fileUrl(filePath));
-  }
-
-  client.send('setExtraPaintingImages', extraPaintingImages);
-
-  return filename;
 }
