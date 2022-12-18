@@ -15,6 +15,33 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
           openZipFile(focusedWindow);
         },
       },
+      {
+        label: 'Save',
+        accelerator: 'CmdOrCtrl+S',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+        },
+      },
+      {
+        label: 'Save As',
+        accelerator: 'CmdOrCtrl+Shift+S',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+        },
+      },
+      {
+        label: 'Exit',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+          focusedWindow.close();
+        },
+      },
     ],
   },
 ];
