@@ -56,7 +56,6 @@ app.whenReady().then(() => {
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
-    fs.rmdirSync(appTempDir, { recursive: true });
     app.quit();
   }
 });
@@ -67,6 +66,10 @@ app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }
+});
+
+app.on('before-quit', () => {
+  fs.rmdirSync(appTempDir, { recursive: true });
 });
 
 ipcMain.handle('openZipFile', (event, args) => {
