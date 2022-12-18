@@ -1,6 +1,6 @@
-import { Painting } from './painting';
+import { arePaintingsEqual, Painting } from './painting';
 
-export interface Pack {
+export interface Archive {
   filename: string;
   id: string;
   name: string;
@@ -10,7 +10,7 @@ export interface Pack {
   paintings: Map<string, Painting>;
 }
 
-export const getDefaultPack = (): Pack => ({
+export const getDefaultArchive = (): Archive => ({
   filename: '',
   id: '',
   name: '',
@@ -20,7 +20,7 @@ export const getDefaultPack = (): Pack => ({
   paintings: new Map(),
 });
 
-export const arePacksEqual = (a: Pack, b: Pack): boolean =>
+export const areArchivesEqual = (a: Archive, b: Archive): boolean =>
   a.filename === b.filename &&
   a.id === b.id &&
   a.name === b.name &&
@@ -28,4 +28,7 @@ export const arePacksEqual = (a: Pack, b: Pack): boolean =>
   a.packFormat === b.packFormat &&
   a.icon === b.icon &&
   a.paintings.size === b.paintings.size &&
-  [...a.paintings.keys()].every((id) => b.paintings.has(id));
+  [...a.paintings.keys()].every((id) => b.paintings.has(id)) &&
+  [...a.paintings.keys()].every((id) =>
+    arePaintingsEqual(a.paintings.get(id)!, b.paintings.get(id)!)
+  );

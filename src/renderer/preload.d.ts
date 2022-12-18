@@ -1,4 +1,4 @@
-import { IpcApi } from 'main/preload';
+import { IpcApi } from '../main/preload';
 
 declare global {
   interface Window {
