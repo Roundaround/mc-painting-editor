@@ -38,7 +38,9 @@ const api = {
       ipcRenderer.on('setPaintingPath', (event, id, paintingPath) =>
         callback(id, paintingPath)
       );
-      return () => ipcRenderer.off('setPaintingPath', callback);
+      return () => {
+        ipcRenderer.off('setPaintingPath', callback);
+      };
     },
     loading: (callback: (loading: boolean) => void) => {
       ipcRenderer.on('setLoading', (event, loading) => callback(loading));
@@ -56,7 +58,9 @@ const api = {
     ipcRenderer.on('setValue', (event, _key, value) => {
       if (_key === key) callback(value);
     });
-    return () => ipcRenderer.off('setValue', callback);
+    return () => {
+      ipcRenderer.off('setValue', callback);
+    };
   },
 } as const;
 

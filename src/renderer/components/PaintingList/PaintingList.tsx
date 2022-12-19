@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAtom } from 'jotai';
-import { Fragment, useCallback, useMemo } from 'react';
+import { useAtom } from '@xoid/react';
+import { Fragment, useMemo } from 'react';
 import { getDefaultPainting } from '../../utils/painting';
 import { paintingsAtom } from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
@@ -9,7 +9,7 @@ import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
-  const [paintings, setPaintings] = useAtom(paintingsAtom);
+  const paintings = useAtom(paintingsAtom);
 
   const paintingIds = useMemo(() => Array.from(paintings.keys()), [paintings]);
 
@@ -18,8 +18,8 @@ export function PaintingList() {
     return Object.values(paintings).filter((painting) => !painting.data).length;
   }, [paintings]);
 
-  const addPainting = useCallback(() => {
-    setPaintings((paintings) => {
+  const addPainting = () => {
+    paintingsAtom.update((paintings) => {
       let nextNum = paintings.size + 1;
       while (paintings.has(`painting-${nextNum}`)) {
         nextNum++;
@@ -28,7 +28,7 @@ export function PaintingList() {
       const id = `painting-${nextNum}`;
       return new Map(paintings).set(id, getDefaultPainting(id));
     });
-  }, [setPaintings]);
+  };
 
   return (
     <>

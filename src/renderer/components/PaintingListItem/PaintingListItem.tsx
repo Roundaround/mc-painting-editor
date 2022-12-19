@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAtom } from 'jotai';
+import { useAtom, useSetup } from '@xoid/react';
 import { useCallback, useMemo } from 'react';
 import {
   getDefaultPainting,
   getPaintingImage,
-  Painting
+  Painting,
 } from '../../utils/painting';
 import { paintingsAtom } from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
@@ -21,35 +21,46 @@ export interface PaintingListItemProps {
 export function PaintingListItem(props: PaintingListItemProps) {
   const { id, isFirst, isLast } = props;
 
-  const [paintings, setPaintings] = useAtom(paintingsAtom);
-  const painting = useMemo(
-    () => paintings.get(id) || getDefaultPainting(id),
-    [id, paintings]
-  );
+  const paintingAtom = paintingsAtom.focus((paintings) => {
+    console.log(paintings);
+    return paintings.get(id);
+  });
+  const painting = useAtom(paintingAtom) || getDefaultPainting(id);
   const paintingImage = useMemo(() => getPaintingImage(painting), [painting]);
 
-  const update = useCallback(
-    (partialPainting: Partial<Painting>) => {
-      setPaintings((paintings) => {
-        return new Map(paintings).set(id, {
-          ...(paintings.get(id) || getDefaultPainting(id)),
-          ...partialPainting,
-        });
+  useSetup((paintingAtomAtom, { effect }) => {
+    effect(() => {
+      const cancel = window.electron.onSet.paintingPath((id, path) => {
+        if (id !== paintingAtomAtom.value.value.id) {
+          return;
+        }
+        paintingAtomAtom.value.update((painting) => ({
+          ...painting,
+          path,
+        }));
       });
-    },
-    [id, setPaintings]
-  );
+
+      return cancel;
+    });
+  }, paintingAtom);
+
+  const update = (partialPainting: Partial<Painting>) => {
+    paintingAtom.update((painting) => ({
+      ...painting,
+      ...partialPainting,
+    }));
+  };
 
   const remove = useCallback(() => {
-    setPaintings((paintings) => {
+    paintingsAtom.update((paintings) => {
       const newPaintings = new Map(paintings);
       newPaintings.delete(id);
       return newPaintings;
     });
-  }, [id, setPaintings]);
+  }, [id]);
 
   const moveUp = useCallback(() => {
-    setPaintings((paintings) => {
+    paintingsAtom.update((paintings) => {
       const newPaintings = new Map(paintings);
       const painting = newPaintings.get(id);
       if (!painting) {
@@ -72,10 +83,10 @@ export function PaintingListItem(props: PaintingListItemProps) {
       newPaintings.set(prevId, painting);
       return newPaintings;
     });
-  }, [id, setPaintings]);
+  }, [id]);
 
   const moveDown = useCallback(() => {
-    setPaintings((paintings) => {
+    paintingsAtom.update((paintings) => {
       const newPaintings = new Map(paintings);
       const painting = newPaintings.get(id);
       if (!painting) {
@@ -98,7 +109,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
       newPaintings.set(nextId, painting);
       return newPaintings;
     });
-  }, [id, setPaintings]);
+  }, [id]);
 
   return (
     <>
@@ -170,7 +181,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         <PaintingGrid
           maxHeight={8}
           maxWidth={8}
-          hasImage={painting.path !== undefined || painting.data !== undefined}
+          hasImage={painting.path !== undefined}
           image={paintingImage}
           height={painting.height}
           width={painting.width}
