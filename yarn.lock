@@ -1109,6 +1109,13 @@
     "@webassemblyjs/ast" "1.11.1"
     "@xtuc/long" "4.2.2"
 
+"@xoid/react@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@xoid/react/-/react-1.0.0-beta.5.tgz#020a9a914da32802d1ca12e01783ddcd38b8938c"
+  integrity sha512-JCTIJ0m9YJBf76L1TPvApXzSfpS0fBEIo0CWyTVC/nLlc/Sh+DZ35NWD6xz3X80VSjFOiVlXioGXg/r2TrCb1w==
+  dependencies:
+    use-sync-external-store "^1.1.0"
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -5896,6 +5903,11 @@ url-loader@^4.1.1:
     mime-types "^2.1.27"
     schema-utils "^3.0.0"
 
+use-sync-external-store@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.2.0.tgz#7dbefd6ef3fe4e767a0cf5d7287aacfb5846928a"
+  integrity sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==
+
 username@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/username/-/username-5.1.0.tgz#a7f9325adce2d0166448cdd55d4985b1360f2508"
@@ -6164,6 +6176,11 @@ xmlbuilder@^15.1.1:
   version "15.1.1"
   resolved "https://registry.yarnpkg.com/xmlbuilder/-/xmlbuilder-15.1.1.tgz#9dcdce49eea66d8d10b42cae94a79c3c8d0c2ec5"
   integrity sha512-yMqGBqtXyeN1e3TGYvgNgDVZ3j84W4cwkOXQswghol6APgZWaff9lnbvN7MHYJOiXsvGPXtjTYJEiC9J2wv9Eg==
+
+xoid@^1.0.0-beta.5:
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/xoid/-/xoid-1.0.0-beta.5.tgz#95f055165d1ed517ed62b673305bc5f7f0b316c4"
+  integrity sha512-xLG4Z+b6NquZmrQ9oQ1bunI0iZZxlcD0FVsh2sbzwwPxZ3Zi6Avy0rIq861BIooaibluAum9QhU/PimJ2BWDpQ==
 
 xterm-addon-fit@^0.5.0:
   version "0.5.0"

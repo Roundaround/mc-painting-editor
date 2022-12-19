@@ -52,6 +52,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.1",
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@xoid/react": "^1.0.0-beta.5",
     "adm-zip": "^0.5.9",
     "electron-squirrel-startup": "^1.0.0",
     "jotai": "^1.11.2",
@@ -60,6 +61,7 @@
     "react-dropzone": "^14.2.3",
     "react-loader-spinner": "^5.3.4",
     "react-router-dom": "^6.5.0",
+    "xoid": "^1.0.0-beta.5",
     "zod": "^3.20.2"
   }
 }

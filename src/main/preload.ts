@@ -49,6 +49,15 @@ const api = {
       return () => ipcRenderer.off('setFilename', callback);
     },
   },
+  sendValue: <T>(key: string, value: T) => {
+    ipcRenderer.send('setValue', key, value);
+  },
+  listenForValue: <T>(key: string, callback: (value: T) => void) => {
+    ipcRenderer.on('setValue', (event, _key, value) => {
+      if (_key === key) callback(value);
+    });
+    return () => ipcRenderer.off('setValue', callback);
+  },
 } as const;
 
 export type IpcApi = typeof api;
