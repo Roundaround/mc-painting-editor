@@ -20,7 +20,8 @@
     "outDir": "dist",
     "paths": {
       "*": ["node_modules/*"]
-    }
+    },
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
   "include": ["src/**/*"]
 }

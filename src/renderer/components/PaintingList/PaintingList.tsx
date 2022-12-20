@@ -56,6 +56,7 @@ export function PaintingList() {
       </div>
       <div
         className={['list', paintingIds.length === 0 ? 'list--empty' : '']
+          .filter((name): name is keyof typeof styles => !!name)
           .map((name) => styles[name])
           .join(' ')}
       >

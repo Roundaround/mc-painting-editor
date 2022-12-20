@@ -10,13 +10,6 @@ import {
 import { createPortal } from 'react-dom';
 import styles from './Tooltip.module.scss';
 
-export enum TooltipVariant {
-  SUCCESS = 'success',
-  INFO = 'info',
-  WARN = 'warn',
-  DANGER = 'danger',
-}
-
 export enum TooltipDirection {
   TOP = 'top',
   RIGHT = 'right',
@@ -36,7 +29,6 @@ export interface TooltipProps {
   content: ReactNode;
   children: ReactNode;
   delay?: number;
-  variant?: TooltipVariant;
   direction?: TooltipDirection;
   inline?: boolean;
   directTabbable?: boolean;
@@ -46,7 +38,6 @@ export interface TooltipProps {
 export function Tooltip(props: TooltipProps & typeof defaultProps) {
   const {
     delay,
-    variant,
     direction,
     inline,
     children,
@@ -78,7 +69,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   }, [hovered, focused, updateBoundingRect, delay]);
 
   const anchorClassNames = useMemo(() => {
-    const result = ['tooltip-anchor'];
+    const result: (keyof typeof styles)[] = ['tooltip-anchor'];
     if (inline) {
       result.push('tooltip-anchor--inline');
     }
@@ -86,15 +77,12 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   }, [inline]);
 
   const classNames = useMemo(() => {
-    const result = ['tooltip', `tooltip--${direction}`];
-    if (variant) {
-      result.push(`tooltip--${variant}`);
-    }
+    const result: (keyof typeof styles)[] = ['tooltip', `tooltip--${direction}`];
     if (noWrap) {
       result.push('tooltip--nowrap');
     }
     return result.map((name) => styles[name]).join(' ');
-  }, [variant, direction]);
+  }, [direction, noWrap]);
 
   const { top, left } = useMemo(() => {
     if (!boundingRect) {
