@@ -53,19 +53,19 @@ export default function Home() {
             id="id"
             label="ID"
             value={id}
-            onChange={(e) => use(idAtom).set(e.target.value)}
+            onChange={(e) => idAtom.set(e.target.value)}
           />
           <TextInput
             id="name"
             label="Name"
             value={name}
-            onChange={(e) => use(nameAtom).set(e.target.value)}
+            onChange={(e) => nameAtom.set(e.target.value)}
           />
           <TextInput
             id="description"
             label="Description"
             value={description}
-            onChange={(e) => use(descriptionAtom).set(e.target.value)}
+            onChange={(e) => descriptionAtom.set(e.target.value)}
           />
           <div
             style={{

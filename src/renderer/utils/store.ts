@@ -13,8 +13,6 @@ type BoundAtomUsable<T, U = {}> = Usable<
   >
 >;
 
-type SetFunction<T> = (value: T) => void;
-
 const createIpcBoundAtom = <T, U = {}>(
   key: string,
   initialValue: T,

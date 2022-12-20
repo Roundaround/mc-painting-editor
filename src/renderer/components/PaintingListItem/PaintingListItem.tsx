@@ -22,8 +22,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
   const { id, isFirst, isLast } = props;
 
   const paintingAtom = paintingsAtom.focus((paintings) => {
-    console.log(paintings);
-    return paintings.get(id);
+    return new Map(paintings).get(id);
   });
   const painting = useAtom(paintingAtom) || getDefaultPainting(id);
   const paintingImage = useMemo(() => getPaintingImage(painting), [painting]);
