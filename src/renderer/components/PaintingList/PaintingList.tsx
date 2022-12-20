@@ -1,34 +1,31 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAtom } from '@xoid/react';
-import { Fragment, useMemo } from 'react';
+import { Fragment, useCallback, useMemo } from 'react';
 import { getDefaultPainting } from '../../utils/painting';
-import { paintingsAtom } from '../../utils/store';
+import { paintingsAtom, usePaintingsState } from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
 import { PaintingListItem } from '../PaintingListItem';
 import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
-  const paintings = useAtom(paintingsAtom);
-
-  const paintingIds = useMemo(() => Array.from(paintings.keys()), [paintings]);
+  const { getAllIds, getAll, add } = usePaintingsState();
+  const paintingIds = useMemo(() => getAllIds(), [getAllIds]);
 
   // TODO: Indicate how many paintings have no image
   const paintingsWithoutImages = useMemo(() => {
-    return Object.values(paintings).filter((painting) => !painting.data).length;
-  }, [paintings]);
+    return getAll().filter((painting) => !painting.path).length;
+  }, [getAll]);
 
-  const addPainting = () => {
-    paintingsAtom.update((paintings) => {
-      let nextNum = paintings.size + 1;
-      while (paintings.has(`painting-${nextNum}`)) {
-        nextNum++;
-      }
+  const addPainting = useCallback(() => {
+    let nextNum = paintingIds.length + 1;
+    while (paintingIds.indexOf(`painting-${nextNum}`) > -1) {
+      nextNum++;
+    }
 
-      const id = `painting-${nextNum}`;
-      return new Map(paintings).set(id, getDefaultPainting(id));
-    });
-  };
+    paintingsAtom.update((paintings) =>
+      add(paintings, getDefaultPainting(`painting-${nextNum}`))
+    );
+  }, [paintingIds, add]);
 
   return (
     <>

@@ -1,6 +1,8 @@
 import { getDefaultArchive, Archive } from './archive';
 import { Painting } from './painting';
 import { Atom, Usable, create, use } from 'xoid';
+import { EntityState, getEmptyEntityState, useEntityState } from './etityState';
+import { useAtom } from '@xoid/react';
 
 type Merge<T, U> = Omit<T, keyof U> & U;
 
@@ -41,12 +43,9 @@ const createIpcBoundAtom = <T, U = {}>(
   return boundAtom;
 };
 
-export interface Collection<T extends {id: string}> {
-  ids: string[];
-  data: { [id: string]: T };
-}
-
-export interface Paintings extends Collection<Painting> {
+export const usePaintingsState = () => {
+  const paintings = useAtom(paintingsAtom);
+  return useEntityState(paintings, (painting) => painting.id);
 }
 
 export const loadingAtom = createIpcBoundAtom('loading', false);
@@ -55,8 +54,8 @@ export const packFormatAtom = createIpcBoundAtom('packFormat', 9);
 export const descriptionAtom = createIpcBoundAtom('description', '');
 export const idAtom = createIpcBoundAtom('id', '');
 export const nameAtom = createIpcBoundAtom('name', '');
-export const paintingsAtom = createIpcBoundAtom<Paintings>('paintings', {
-  ids: [],
-  data: {},
-});
+export const paintingsAtom = createIpcBoundAtom(
+  'paintings',
+  getEmptyEntityState<Painting>()
+);
 export const filenameAtom = createIpcBoundAtom('filename', '');

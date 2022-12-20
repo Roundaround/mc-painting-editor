@@ -55,6 +55,7 @@
     "@xoid/react": "^1.0.0-beta.5",
     "adm-zip": "^0.5.9",
     "electron-squirrel-startup": "^1.0.0",
+    "immer": "^9.0.16",
     "jotai": "^1.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
