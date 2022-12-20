@@ -19,7 +19,7 @@ const createIpcBoundAtom = <T, U = {}>(
   getUsable?: (atom: Atom<T>) => U
 ): Atom<T> & BoundAtomUsable<T, U> => {
   let baseSetter = (value: T) => {};
-  
+
   const boundAtom = create(initialValue, (atom) => {
     const usableAdditions = getUsable?.(atom) ?? ({} as U);
     return {
@@ -41,14 +41,22 @@ const createIpcBoundAtom = <T, U = {}>(
   return boundAtom;
 };
 
+export interface Collection<T extends {id: string}> {
+  ids: string[];
+  data: { [id: string]: T };
+}
+
+export interface Paintings extends Collection<Painting> {
+}
+
 export const loadingAtom = createIpcBoundAtom('loading', false);
 export const iconAtom = createIpcBoundAtom('icon', '');
 export const packFormatAtom = createIpcBoundAtom('packFormat', 9);
 export const descriptionAtom = createIpcBoundAtom('description', '');
 export const idAtom = createIpcBoundAtom('id', '');
 export const nameAtom = createIpcBoundAtom('name', '');
-export const paintingsAtom = createIpcBoundAtom(
-  'paintings',
-  new Map<string, Painting>()
-);
+export const paintingsAtom = createIpcBoundAtom<Paintings>('paintings', {
+  ids: [],
+  data: {},
+});
 export const filenameAtom = createIpcBoundAtom('filename', '');

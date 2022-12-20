@@ -9,12 +9,12 @@ export const paintingSchema = z.object({
   path: z.string().optional(),
 });
 
-export const getDefaultPainting = (id: string): Painting =>
+export const getDefaultPainting = (id: string) =>
   paintingSchema.parse({
     id,
   });
 
-export type Painting = z.output<typeof paintingSchema>;
+export type Painting = z.infer<typeof paintingSchema>;
 
 const generateBlankImage = (width: number, height: number) => {
   const canvas = document.createElement('canvas');
