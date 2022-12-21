@@ -36,8 +36,24 @@ export function createStore(mainWindow: BrowserWindow) {
     }
   );
 
+  newStore.subscribe(() => {
+    updateTitleFromStore(mainWindow, newStore);
+  });
+
   store = newStore;
   return newStore;
+}
+
+export function updateTitleFromStore(
+  mainWindow: BrowserWindow,
+  store: MainStore
+) {
+  const state = store.getState();
+  const filename = state.editor.filename || '(Untitled)';
+  const title = `${filename} - Custom Painting Editor`;
+  if (mainWindow.getTitle() !== title) {
+    mainWindow.setTitle(title);
+  }
 }
 
 export const paintingsSelectors = paintingsAdapter.getSelectors(
