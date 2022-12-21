@@ -5,7 +5,12 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import fs from 'fs';
 import url from 'url';
-import { appTempDir, openZipFile } from './files';
+import {
+  appTempDir,
+  openIconFile,
+  openPaintingFile,
+  openZipFile,
+} from './files';
 import { registerMenu } from './menu';
 import { createStore } from './store';
 
@@ -97,4 +102,20 @@ ipcMain.handle('openZipFile', (event, args) => {
   }
 
   return openZipFile(mainWindow);
+});
+
+ipcMain.handle('openIconFile', (event, args) => {
+  if (!mainWindow) {
+    return '';
+  }
+
+  return openIconFile(mainWindow);
+});
+
+ipcMain.handle('openPaintingFile', (event, paintingId) => {
+  if (!mainWindow) {
+    return '';
+  }
+
+  return openPaintingFile(mainWindow, paintingId);
 });

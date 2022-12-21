@@ -57,6 +57,9 @@ export default function Home() {
               className={['icon-input', !icon ? 'icon-input--empty' : ''].join(
                 ' '
               )}
+              onClick={() => {
+                window.electron.openIconFile();
+              }}
             >
               {!icon ? null : (
                 <img

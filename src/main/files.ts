@@ -1,6 +1,7 @@
 import { nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
+import fs from 'fs/promises';
 import path from 'path';
 import url from 'url';
 import {
@@ -125,8 +126,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       const key = filename.substring(0, filename.lastIndexOf('.'));
 
       const dir = path.join(appTempDir, 'paintings');
-      zip.extractEntryTo(entry, dir, false, true);
-      const filePath = path.join(appTempDir, 'paintings', filename);
+
       if (!paintingUuids[key]) {
         const defaultPainting = getDefaultPainting();
         paintingUuids[key] = defaultPainting.uuid;
@@ -137,9 +137,16 @@ export async function openZipFile(parentWindow: BrowserWindow) {
           })
         );
       }
+
+      const uuid = paintingUuids[key];
+      const newFilename = `${uuid}.png`;
+
+      zip.extractEntryTo(entry, dir, false, true, false, newFilename);
+
+      const filePath = path.join(appTempDir, 'paintings', newFilename);
       store.dispatch(
         updatePainting({
-          id: paintingUuids[key],
+          id: uuid,
           changes: {
             path: fileUrl(filePath),
           },
@@ -154,4 +161,67 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     store.dispatch(setLoading(false));
     return '';
   }
+}
+
+export async function openIconFile(parentWindow: BrowserWindow) {
+  const files = await dialog.showOpenDialog(parentWindow, {
+    properties: ['openFile'],
+    filters: [
+      {
+        name: 'PNG Image Files',
+        extensions: ['png'],
+      },
+    ],
+  });
+
+  if (files.canceled) {
+    return;
+  }
+
+  const filename = files.filePaths[0];
+  const newPath = path.join(appTempDir, 'pack.png');
+
+  await fs.mkdir(appTempDir, { recursive: true }).catch((err) => {
+    if (err?.code !== 'EEXIST') {
+      throw err;
+    }
+  });
+  await fs.copyFile(filename, newPath);
+
+  store.dispatch(setIcon(fileUrl(newPath)));
+}
+
+export async function openPaintingFile(
+  parentWindow: BrowserWindow,
+  paintingId: string
+) {
+  const files = await dialog.showOpenDialog(parentWindow, {
+    properties: ['openFile'],
+    filters: [
+      {
+        name: 'PNG Image Files',
+        extensions: ['png'],
+      },
+    ],
+  });
+
+  if (files.canceled) {
+    return;
+  }
+
+  const filename = files.filePaths[0];
+  const newPath = path.join(appTempDir, 'paintings', `${paintingId}.png`);
+
+  await fs
+    .mkdir(path.join(appTempDir, 'paintings'), { recursive: true })
+    .catch((err) => {
+      if (err?.code !== 'EEXIST') {
+        throw err;
+      }
+    });
+  await fs.copyFile(filename, newPath);
+
+  store.dispatch(
+    updatePainting({ id: paintingId, changes: { path: fileUrl(newPath) } })
+  );
 }

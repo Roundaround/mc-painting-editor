@@ -1,7 +1,7 @@
-import { CSSProperties, useEffect } from 'react';
+import { BaseHTMLAttributes, CSSProperties } from 'react';
 import styles from './PaintingGrid.module.scss';
 
-export interface PaintingGridProps {
+export interface PaintingGridProps extends BaseHTMLAttributes<HTMLDivElement> {
   maxHeight: number;
   maxWidth: number;
   hasImage: boolean;
@@ -11,7 +11,7 @@ export interface PaintingGridProps {
 }
 
 export const PaintingGrid = (props: PaintingGridProps) => {
-  const { maxHeight, maxWidth, hasImage, image, height, width } = props;
+  const { onClick, maxHeight, maxWidth, hasImage, image, height, width } = props;
 
   return (
     <div
@@ -22,6 +22,7 @@ export const PaintingGrid = (props: PaintingGridProps) => {
           '--painting-grid-width': `${maxWidth * 2}rem`,
         } as CSSProperties
       }
+      onClick={onClick}
     >
       <img
         src={image}
@@ -33,6 +34,7 @@ export const PaintingGrid = (props: PaintingGridProps) => {
           } as CSSProperties
         }
       />
+      <div className={styles['edit-overlay']}></div>
       {hasImage ? null : (
         <div className={styles['upload-instructions']}>
           <span style={{ whiteSpace: 'nowrap' }}>Click here to</span>

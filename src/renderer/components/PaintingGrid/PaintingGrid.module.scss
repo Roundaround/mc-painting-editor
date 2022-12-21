@@ -8,10 +8,11 @@
   border: 0.125rem solid var(--smoke);
   box-sizing: content-box;
   background-color: transparent;
+  cursor: pointer;
   transition: background-color;
 
   &:hover {
-    .pg-edit-overlay {
+    .edit-overlay {
       opacity: 1;
     }
   }

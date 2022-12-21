@@ -57,7 +57,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
           }}
         >
           <TextInput
-            id={`painting-id-${painting.id}`}
+            id={`painting-id-${id}`}
             label="ID"
             value={painting.id}
             onChange={(e) => {
@@ -65,7 +65,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             }}
           />
           <TextInput
-            id={`painting-name-${painting.id}`}
+            id={`painting-name-${id}`}
             label="Name"
             value={painting.name}
             onChange={(e) => {
@@ -75,7 +75,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             }}
           />
           <TextInput
-            id={`painting-artist-${painting.id}`}
+            id={`painting-artist-${id}`}
             label="Artist"
             value={painting.artist}
             onChange={(e) => {
@@ -85,7 +85,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             }}
           />
           <NumberInput
-            id={`painting-width-${painting.id}`}
+            id={`painting-width-${id}`}
             label="Width"
             min={1}
             max={8}
@@ -100,7 +100,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             }}
           />
           <NumberInput
-            id={`painting-height-${painting.id}`}
+            id={`painting-height-${id}`}
             label="Height"
             min={1}
             max={8}
@@ -116,6 +116,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
           />
         </div>
         <PaintingGrid
+          onClick={() => window.electron.openPaintingFile(id)}
           maxHeight={8}
           maxWidth={8}
           hasImage={painting.path !== undefined}

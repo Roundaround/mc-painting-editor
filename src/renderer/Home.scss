@@ -40,48 +40,12 @@
   padding: var(--size-4);
 }
 
-.zip-input {
-  position: relative;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: var(--size-6) var(--size-8);
-  cursor: pointer;
-  user-select: none;
-  border: var(--border-size-2) dashed var(--accent);
-  border-radius: var(--radius-3);
-  text-align: center;
-  overflow: hidden;
-  margin: var(--size-5);
-  max-width: 50ch;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    pointer-events: none;
-    user-select: none;
-    background-color: hsl(var(--accent-hsl) / 0.2);
-    opacity: 0;
-    transition: opacity 0.075s var(--ease-in-out-2);
-  }
-
-  &:hover {
-    &::before {
-      opacity: 1;
-    }
-  }
-}
-
 .icon-input {
   position: relative;
   height: 8rem;
   width: 8rem;
   image-rendering: pixelated;
+  cursor: pointer;
 
   &::before {
     content: '';
