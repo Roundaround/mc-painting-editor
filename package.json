@@ -54,18 +54,15 @@
     "@fortawesome/free-solid-svg-icons": "^6.2.1",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.1",
-    "@xoid/react": "^1.0.0-beta.5",
     "adm-zip": "^0.5.9",
     "electron-squirrel-startup": "^1.0.0",
     "immer": "^9.0.16",
-    "jotai": "^1.11.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-loader-spinner": "^5.3.4",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.5.0",
-    "xoid": "^1.0.0-beta.5",
     "zod": "3.19.1"
   }
 }

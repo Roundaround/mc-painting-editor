@@ -1,8 +1,16 @@
+import { nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
 import path from 'path';
 import url from 'url';
-import { mcmetaSchema, packSchema, Painting } from './schemas';
+import { editorSlice, metadataSlice, paintingsSlice } from '../common/store';
+import { getDefaultPainting, mcmetaSchema, packSchema } from './schemas';
+import { store } from './store';
+
+const { setLoading, setFilename } = editorSlice.actions;
+const { setIcon, setPackFormat, setDescription, setId, setName } =
+  metadataSlice.actions;
+const { updatePainting, upsertPainting, setPaintings } = paintingsSlice.actions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
 
@@ -18,8 +26,6 @@ export function fileUrl(filePath: string): string {
 }
 
 export async function openZipFile(parentWindow: BrowserWindow) {
-  const client = parentWindow.webContents;
-
   const files = await dialog.showOpenDialog(parentWindow, {
     properties: ['openFile'],
     filters: [
@@ -34,7 +40,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     return '';
   }
 
-  client.send('setLoading', false);
+  store.dispatch(setLoading(true));
 
   try {
     const filename = files.filePaths[0];
@@ -46,8 +52,8 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     const zip = new AdmZip(filename);
     const entries = zip.getEntries();
 
+    const paintingUuids: { [key: string]: string } = {};
     const paintingImages: IZipEntry[] = [];
-    const extraPaintingImages: string[] = [];
 
     for (const entry of entries) {
       if (entry.isDirectory) {
@@ -58,9 +64,9 @@ export async function openZipFile(parentWindow: BrowserWindow) {
         const text = entry.getData().toString('utf8');
         const mcmeta = mcmetaSchema.parse(JSON.parse(text));
 
-        client.send('setPackFormat', mcmeta.pack.packFormat);
+        store.dispatch(setPackFormat(mcmeta.pack.packFormat));
         if (mcmeta.pack.description) {
-          client.send('setDescription', mcmeta.pack.description);
+          store.dispatch(setDescription(mcmeta.pack.description));
         }
 
         continue;
@@ -70,16 +76,22 @@ export async function openZipFile(parentWindow: BrowserWindow) {
         const text = entry.getData().toString('utf8');
         const pack = packSchema.parse(JSON.parse(text));
 
-        client.send('setId', pack.id);
+        store.dispatch(setId(pack.id));
         if (pack.name) {
           packName = pack.name;
         }
 
-        const paintings = new Map<string, Painting>();
-        for (const painting of pack.paintings) {
-          paintings.set(painting.id, painting);
-        }
-        client.send('setPaintings', paintings);
+        store.dispatch(
+          setPaintings(
+            pack.paintings.map((painting) => {
+              paintingUuids[painting.id] = nanoid();
+              return {
+                ...painting,
+                uuid: paintingUuids[painting.id],
+              };
+            })
+          )
+        );
 
         continue;
       }
@@ -90,7 +102,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
           entry.entryName.lastIndexOf('/') + 1
         );
         const filePath = path.join(appTempDir, filename);
-        client.send('setIcon', fileUrl(filePath));
+        store.dispatch(setIcon(fileUrl(filePath)));
 
         continue;
       } else if (entry.entryName.endsWith('.png')) {
@@ -99,7 +111,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       }
     }
 
-    client.send('setName', packName);
+    store.dispatch(setName(packName));
 
     for (const entry of paintingImages) {
       const filename = entry.entryName.substring(
@@ -110,15 +122,30 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       const dir = path.join(appTempDir, 'paintings');
       zip.extractEntryTo(entry, dir, false, true);
       const filePath = path.join(appTempDir, 'paintings', filename);
-      client.send('setPaintingPath', key, fileUrl(filePath));
+      if (!paintingUuids[key]) {
+        const defaultPainting = getDefaultPainting(key);
+        store.dispatch(
+          upsertPainting({
+            ...defaultPainting,
+            uuid: paintingUuids[key],
+          })
+        );
+      }
+      store.dispatch(
+        updatePainting({
+          id: key,
+          changes: {
+            path: fileUrl(filePath),
+          },
+        })
+      );
     }
 
-    client.send('setExtraPaintingImages', extraPaintingImages);
-    client.send('setFilename', filename);
+    store.dispatch(setFilename(filename));
     return filename;
   } finally {
-    client.send('setFilename', '');
-    client.send('setLoading', false);
+    store.dispatch(setFilename(''));
+    store.dispatch(setLoading(false));
     return '';
   }
 }

@@ -1,61 +1,34 @@
-import { getDefaultArchive, Archive } from './archive';
-import { Painting } from './painting';
-import { Atom, Usable, create, use } from 'xoid';
-import { EntityState, getEmptyEntityState, useEntityState } from './etityState';
-import { useAtom } from '@xoid/react';
+import { configureStore, Middleware } from '@reduxjs/toolkit';
+import {
+  asSyncAction,
+  cleanActionMeta,
+  LOCAL_META,
+  markLocalActions,
+  PayloadActionWithMeta,
+  reducers,
+  SYNC_META,
+} from '../../common/store';
 
-type Merge<T, U> = Omit<T, keyof U> & U;
+const syncWithMain: Middleware =
+  () =>
+  (next) =>
+  <T>(action: PayloadActionWithMeta<T>) => {
+    if (action.meta !== SYNC_META && action.meta !== LOCAL_META) {
+      window.electron.sendReduxAction(asSyncAction(action));
+    }
 
-type BoundAtomUsable<T, U = {}> = Usable<
-  Merge<
-    {
-      registerListener: () => () => void;
-    },
-    U
-  >
->;
-
-const createIpcBoundAtom = <T, U = {}>(
-  key: string,
-  initialValue: T,
-  getUsable?: (atom: Atom<T>) => U
-): Atom<T> & BoundAtomUsable<T, U> => {
-  let baseSetter = (value: T) => {};
-
-  const boundAtom = create(initialValue, (atom) => {
-    const usableAdditions = getUsable?.(atom) ?? ({} as U);
-    return {
-      registerListener: () => {
-        return window.electron.listenForValue(key, (value: T) => {
-          baseSetter(value);
-        });
-      },
-      ...usableAdditions,
-    };
-  });
-
-  baseSetter = boundAtom.set;
-  boundAtom.set = (value: T) => {
-    baseSetter(value);
-    window.electron.sendValue(key, value);
+    next(cleanActionMeta(action));
   };
 
-  return boundAtom;
-};
+export const store = configureStore({
+  reducer: { ...reducers },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(markLocalActions).concat(syncWithMain),
+});
 
-export const usePaintingsState = () => {
-  const paintings = useAtom(paintingsAtom);
-  return useEntityState(paintings, (painting) => painting.id);
-}
+window.electron.listenForReduxActions((action) => {
+  store.dispatch(action);
+});
 
-export const loadingAtom = createIpcBoundAtom('loading', false);
-export const iconAtom = createIpcBoundAtom('icon', '');
-export const packFormatAtom = createIpcBoundAtom('packFormat', 9);
-export const descriptionAtom = createIpcBoundAtom('description', '');
-export const idAtom = createIpcBoundAtom('id', '');
-export const nameAtom = createIpcBoundAtom('name', '');
-export const paintingsAtom = createIpcBoundAtom(
-  'paintings',
-  getEmptyEntityState<Painting>()
-);
-export const filenameAtom = createIpcBoundAtom('filename', '');
+export type RootState = ReturnType<typeof store.getState>;
+export type Dispatch = typeof store.dispatch;
