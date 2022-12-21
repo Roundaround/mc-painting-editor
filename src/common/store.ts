@@ -2,6 +2,7 @@ import {
   createEntityAdapter,
   createSlice,
   Middleware,
+  nanoid,
   PayloadAction,
 } from '@reduxjs/toolkit';
 import produce from 'immer';
@@ -69,15 +70,25 @@ export const metadataSlice = createSlice({
 
 export interface Painting {
   id: string;
-  name?: string;
-  artist?: string;
+  name: string;
+  artist: string;
   height: number;
   width: number;
-  path?: string;
+  path: string;
   uuid: string; // For maintinging tracking in React
 }
 
-const paintingsAdapter = createEntityAdapter<Painting>({
+const getDefaultPainting = (): Painting => ({
+  id: '',
+  name: '',
+  artist: '',
+  height: 1,
+  width: 1,
+  path: '',
+  uuid: nanoid(),
+});
+
+export const paintingsAdapter = createEntityAdapter<Painting>({
   selectId: (painting) => painting.uuid,
 });
 
@@ -86,6 +97,9 @@ export const paintingsSlice = createSlice({
   initialState: paintingsAdapter.getInitialState(),
   reducers: {
     addPainting: paintingsAdapter.addOne,
+    createPainting: (state) => {
+      return paintingsAdapter.addOne(state, getDefaultPainting());
+    },
     upsertPainting: paintingsAdapter.upsertOne,
     updatePainting: paintingsAdapter.updateOne,
     setPaintings: paintingsAdapter.setAll,

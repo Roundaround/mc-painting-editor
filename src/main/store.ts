@@ -35,6 +35,7 @@ export function createStore(mainWindow: BrowserWindow) {
     }
   );
 
+  store = newStore;
   return newStore;
 }
 

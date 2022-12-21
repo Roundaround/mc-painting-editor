@@ -1,43 +1,20 @@
-import { useAtom, useSetup } from '@xoid/react';
 import { Blocks } from 'react-loader-spinner';
-import { use } from 'xoid';
+import { metadataSlice } from '../common/store';
 import { PaintingList } from './components/PaintingList';
 import { TextInput } from './components/TextInput';
 import './Home.scss';
-import {
-  descriptionAtom,
-  filenameAtom,
-  iconAtom,
-  idAtom,
-  loadingAtom,
-  nameAtom,
-  packFormatAtom,
-  paintingsAtom,
-} from './utils/store';
+import { useDispatch, useSelector } from './utils/store';
+
+const { setId, setName, setDescription } = metadataSlice.actions;
 
 export default function Home() {
-  const loading = useAtom(loadingAtom);
-  const icon = useAtom(iconAtom);
-  const description = useAtom(descriptionAtom);
-  const id = useAtom(idAtom);
-  const name = useAtom(nameAtom);
+  const loading = useSelector((state) => state.editor.loading);
+  const icon = useSelector((state) => state.metadata.icon);
+  const id = useSelector((state) => state.metadata.id);
+  const name = useSelector((state) => state.metadata.name);
+  const description = useSelector((state) => state.metadata.description);
 
-  useSetup(() => {
-    const listenerCancellers = [
-      use(loadingAtom).registerListener(),
-      use(iconAtom).registerListener(),
-      use(packFormatAtom).registerListener(),
-      use(descriptionAtom).registerListener(),
-      use(idAtom).registerListener(),
-      use(nameAtom).registerListener(),
-      use(paintingsAtom).registerListener(),
-      use(filenameAtom).registerListener(),
-    ];
-
-    return () => {
-      listenerCancellers.forEach((cancel) => cancel());
-    };
-  });
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -53,19 +30,19 @@ export default function Home() {
             id="id"
             label="ID"
             value={id}
-            onChange={(e) => idAtom.set(e.target.value)}
+            onChange={(e) => dispatch(setId(e.target.value))}
           />
           <TextInput
             id="name"
             label="Name"
             value={name}
-            onChange={(e) => nameAtom.set(e.target.value)}
+            onChange={(e) => dispatch(setName(e.target.value))}
           />
           <TextInput
             id="description"
             label="Description"
             value={description}
-            onChange={(e) => descriptionAtom.set(e.target.value)}
+            onChange={(e) => dispatch(setDescription(e.target.value))}
           />
           <div
             style={{

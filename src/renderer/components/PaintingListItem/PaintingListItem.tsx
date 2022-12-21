@@ -1,16 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useAtom, useSetup } from '@xoid/react';
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
+import { paintingsSlice } from '../../../common/store';
+import { getPaintingImage } from '../../utils/painting';
 import {
-  getDefaultPainting,
-  getPaintingImage,
-  Painting,
-} from '../../utils/painting';
-import { paintingsAtom, usePaintingsState } from '../../utils/store';
+  paintingsSelectors,
+  useDispatch,
+  useSelector,
+} from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
 import { NumberInput } from '../NumberInput';
 import { PaintingGrid } from '../PaintingGrid';
 import { TextInput } from '../TextInput';
+
+const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
+  paintingsSlice.actions;
 
 export interface PaintingListItemProps {
   id: string;
@@ -21,83 +24,19 @@ export interface PaintingListItemProps {
 export function PaintingListItem(props: PaintingListItemProps) {
   const { id, isFirst, isLast } = props;
 
-  const { getById, update, remove, getAllIds } = usePaintingsState();
-  const painting = useMemo(() => {
-    return getById(id) || getDefaultPainting(id);
-  }, [id, getById]);
+  const painting = useSelector((state) =>
+    paintingsSelectors.selectById(state, id)
+  );
+
   const paintingImage = useMemo(() => {
     return getPaintingImage(painting);
   }, [painting]);
 
-  useSetup(
-    (stateAtom, { effect }) => {
-      effect(() => {
-        const cancel = window.electron.onSet.paintingPath((id, path) => {
-          if (id !== stateAtom.value.id) {
-            return;
-          }
-          paintingsAtom.update((paintings) => {
-            return stateAtom.value.update(paintings, id, { path });
-          });
-        });
+  const dispatch = useDispatch();
 
-        return cancel;
-      });
-    },
-    { id, update }
-  );
-
-  const moveUp = useCallback(() => {
-    paintingsAtom.update((paintings) => {
-      const newPaintings = new Map(paintings);
-      const painting = newPaintings.get(id);
-      if (!painting) {
-        return newPaintings;
-      }
-
-      const paintingIds = Array.from(newPaintings.keys());
-      const index = paintingIds.indexOf(id);
-      if (index === 0) {
-        return newPaintings;
-      }
-
-      const prevId = paintingIds[index - 1];
-      const prevPainting = newPaintings.get(prevId);
-      if (!prevPainting) {
-        return newPaintings;
-      }
-
-      newPaintings.set(id, prevPainting);
-      newPaintings.set(prevId, painting);
-      return newPaintings;
-    });
-  }, [id, getAllIds]);
-
-  const moveDown = useCallback(() => {
-    paintingsAtom.update((paintings) => {
-      const newPaintings = new Map(paintings);
-      const painting = newPaintings.get(id);
-      if (!painting) {
-        return newPaintings;
-      }
-
-      const paintingIds = Array.from(newPaintings.keys());
-      const index = paintingIds.indexOf(id);
-      if (index === paintingIds.length - 1) {
-        return newPaintings;
-      }
-
-      const nextId = paintingIds[index + 1];
-      const nextPainting = newPaintings.get(nextId);
-      if (!nextPainting) {
-        return newPaintings;
-      }
-
-      newPaintings.set(id, nextPainting);
-      newPaintings.set(nextId, painting);
-      return newPaintings;
-    });
-  }, [id]);
+  if (!painting) {
+    return null;
+  }
 
   return (
     <>
@@ -122,28 +61,26 @@ export function PaintingListItem(props: PaintingListItemProps) {
             label="ID"
             value={painting.id}
             onChange={(e) => {
-              paintingsAtom.update((paintings) =>
-                update(paintings, id, { id: e.target.value })
-              );
+              dispatch(updatePainting({ id, changes: { id: e.target.value } }));
             }}
           />
           <TextInput
             id={`painting-name-${painting.id}`}
             label="Name"
-            value={painting.name || ''}
+            value={painting.name}
             onChange={(e) => {
-              paintingsAtom.update((paintings) =>
-                update(paintings, id, { name: e.target.value })
+              dispatch(
+                updatePainting({ id, changes: { name: e.target.value } })
               );
             }}
           />
           <TextInput
             id={`painting-artist-${painting.id}`}
             label="Artist"
-            value={painting.artist || ''}
+            value={painting.artist}
             onChange={(e) => {
-              paintingsAtom.update((paintings) =>
-                update(paintings, id, { artist: e.target.value })
+              dispatch(
+                updatePainting({ id, changes: { artist: e.target.value } })
               );
             }}
           />
@@ -154,8 +91,11 @@ export function PaintingListItem(props: PaintingListItemProps) {
             max={8}
             value={painting.width}
             onChange={(e) => {
-              paintingsAtom.update((paintings) =>
-                update(paintings, id, { width: parseInt(e.target.value, 10) })
+              dispatch(
+                updatePainting({
+                  id,
+                  changes: { width: parseInt(e.target.value, 10) },
+                })
               );
             }}
           />
@@ -166,8 +106,11 @@ export function PaintingListItem(props: PaintingListItemProps) {
             max={8}
             value={painting.height}
             onChange={(e) => {
-              paintingsAtom.update((paintings) =>
-                update(paintings, id, { height: parseInt(e.target.value, 10) })
+              dispatch(
+                updatePainting({
+                  id,
+                  changes: { height: parseInt(e.target.value, 10) },
+                })
               );
             }}
           />
@@ -192,9 +135,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         >
           <Button
             onClick={() => {
-              paintingsAtom.update((paintings) => {
-                return remove(paintings, id);
-              });
+              dispatch(removePainting(id));
             }}
             style={ButtonStyle.ICON}
             tooltip={{
@@ -215,15 +156,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             {isFirst ? null : (
               <Button
                 onClick={() => {
-                  const allIds = getAllIds().slice();
-                  const index = allIds.indexOf(id);
-                  if (index === -1 || index === 0) {
-                    return;
-                  }
-                  const temp = allIds[index - 1];
-                  allIds[index - 1] = allIds[index];
-                  allIds[index] = temp;
-                  paintingsAtom.
+                  dispatch(movePaintingUp(id));
                 }}
                 style={ButtonStyle.ICON}
                 tooltip={{
@@ -236,7 +169,9 @@ export function PaintingListItem(props: PaintingListItemProps) {
             )}
             {isLast ? null : (
               <Button
-                onClick={moveDown}
+                onClick={() => {
+                  dispatch(movePaintingDown(id));
+                }}
                 style={ButtonStyle.ICON}
                 tooltip={{
                   content: 'Move Down',

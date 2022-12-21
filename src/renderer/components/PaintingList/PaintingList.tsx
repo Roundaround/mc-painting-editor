@@ -1,31 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Fragment, useCallback, useMemo } from 'react';
-import { getDefaultPainting } from '../../utils/painting';
-import { paintingsAtom, usePaintingsState } from '../../utils/store';
+import { Fragment } from 'react';
+import { paintingsAdapter, paintingsSlice } from '../../../common/store';
+import { RootState, useDispatch, useSelector } from '../../utils/store';
 import { Button, ButtonStyle } from '../Button';
 import { PaintingListItem } from '../PaintingListItem';
 import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
 
 export function PaintingList() {
-  const { getAllIds, getAll, add } = usePaintingsState();
-  const paintingIds = useMemo(() => getAllIds(), [getAllIds]);
+  const paintingIds = useSelector(
+    paintingsAdapter.getSelectors((state: RootState) => state.paintings)
+      .selectIds
+  ) as string[];
+  const dispatch = useDispatch();
 
   // TODO: Indicate how many paintings have no image
-  const paintingsWithoutImages = useMemo(() => {
-    return getAll().filter((painting) => !painting.path).length;
-  }, [getAll]);
-
-  const addPainting = useCallback(() => {
-    let nextNum = paintingIds.length + 1;
-    while (paintingIds.indexOf(`painting-${nextNum}`) > -1) {
-      nextNum++;
-    }
-
-    paintingsAtom.update((paintings) =>
-      add(paintings, getDefaultPainting(`painting-${nextNum}`))
-    );
-  }, [paintingIds, add]);
 
   return (
     <>
@@ -43,7 +32,9 @@ export function PaintingList() {
           Paintings ({paintingIds.length})
         </div>
         <Button
-          onClick={addPainting}
+          onClick={() => {
+            dispatch(paintingsSlice.actions.createPainting());
+          }}
           style={ButtonStyle.ICON}
           tooltip={{
             content: 'Add a painting',

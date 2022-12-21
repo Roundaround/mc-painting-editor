@@ -1,20 +1,4 @@
-import { z } from 'zod';
-
-export const paintingSchema = z.object({
-  id: z.string(),
-  name: z.string().optional(),
-  artist: z.string().optional(),
-  height: z.number().min(1).max(8).default(1),
-  width: z.number().min(1).max(8).default(1),
-  path: z.string().optional(),
-});
-
-export const getDefaultPainting = (id: string) =>
-  paintingSchema.parse({
-    id,
-  });
-
-export type Painting = z.infer<typeof paintingSchema>;
+import { Painting } from '../../common/store';
 
 const generateBlankImage = (width: number, height: number) => {
   const canvas = document.createElement('canvas');
