@@ -129,17 +129,17 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       const filePath = path.join(appTempDir, 'paintings', filename);
       if (!paintingUuids[key]) {
         const defaultPainting = getDefaultPainting();
+        paintingUuids[key] = defaultPainting.uuid;
         store.dispatch(
           upsertPainting({
             ...defaultPainting,
             id: key,
-            uuid: paintingUuids[key],
           })
         );
       }
       store.dispatch(
         updatePainting({
-          id: key,
+          id: paintingUuids[key],
           changes: {
             path: fileUrl(filePath),
           },
