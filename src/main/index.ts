@@ -85,7 +85,10 @@ app.on('activate', () => {
 });
 
 app.on('before-quit', () => {
-  fs.rmdirSync(appTempDir, { recursive: true });
+  const files = fs.readdirSync(appTempDir);
+  for (const file of files) {
+    fs.rmSync(appTempDir, { recursive: true });
+  }
 });
 
 ipcMain.handle('openZipFile', (event, args) => {
