@@ -1,9 +1,9 @@
 import { Menu, MenuItemConstructorOptions } from 'electron';
-import { openZipFile } from './files';
+import { openZipFile, saveZipFile } from './files';
 
 export const menuTemplate: MenuItemConstructorOptions[] = [
   {
-    label: 'File',
+    label: '&File',
     submenu: [
       {
         label: 'Open',
@@ -22,6 +22,7 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
           if (!focusedWindow) {
             return;
           }
+          saveZipFile(focusedWindow);
         },
       },
       {
@@ -31,6 +32,7 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
           if (!focusedWindow) {
             return;
           }
+          saveZipFile(focusedWindow, true);
         },
       },
       {

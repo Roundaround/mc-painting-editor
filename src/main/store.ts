@@ -5,6 +5,7 @@ import {
   cleanActionMeta,
   LOCAL_META,
   markLocalActions,
+  paintingsAdapter,
   PayloadActionWithMeta,
   reducers,
   SYNC_META,
@@ -38,6 +39,10 @@ export function createStore(mainWindow: BrowserWindow) {
   store = newStore;
   return newStore;
 }
+
+export const paintingsSelectors = paintingsAdapter.getSelectors(
+  (state: RootState) => state.paintings
+);
 
 export type MainStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<MainStore['getState']>;

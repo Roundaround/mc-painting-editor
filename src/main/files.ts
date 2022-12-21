@@ -11,7 +11,7 @@ import {
   paintingsSlice,
 } from '../common/store';
 import { mcmetaSchema, packSchema } from './schemas';
-import { store } from './store';
+import { paintingsSelectors, store } from './store';
 
 const { setLoading, setFilename } = editorSlice.actions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
@@ -28,6 +28,12 @@ export function fileUrl(filePath: string): string {
       .replace(/^file:\/\//, 'mc-painting-editor://') +
     '?v=' +
     Date.now()
+  );
+}
+
+export function filePath(fileUrl: string): string {
+  return url.fileURLToPath(
+    fileUrl.replace(/^mc-painting-editor:\/\//, 'file://').split('?')[0]
   );
 }
 
@@ -156,8 +162,10 @@ export async function openZipFile(parentWindow: BrowserWindow) {
 
     store.dispatch(setFilename(filename));
     return filename;
-  } finally {
+  } catch (err) {
     store.dispatch(setFilename(''));
+    return '';
+  } finally {
     store.dispatch(setLoading(false));
     return '';
   }
@@ -224,4 +232,93 @@ export async function openPaintingFile(
   store.dispatch(
     updatePainting({ id: paintingId, changes: { path: fileUrl(newPath) } })
   );
+}
+
+async function getSaveFilename(parentWindow: BrowserWindow) {
+  let name = store.getState().metadata.name;
+  if (!name) {
+    name = 'Custom Paintings';
+  }
+
+  // Sanitize name so it can be used as a filename on any OS
+  name = name.replace(/[/\\?%*:|"<>]/g, '-');
+
+  const result = await dialog.showSaveDialog(parentWindow, {
+    defaultPath: `${name}.zip`,
+    filters: [
+      {
+        name: 'Zip Files',
+        extensions: ['zip'],
+      },
+    ],
+  });
+
+  return result.filePath || '';
+}
+
+export async function saveZipFile(
+  parentWindow: BrowserWindow,
+  requestNewFilename = false
+) {
+  let filename = store.getState().editor.filename;
+  if (!filename || requestNewFilename) {
+    filename = await getSaveFilename(parentWindow);
+  }
+
+  if (!filename) {
+    return;
+  }
+
+  // Some simple validation
+  const state = store.getState();
+  if (!state.metadata.id) {
+    // TODO: Show error message
+    return;
+  }
+
+  try {
+    store.dispatch(setLoading(true));
+
+    const zip = new AdmZip();
+    const paintings = paintingsSelectors.selectAll(state);
+
+    const mcmeta = {
+      pack: {
+        pack_format: state.metadata.packFormat,
+        description: state.metadata.description,
+      },
+    };
+    zip.addFile('pack.mcmeta', Buffer.from(JSON.stringify(mcmeta, null, 2)));
+
+    const pack = {
+      id: state.metadata.id,
+      name: state.metadata.name,
+      paintings: paintings.map(({ uuid, path, ...painting }) => painting),
+    };
+    zip.addFile(
+      'custompaintings.json',
+      Buffer.from(JSON.stringify(pack, null, 2))
+    );
+
+    const iconPath = state.metadata.icon;
+    if (iconPath) {
+      zip.addLocalFile(filePath(iconPath), '', 'pack.png');
+    }
+
+    for (const painting of paintings) {
+      if (!painting.path || !painting.id) {
+        continue;
+      }
+      zip.addLocalFile(
+        filePath(painting.path),
+        `assets/${state.metadata.id}/textures/painting/`,
+        `${painting.id}.png`
+      );
+    }
+
+    zip.writeZip(filename);
+    store.dispatch(setFilename(filename));
+  } finally {
+    store.dispatch(setLoading(false));
+  }
 }
