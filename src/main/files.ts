@@ -3,8 +3,13 @@ import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
 import path from 'path';
 import url from 'url';
-import { editorSlice, metadataSlice, paintingsSlice } from '../common/store';
-import { getDefaultPainting, mcmetaSchema, packSchema } from './schemas';
+import {
+  editorSlice,
+  getDefaultPainting,
+  metadataSlice,
+  paintingsSlice,
+} from '../common/store';
+import { mcmetaSchema, packSchema } from './schemas';
 import { store } from './store';
 
 const { setLoading, setFilename } = editorSlice.actions;
@@ -123,10 +128,11 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       zip.extractEntryTo(entry, dir, false, true);
       const filePath = path.join(appTempDir, 'paintings', filename);
       if (!paintingUuids[key]) {
-        const defaultPainting = getDefaultPainting(key);
+        const defaultPainting = getDefaultPainting();
         store.dispatch(
           upsertPainting({
             ...defaultPainting,
+            id: key,
             uuid: paintingUuids[key],
           })
         );

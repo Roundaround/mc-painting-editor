@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const paintingSchema = z.object({
-  id: z.string(),
-  name: z.string().optional(),
-  artist: z.string().optional(),
+  id: z.string().optional().default(''),
+  name: z.string().optional().default(''),
+  artist: z.string().optional().default(''),
   height: z.number().min(1).max(8).default(1),
   width: z.number().min(1).max(8).default(1),
-  path: z.string().optional(),
+  path: z.string().optional().default(''),
 });
 
 export const packSchema = z.object({
@@ -28,8 +28,3 @@ export const mcmetaSchema = z.object({
 });
 
 export type Painting = z.output<typeof paintingSchema>;
-
-export const getDefaultPainting = (id: string): Painting =>
-  paintingSchema.parse({
-    id,
-  });

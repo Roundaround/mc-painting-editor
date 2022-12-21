@@ -32,9 +32,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(markLocalActions).concat(syncWithMain),
 });
 
-console.log('Store created');
 window.electron.listenForReduxActions((action) => {
-  console.log('Received action from main', action);
   store.dispatch(action);
 });
 

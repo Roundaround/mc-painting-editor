@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { paintingsSlice } from '../../../common/store';
 import { getPaintingImage } from '../../utils/painting';
 import {

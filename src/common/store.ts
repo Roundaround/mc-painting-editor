@@ -78,7 +78,7 @@ export interface Painting {
   uuid: string; // For maintinging tracking in React
 }
 
-const getDefaultPainting = (): Painting => ({
+export const getDefaultPainting = (): Painting => ({
   id: '',
   name: '',
   artist: '',
@@ -97,14 +97,14 @@ export const paintingsSlice = createSlice({
   initialState: paintingsAdapter.getInitialState(),
   reducers: {
     addPainting: paintingsAdapter.addOne,
-    createPainting: (state) => {
+    createPainting(state) {
       return paintingsAdapter.addOne(state, getDefaultPainting());
     },
     upsertPainting: paintingsAdapter.upsertOne,
     updatePainting: paintingsAdapter.updateOne,
     setPaintings: paintingsAdapter.setAll,
     removePainting: paintingsAdapter.removeOne,
-    movePaintingUp: (state, action: PayloadAction<string>) => {
+    movePaintingUp(state, action: PayloadAction<string>) {
       const index = state.ids.indexOf(action.payload);
       if (index > 0) {
         const temp = state.ids[index - 1];
@@ -112,7 +112,7 @@ export const paintingsSlice = createSlice({
         state.ids[index] = temp;
       }
     },
-    movePaintingDown: (state, action: PayloadAction<string>) => {
+    movePaintingDown(state, action: PayloadAction<string>) {
       const index = state.ids.indexOf(action.payload);
       if (index < state.ids.length - 1) {
         const temp = state.ids[index + 1];
