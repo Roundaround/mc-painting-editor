@@ -13,6 +13,7 @@ import {
   PayloadActionWithMeta,
   reducers,
   SYNC_META,
+  trackDirty,
 } from '../../common/store';
 
 const syncWithMain: Middleware =
@@ -29,7 +30,10 @@ const syncWithMain: Middleware =
 export const store = configureStore({
   reducer: { ...reducers },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(markLocalActions).concat(syncWithMain),
+    getDefaultMiddleware()
+      .concat(trackDirty)
+      .concat(markLocalActions)
+      .concat(syncWithMain),
 });
 
 window.electron.listenForReduxActions((action) => {

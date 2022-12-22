@@ -9,6 +9,7 @@ import {
   getDefaultPainting,
   metadataSlice,
   paintingsSlice,
+  savedSnapshotSlice,
 } from '../common/store';
 import { mcmetaSchema, packSchema } from './schemas';
 import { paintingsSelectors, store } from './store';
@@ -17,6 +18,7 @@ const { setLoading, setFilename } = editorSlice.actions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
   metadataSlice.actions;
 const { updatePainting, upsertPainting, setPaintings } = paintingsSlice.actions;
+const { captureSnapshot } = savedSnapshotSlice.actions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
 
@@ -160,13 +162,13 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       );
     }
 
+    store.dispatch(setLoading(false));
     store.dispatch(setFilename(filename));
+    store.dispatch(captureSnapshot(store.getState()));
     return filename;
   } catch (err) {
-    store.dispatch(setFilename(''));
-    return '';
-  } finally {
     store.dispatch(setLoading(false));
+    store.dispatch(setFilename(''));
     return '';
   }
 }
@@ -318,6 +320,7 @@ export async function saveZipFile(
 
     zip.writeZip(filename);
     store.dispatch(setFilename(filename));
+    store.dispatch(captureSnapshot(store.getState()));
   } finally {
     store.dispatch(setLoading(false));
   }

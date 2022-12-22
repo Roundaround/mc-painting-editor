@@ -9,6 +9,7 @@ import {
   PayloadActionWithMeta,
   reducers,
   SYNC_META,
+  trackDirty,
 } from '../common/store';
 
 export function createStore(mainWindow: BrowserWindow) {
@@ -26,7 +27,10 @@ export function createStore(mainWindow: BrowserWindow) {
   const newStore = configureStore({
     reducer: { ...reducers },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(markLocalActions).concat(syncWithRenderer),
+      getDefaultMiddleware()
+        .concat(trackDirty)
+        .concat(markLocalActions)
+        .concat(syncWithRenderer),
   });
 
   ipcMain.on(
@@ -37,6 +41,7 @@ export function createStore(mainWindow: BrowserWindow) {
   );
 
   newStore.subscribe(() => {
+    console.log('Updating title from store');
     updateTitleFromStore(mainWindow, newStore);
   });
 
@@ -50,7 +55,13 @@ export function updateTitleFromStore(
 ) {
   const state = store.getState();
   const filename = state.editor.filename || '(Untitled)';
-  const title = `${filename} - Custom Painting Editor`;
+  const prefix = state.editor.dirty ? '• ' : '';
+  const title = `${prefix}${filename} - Custom Painting Editor`;
+  console.log([
+    state.editor.dirty,
+    mainWindow.getTitle(),
+    title,
+  ]);
   if (mainWindow.getTitle() !== title) {
     mainWindow.setTitle(title);
   }

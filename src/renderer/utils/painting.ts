@@ -22,15 +22,3 @@ export function getPaintingImage(painting?: Painting) {
     )
   );
 }
-
-function removeCacheBuster(url: string) {
-  return url.replace(/\?v=\d+$/, '');
-}
-
-export const arePaintingsEqual = (a: Painting, b: Painting): boolean =>
-  a.id === b.id &&
-  a.name === b.name &&
-  a.artist === b.artist &&
-  a.height === b.height &&
-  a.width === b.width &&
-  removeCacheBuster(a.path || '') === removeCacheBuster(b.path || '');
