@@ -1,5 +1,6 @@
-import { Menu, MenuItemConstructorOptions } from 'electron';
+import { dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { openZipFile, saveZipFile } from './files';
+import { store } from './store';
 
 export const menuTemplate: MenuItemConstructorOptions[] = [
   {
@@ -8,11 +9,30 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
       {
         label: 'Open',
         accelerator: 'CmdOrCtrl+O',
-        click: (menuItem, focusedWindow, event) => {
+        click: async (menuItem, focusedWindow, event) => {
           if (!focusedWindow) {
             return;
           }
-          openZipFile(focusedWindow);
+
+          if (!store.getState().editor.dirty) {
+            openZipFile(focusedWindow);
+            return;
+          }
+
+          focusedWindow.webContents.ipc.once(
+            'confirmation',
+            (event, confirmed) => {
+              if (!confirmed) {
+                return;
+              }
+              openZipFile(focusedWindow);
+            }
+          );
+          focusedWindow.webContents.send(
+            'confirmation',
+            'You have unsaved changes. ' +
+              'Are you sure you want to open a new file?'
+          );
         },
       },
       {

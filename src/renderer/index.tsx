@@ -11,6 +11,8 @@ import { store } from './utils/store';
 library.add(fas);
 library.add(far);
 
+window.electron.listenForRequestConfirmation();
+
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 root.render(

@@ -24,6 +24,11 @@ const api = {
       }
     );
   },
+  listenForRequestConfirmation() {
+    ipcRenderer.on('confirmation', async (event, message: string) => {
+      ipcRenderer.send('confirmation', confirm(message));
+    });
+  },
 } as const;
 
 export type IpcApi = typeof api;
