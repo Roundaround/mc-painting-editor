@@ -235,16 +235,27 @@ export function cleanActionMeta<T>(
   });
 }
 
-export const markLocalActions: Middleware =
+function isSyncAction<T>(action: PayloadActionWithMeta<T>) {
+  return action.meta === SYNC_META;
+}
+
+function isLocalAction<T>(action: PayloadActionWithMeta<T>) {
+  return (
+    action.meta === LOCAL_META ||
+    !Object.keys(reducers).some((key) => action.type.startsWith(`${key}/`))
+  );
+}
+
+export const syncWithExternal =
+  (syncFn: (action: PayloadActionWithMeta<any>) => void): Middleware =>
   () =>
   (next) =>
   <T>(action: PayloadActionWithMeta<T>) => {
-    for (const reducerKey of Object.keys(reducers)) {
-      if (action.type.startsWith(`${reducerKey}/`)) {
-        return next(action);
-      }
+    if (!isSyncAction(action) && !isLocalAction(action)) {
+      syncFn(asSyncAction(action));
     }
-    return next(asLocalAction(action));
+
+    next(cleanActionMeta(action));
   };
 
 export const trackDirty: Middleware<
@@ -259,6 +270,10 @@ export const trackDirty: Middleware<
   ({ dispatch, getState }) =>
   (next) =>
   <P>(action: PayloadActionWithMeta<P>) => {
+    if (isSyncAction(action)) {
+      return next(action);
+    }
+
     if (getState().editor.loading) {
       return next(action);
     }
@@ -280,10 +295,8 @@ export const trackDirty: Middleware<
       };
 
       dispatch(
-        asLocalAction(
-          editorSlice.actions.setDirty(
-            !areSavedSnapshotsEqual(savedSnapshot, newSnapshot)
-          )
+        editorSlice.actions.setDirty(
+          !areSavedSnapshotsEqual(savedSnapshot, newSnapshot)
         )
       );
     });

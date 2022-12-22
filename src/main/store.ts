@@ -1,36 +1,23 @@
-import { configureStore, Middleware, PayloadAction } from '@reduxjs/toolkit';
+import { configureStore, PayloadAction } from '@reduxjs/toolkit';
 import { BrowserWindow, ipcMain } from 'electron';
 import {
-  asSyncAction,
-  cleanActionMeta,
-  LOCAL_META,
-  markLocalActions,
   paintingsAdapter,
-  PayloadActionWithMeta,
   reducers,
-  SYNC_META,
+  syncWithExternal,
   trackDirty,
 } from '../common/store';
 
 export function createStore(mainWindow: BrowserWindow) {
-  const syncWithRenderer: Middleware =
-    () =>
-    (next) =>
-    <T>(action: PayloadActionWithMeta<T>) => {
-      if (action.meta !== SYNC_META && action.meta !== LOCAL_META) {
-        mainWindow.webContents.send('reduxAction', asSyncAction(action));
-      }
-
-      next(cleanActionMeta(action));
-    };
-
   const newStore = configureStore({
     reducer: { ...reducers },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
         .concat(trackDirty)
-        .concat(markLocalActions)
-        .concat(syncWithRenderer),
+        .concat(
+          syncWithExternal((action) => {
+            mainWindow.webContents.send('reduxAction', action);
+          })
+        ),
   });
 
   ipcMain.on(
@@ -41,7 +28,6 @@ export function createStore(mainWindow: BrowserWindow) {
   );
 
   newStore.subscribe(() => {
-    console.log('Updating title from store');
     updateTitleFromStore(mainWindow, newStore);
   });
 
@@ -57,11 +43,6 @@ export function updateTitleFromStore(
   const filename = state.editor.filename || '(Untitled)';
   const prefix = state.editor.dirty ? '• ' : '';
   const title = `${prefix}${filename} - Custom Painting Editor`;
-  console.log([
-    state.editor.dirty,
-    mainWindow.getTitle(),
-    title,
-  ]);
   if (mainWindow.getTitle() !== title) {
     mainWindow.setTitle(title);
   }

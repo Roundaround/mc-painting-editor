@@ -1,39 +1,26 @@
-import { configureStore, Middleware } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit';
 import {
   TypedUseSelectorHook,
   useDispatch as useDispatchBase,
   useSelector as useSelectorBase,
 } from 'react-redux';
 import {
-  asSyncAction,
-  cleanActionMeta,
-  LOCAL_META,
-  markLocalActions,
   paintingsAdapter,
-  PayloadActionWithMeta,
   reducers,
-  SYNC_META,
+  syncWithExternal,
   trackDirty,
 } from '../../common/store';
-
-const syncWithMain: Middleware =
-  () =>
-  (next) =>
-  <T>(action: PayloadActionWithMeta<T>) => {
-    if (action.meta !== SYNC_META && action.meta !== LOCAL_META) {
-      window.electron.sendReduxAction(asSyncAction(action));
-    }
-
-    next(cleanActionMeta(action));
-  };
 
 export const store = configureStore({
   reducer: { ...reducers },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(trackDirty)
-      .concat(markLocalActions)
-      .concat(syncWithMain),
+      .concat(
+        syncWithExternal((action) => {
+          window.electron.sendReduxAction(action);
+        })
+      ),
 });
 
 window.electron.listenForReduxActions((action) => {
