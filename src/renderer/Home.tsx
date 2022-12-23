@@ -1,9 +1,12 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Blocks } from 'react-loader-spinner';
-import { metadataSlice } from '../common/store';
+import { metadataSlice, paintingsSlice } from '../common/store';
+import { Button, ButtonStyle } from './components/Button';
 import { PaintingList } from './components/PaintingList';
 import { TextInput } from './components/TextInput';
+import { TooltipDirection } from './components/Tooltip';
 import './Home.scss';
-import { useDispatch, useSelector } from './utils/store';
+import { paintingsSelectors, useDispatch, useSelector } from './utils/store';
 
 const { setId, setName, setDescription } = metadataSlice.actions;
 
@@ -13,6 +16,9 @@ export default function Home() {
   const id = useSelector((state) => state.metadata.id);
   const name = useSelector((state) => state.metadata.name);
   const description = useSelector((state) => state.metadata.description);
+  const paintingCount = useSelector((state) =>
+    paintingsSelectors.selectTotal(state)
+  );
 
   const dispatch = useDispatch();
 
@@ -24,65 +30,239 @@ export default function Home() {
         </div>
       )}
 
-      <main className="page-wrapper">
-        <div className="page-column">
-          <TextInput
-            id="id"
-            label="ID"
-            value={id}
-            onChange={(e) => dispatch(setId(e.target.value))}
-          />
-          <TextInput
-            id="name"
-            label="Name"
-            value={name}
-            onChange={(e) => dispatch(setName(e.target.value))}
-          />
-          <TextInput
-            id="description"
-            label="Description"
-            value={description}
-            onChange={(e) => dispatch(setDescription(e.target.value))}
-          />
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              gap: '0.25rem',
-            }}
-          >
-            <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+      <div className="page-wrapper">
+        <div className="side-bar">
+          <div className="side-bar__content">
+            <TextInput
+              id="id"
+              label="ID"
+              value={id}
+              onChange={(e) => dispatch(setId(e.target.value))}
+            />
+            <TextInput
+              id="name"
+              label="Name"
+              value={name}
+              onChange={(e) => dispatch(setName(e.target.value))}
+            />
+            <TextInput
+              id="description"
+              label="Description"
+              value={description}
+              onChange={(e) => dispatch(setDescription(e.target.value))}
+            />
             <div
-              className={['icon-input', !icon ? 'icon-input--empty' : ''].join(
-                ' '
-              )}
-              onClick={() => {
-                window.electron.openIconFile();
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
               }}
             >
-              {!icon ? null : (
-                <img
-                  src={icon}
-                  style={{
-                    imageRendering: 'pixelated',
-                    height: '8rem',
-                    width: 'auto',
-                    objectFit: 'contain',
-                  }}
-                />
-              )}
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'flex-start',
+                gap: '0.25rem',
+              }}
+            >
+              <div style={{ fontSize: 'var(--font-size-0)' }}>Icon</div>
+              <div
+                className={[
+                  'icon-input',
+                  !icon ? 'icon-input--empty' : '',
+                ].join(' ')}
+                onClick={() => {
+                  window.electron.openIconFile();
+                }}
+              >
+                {!icon ? null : (
+                  <img
+                    src={icon}
+                    style={{
+                      imageRendering: 'pixelated',
+                      height: '8rem',
+                      width: 'auto',
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+              </div>
             </div>
           </div>
+
+          <div className="side-bar__footer">Made with ❤️ by Roundaround</div>
         </div>
-        <div className="page-column">
+        <div className="main-panel">
+          <div className="main-panel__header">
+            <div style={{ fontSize: 'var(--font-size-5)' }}>
+              Paintings ({paintingCount})
+            </div>
+            <Button
+              onClick={() => {
+                dispatch(paintingsSlice.actions.createPainting());
+              }}
+              style={ButtonStyle.ICON}
+              tooltip={{
+                content: 'Add a painting',
+                noWrap: true,
+                direction: TooltipDirection.BOTTOM,
+              }}
+            >
+              <FontAwesomeIcon icon={'plus'} />
+            </Button>
+          </div>
           <PaintingList />
         </div>
-      </main>
-      <footer className="page-footer">
-        Made with ❤️ by Roundaround for use with the Custom Paintings Minecraft
-        mod
-      </footer>
+      </div>
     </>
   );
 }
