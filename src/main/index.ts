@@ -91,9 +91,14 @@ app.on('activate', () => {
 });
 
 app.on('before-quit', () => {
-  const files = fs.readdirSync(appTempDir);
-  for (const file of files) {
-    fs.rmSync(appTempDir, { recursive: true });
+  try {
+    const files = fs.readdirSync(appTempDir);
+    for (const file of files) {
+      fs.rmSync(appTempDir, { recursive: true });
+    }
+  } catch (e) {
+    // Directory either doesn't exist or no longer writable.
+    // Either way, do nothing.
   }
 });
 
