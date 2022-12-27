@@ -29,6 +29,7 @@
   --tooltip-foreground-color: var(--text-1);
   --tooltip-margin: var(--size-3);
   --tooltip-arrow: var(--size-2);
+  --tooltip-offset: 0px;
 
   position: absolute;
   border-radius: var(--radius-2);
@@ -53,22 +54,24 @@
 
 .tooltip--top {
   top: calc(var(--tooltip-margin) * -1);
+  left: calc(100% + var(--tooltip-offset));
   transform: translateX(-50%) translateY(-100%);
 
   &::before {
     top: 100%;
+    left: calc(50% - var(--tooltip-offset));
     border-top-color: var(--tooltip-background-color);
   }
 }
 
 .tooltip--right {
   left: calc(100% + var(--tooltip-margin));
-  top: 50%;
+  top: calc(50% + var(--tooltip-offset));
   transform: translateX(0) translateY(-50%);
 
   &::before {
     left: calc(var(--tooltip-arrow) * -1);
-    top: 50%;
+    top: calc(50% - var(--tooltip-offset));
     transform: translateX(0) translateY(-50%);
     border-right-color: var(--tooltip-background-color);
   }
@@ -76,10 +79,12 @@
 
 .tooltip--bottom {
   bottom: calc(var(--tooltip-margin) * -1);
+  left: calc(100% + var(--tooltip-offset));
   transform: translateX(-50%) translateY(100%);
 
   &::before {
     bottom: 100%;
+    left: calc(50% - var(--tooltip-offset));
     border-bottom-color: var(--tooltip-background-color);
   }
 }
@@ -87,13 +92,13 @@
 .tooltip--left {
   left: auto;
   right: calc(100% + var(--tooltip-margin));
-  top: 50%;
+  top: calc(50% + var(--tooltip-offset));
   transform: translateX(0) translateY(-50%);
 
   &::before {
     left: auto;
     right: calc(var(--tooltip-arrow) * -2);
-    top: 50%;
+    top: calc(50% - var(--tooltip-offset));
     transform: translateX(0) translateY(-50%);
     border-left-color: var(--tooltip-background-color);
   }

@@ -1,4 +1,5 @@
 import {
+  CSSProperties,
   ReactNode,
   RefObject,
   useCallback,
@@ -48,8 +49,11 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
 
   const [boundingRect, updateBoundingRect, anchorRef] =
     useBoundingRect<HTMLDivElement>();
+  const [contentRect, updateContentRect, contentRef] =
+    useBoundingRect<HTMLDivElement>();
 
   const portalEl = useRef<HTMLElement>();
+  const contentEl = useRef<HTMLDivElement>();
   const [mounted, setMounted] = useState(false);
   const timeout = useRef<number>();
   const [active, setActive] = useState(false);
@@ -66,7 +70,11 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
       clearInterval(timeout.current);
       setActive(false);
     }
-  }, [hovered, focused, updateBoundingRect, delay]);
+  }, [hovered, focused, updateBoundingRect, updateContentRect, delay]);
+
+  useEffect(() => {
+    updateContentRect();
+  }, [active]);
 
   const anchorClassNames = useMemo(() => {
     const result: (keyof typeof styles)[] = ['tooltip-anchor'];
@@ -77,11 +85,17 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   }, [inline]);
 
   const classNames = useMemo(() => {
-    const result: (keyof typeof styles)[] = ['tooltip', `tooltip--${direction}`];
+    const result: (keyof typeof styles)[] = [
+      'tooltip',
+      `tooltip--${direction}`,
+    ];
     if (noWrap) {
       result.push('tooltip--nowrap');
     }
-    return result.map((name) => styles[name]).join(' ');
+    return result
+      .map((name) => styles[name])
+      .concat('test')
+      .join(' ');
   }, [direction, noWrap]);
 
   const { top, left } = useMemo(() => {
@@ -115,6 +129,47 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     }
   }, [boundingRect, direction]);
 
+  const { contentWidth, contentHeight } = useMemo(() => {
+    if (!contentRect) {
+      return {
+        contentWidth: 0,
+        contentHeight: 0,
+      };
+    }
+
+    return {
+      contentWidth: contentRect.width,
+      contentHeight: contentRect.height,
+    };
+  }, [contentRect]);
+
+  const offset = useMemo(() => {
+    if (
+      direction === TooltipDirection.LEFT ||
+      direction === TooltipDirection.RIGHT
+    ) {
+      const topSide = top - contentHeight / 2;
+      const bottomSide = top + contentHeight / 2;
+      if (topSide < 0) {
+        return -topSide + 4;
+      } else if (bottomSide > window.innerHeight) {
+        return window.innerHeight - bottomSide - 4;
+      }
+
+      return 0;
+    }
+
+    const leftSide = left - contentWidth / 2;
+    const rightSide = left + contentWidth / 2;
+    if (leftSide < 0) {
+      return -leftSide + 4;
+    } else if (rightSide > window.innerWidth) {
+      return window.innerWidth - rightSide - 4;
+    }
+
+    return 0;
+  }, [direction, left, contentWidth]);
+
   useEffect(() => {
     portalEl.current = document.getElementById('tooltip-portal')!;
     setMounted(true);
@@ -137,7 +192,17 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
         portalEl.current &&
         createPortal(
           <div className={styles['tooltip-wrapper']} style={{ top, left }}>
-            <div className={classNames}>{content}</div>
+            <div
+              className={classNames}
+              ref={contentRef}
+              style={
+                {
+                  '--tooltip-offset': `${offset}px`,
+                } as CSSProperties
+              }
+            >
+              {content}
+            </div>
           </div>,
           portalEl.current
         )}
