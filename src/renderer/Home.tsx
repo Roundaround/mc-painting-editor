@@ -3,6 +3,7 @@ import { Blocks } from 'react-loader-spinner';
 import { metadataSlice, paintingsSlice } from '../common/store';
 import { Button, ButtonStyle } from './components/Button';
 import { PaintingList } from './components/PaintingList';
+import { SplitPane } from './components/SplitPane';
 import { TextInput } from './components/TextInput';
 import { TooltipDirection } from './components/Tooltip';
 import './Home.scss';
@@ -30,7 +31,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="page-wrapper">
+      <SplitPane className="page-wrapper">
         <div className="side-bar">
           <div className="side-bar__content">
             <TextInput
@@ -107,7 +108,7 @@ export default function Home() {
           </div>
           <PaintingList />
         </div>
-      </div>
+      </SplitPane>
     </>
   );
 }

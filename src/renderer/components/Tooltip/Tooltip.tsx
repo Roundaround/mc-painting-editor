@@ -1,14 +1,13 @@
 import {
   CSSProperties,
   ReactNode,
-  RefObject,
-  useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { useBoundingRect } from '../../utils/useBoundingRect';
 import styles from './Tooltip.module.scss';
 
 export enum TooltipDirection {
@@ -211,32 +210,3 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
 }
 
 Tooltip.defaultProps = defaultProps;
-
-function useBoundingRect<T extends HTMLElement>(): [
-  DOMRect | false,
-  () => void,
-  RefObject<T>
-] {
-  const ref = useRef<T>(null);
-  const [boundingRect, setBoundingRect] = useState(false as DOMRect | false);
-
-  const updateBoundingRect = useCallback(() => {
-    setBoundingRect(
-      ref && ref.current ? ref.current.getBoundingClientRect() : false
-    );
-  }, [ref]);
-
-  const useEffectInEvent = (event: string, useCapture = false) => {
-    useEffect(() => {
-      updateBoundingRect();
-      window.addEventListener(event, updateBoundingRect, useCapture);
-      return () =>
-        window.removeEventListener(event, updateBoundingRect, useCapture);
-    }, [event, useCapture]);
-  };
-
-  useEffectInEvent('resize');
-  useEffectInEvent('scroll', true);
-
-  return [boundingRect, updateBoundingRect, ref];
-}
