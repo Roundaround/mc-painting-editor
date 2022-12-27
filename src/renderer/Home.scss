@@ -63,7 +63,8 @@
   padding: var(--size-2) var(--size-3);
   gap: var(--size-4);
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
+  font-size: var(--font-size-5);
 }
 
 .icon-input {

@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useMemo } from 'react';
 import { Blocks } from 'react-loader-spinner';
 import { metadataSlice, paintingsSlice } from '../common/store';
 import { Button, ButtonStyle } from './components/Button';
@@ -20,6 +21,13 @@ export default function Home() {
   const paintingCount = useSelector((state) =>
     paintingsSelectors.selectTotal(state)
   );
+  const paintings = useSelector(paintingsSelectors.selectAll);
+  const paintingsWithoutImage = useMemo(() => {
+    return paintings.filter((painting) => !painting.path).length;
+  }, [paintings]);
+  const paintingsWithoutId = useMemo(() => {
+    return paintings.filter((painting) => !painting.id).length;
+  }, [paintings]);
 
   const dispatch = useDispatch();
 
@@ -89,9 +97,13 @@ export default function Home() {
         </div>
         <div className="main-panel">
           <div className="main-panel__header">
-            <div style={{ fontSize: 'var(--font-size-5)' }}>
-              Paintings ({paintingCount})
-            </div>
+            <span>Paintings</span>
+            <span>({paintingCount})</span>
+            {!paintingsWithoutId ? null : <span>({paintingsWithoutId}*)</span>}
+            {!paintingsWithoutImage ? null : (
+              <span>({paintingsWithoutImage}*)</span>
+            )}
+            <div style={{ flex: '1 1 100%' }} />
             <Button
               onClick={() => {
                 dispatch(paintingsSlice.actions.createPainting());
