@@ -18,8 +18,8 @@ export const PaintingGrid = (props: PaintingGridProps) => {
       className={styles['wrapper']}
       style={
         {
-          '--painting-grid-height': `${maxHeight * 2}rem`,
-          '--painting-grid-width': `${maxWidth * 2}rem`,
+          '--painting-grid-height': `${maxHeight * 2.4}rem`,
+          '--painting-grid-width': `${maxWidth * 2.4}rem`,
         } as CSSProperties
       }
       onClick={onClick}
@@ -29,8 +29,8 @@ export const PaintingGrid = (props: PaintingGridProps) => {
         className={styles['painting']}
         style={
           {
-            '--painting-height': `${height * 2}rem`,
-            '--painting-width': `${width * 2}rem`,
+            '--painting-height': `${height * 2.4}rem`,
+            '--painting-width': `${width * 2.4}rem`,
           } as CSSProperties
         }
       />
