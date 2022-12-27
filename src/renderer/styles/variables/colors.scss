@@ -1,12 +1,12 @@
 :root {
   --white: #fcfcfc;
-  --white-hsl: 0, 0, 99;
+  --white-hsl: 0 0% 99%;
   --black: #0f1010;
-  --black-hsl: 180, 3, 6;
+  --black-hsl: 180 3% 6%;
   --smoke: #eaeaea;
-  --smoke-hsl: 0, 0, 92;
+  --smoke-hsl: 0 0% 92%;
   --charcoal: #171a1c;
-  --charcoal-hsl: 204, 10, 10;
+  --charcoal-hsl: 204 10% 10%;
 
   --red-0: #fff5f5;
   --red-1: #ffe3e3;
@@ -118,17 +118,6 @@
   --orange-8: #e8590c;
   --orange-9: #d9480f;
 
-  --gray-0-hsl: 210 17% 98%;
-  --gray-1-hsl: 210 17% 95%;
-  --gray-2-hsl: 210 16% 93%;
-  --gray-3-hsl: 210 14% 89%;
-  --gray-4-hsl: 210 14% 83%;
-  --gray-5-hsl: 210 11% 71%;
-  --gray-6-hsl: 210 7% 56%;
-  --gray-7-hsl: 210 9% 31%;
-  --gray-8-hsl: 210 10% 23%;
-  --gray-9-hsl: 210 11% 15%;
-
   --red-0-hsl: 0 100% 98%;
   --red-1-hsl: 0 100% 95%;
   --red-2-hsl: 0 100% 89%;
@@ -172,28 +161,6 @@
   --violet-7-hsl: 255 78% 60%;
   --violet-8-hsl: 255 67% 55%;
   --violet-9-hsl: 255 53% 50%;
-
-  --indigo-0-hsl: 223 100% 96%;
-  --indigo-1-hsl: 225 100% 93%;
-  --indigo-2-hsl: 228 100% 86%;
-  --indigo-3-hsl: 228 100% 78%;
-  --indigo-4-hsl: 228 96% 72%;
-  --indigo-5-hsl: 228 94% 67%;
-  --indigo-6-hsl: 228 89% 63%;
-  --indigo-7-hsl: 228 81% 59%;
-  --indigo-8-hsl: 228 69% 55%;
-  --indigo-9-hsl: 230 57% 50%;
-
-  --blue-0-hsl: 205 100% 95%;
-  --blue-1-hsl: 206 100% 91%;
-  --blue-2-hsl: 206 100% 82%;
-  --blue-3-hsl: 206 96% 72%;
-  --blue-4-hsl: 207 91% 64%;
-  --blue-5-hsl: 207 86% 57%;
-  --blue-6-hsl: 208 80% 52%;
-  --blue-7-hsl: 208 77% 47%;
-  --blue-8-hsl: 209 77% 43%;
-  --blue-9-hsl: 209 75% 38%;
 
   --cyan-0-hsl: 185 81% 94%;
   --cyan-1-hsl: 185 84% 88%;

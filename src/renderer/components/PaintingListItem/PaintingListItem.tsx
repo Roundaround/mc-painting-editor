@@ -11,6 +11,8 @@ import { Button, ButtonStyle } from '../Button';
 import { NumberInput } from '../NumberInput';
 import { PaintingGrid } from '../PaintingGrid';
 import { TextInput } from '../TextInput';
+import { TooltipDirection } from '../Tooltip';
+import styles from './PaintingListItem.module.scss';
 
 const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
   paintingsSlice.actions;
@@ -40,22 +42,8 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          gap: '1.5rem',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--size-1)',
-          }}
-        >
+      <div className={styles['wrapper']}>
+        <div className={styles['inputs']}>
           <TextInput
             id={`painting-id-${id}`}
             label="ID"
@@ -141,6 +129,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
             style={ButtonStyle.ICON}
             tooltip={{
               content: 'Remove',
+              direction: TooltipDirection.LEFT,
             }}
           >
             <FontAwesomeIcon icon={'trash'} />
@@ -163,6 +152,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
                 tooltip={{
                   content: 'Move Up',
                   noWrap: true,
+                  direction: TooltipDirection.LEFT,
                 }}
               >
                 <FontAwesomeIcon icon={'arrow-up'} />
@@ -177,6 +167,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
                 tooltip={{
                   content: 'Move Down',
                   noWrap: true,
+                  direction: TooltipDirection.LEFT,
                 }}
               >
                 <FontAwesomeIcon icon={'arrow-down'} />

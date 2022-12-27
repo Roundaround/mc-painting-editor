@@ -11,21 +11,20 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
     paintingsAdapter.getSelectors((state: RootState) => state.paintings)
       .selectIds
   ) as string[];
+  const paintingCount = useSelector(
+    paintingsAdapter.getSelectors((state: RootState) => state.paintings)
+      .selectTotal
+  );
+
+  const classNames = ['list', paintingCount === 0 ? 'list--empty' : '']
+    .map((name) => styles[name as keyof typeof styles])
+    .concat([passedClassName || ''])
+    .join(' ');
 
   // TODO: Indicate how many paintings have no image
 
   return (
-    <div
-      {...htmlProps}
-      className={[
-        passedClassName || '',
-        styles['list'],
-        paintingIds.length === 0 ? styles['list--empty'] : '',
-      ]
-        .filter((name): name is keyof typeof styles => !!name)
-        .map((name) => styles[name])
-        .join(' ')}
-    >
+    <div {...htmlProps} className={classNames}>
       {paintingIds.length > 0 ? null : <div>No paintings...yet!</div>}
       {paintingIds.map((id, index) => (
         <Fragment key={id}>
