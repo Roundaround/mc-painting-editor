@@ -1,11 +1,11 @@
-.splitView {
+.wrapper {
   height: 100%;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
 
-.leftPane {
+.left-pane {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -18,7 +18,7 @@
   }
 }
 
-.rightPane {
+.right-pane {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;

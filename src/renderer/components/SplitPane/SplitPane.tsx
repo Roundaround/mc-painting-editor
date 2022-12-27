@@ -117,7 +117,7 @@ export const SplitPane = (props: SplitPaneProps) => {
     };
   }, [onMouseMove, onTouchMove, onMouseUp]);
 
-  const wrapperClasses = [styles['splitView'], passedClassName || '']
+  const wrapperClasses = [styles['wrapper'], passedClassName || '']
     .join(' ')
     .trim();
 
@@ -130,7 +130,7 @@ export const SplitPane = (props: SplitPaneProps) => {
 
   return (
     <div className={wrapperClasses} ref={splitPaneRef}>
-      <div className={styles['leftPane']} ref={leftRef}>
+      <div className={styles['left-pane']} ref={leftRef}>
         {left}
       </div>
       <div className={styles['divider']}>
@@ -140,7 +140,7 @@ export const SplitPane = (props: SplitPaneProps) => {
           onTouchStart={onTouchStart}
         ></div>
       </div>
-      <div className={styles['rightPane']}>{right}</div>
+      <div className={styles['right-pane']}>{right}</div>
     </div>
   );
 };
