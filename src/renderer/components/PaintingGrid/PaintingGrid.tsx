@@ -17,7 +17,7 @@ export const PaintingGrid = (props: PaintingGridProps) => {
   return (
     <div
       className={styles['wrapper']}
-      variant={
+      style={
         {
           '--painting-grid-height': `${maxHeight * 2.4}rem`,
           '--painting-grid-width': `${maxWidth * 2.4}rem`,
@@ -28,7 +28,7 @@ export const PaintingGrid = (props: PaintingGridProps) => {
       <img
         src={image}
         className={styles['painting']}
-        variant={
+        style={
           {
             '--painting-height': `${height * 2.4}rem`,
             '--painting-width': `${width * 2.4}rem`,
@@ -38,9 +38,9 @@ export const PaintingGrid = (props: PaintingGridProps) => {
       <div className={styles['edit-overlay']}></div>
       {hasImage ? null : (
         <div className={styles['upload-instructions']}>
-          <span variant={{ whiteSpace: 'nowrap' }}>Click here to</span>
+          <span style={{ whiteSpace: 'nowrap' }}>Click here to</span>
           <br />
-          <span variant={{ whiteSpace: 'nowrap' }}>upload an image</span>
+          <span style={{ whiteSpace: 'nowrap' }}>upload an image</span>
         </div>
       )}
     </div>
