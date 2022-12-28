@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useEffect, useMemo } from 'react';
+import { HTMLProps, useEffect, useMemo } from 'react';
 import { paintingsSlice } from '../../../common/store';
 import { getPaintingImage } from '../../utils/painting';
 import {
@@ -17,18 +17,30 @@ import styles from './PaintingListItem.module.scss';
 const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
   paintingsSlice.actions;
 
-export interface PaintingListItemProps {
+export interface PaintingListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
-  isFirst: boolean;
-  isLast: boolean;
 }
 
 export function PaintingListItem(props: PaintingListItemProps) {
-  const { id, isFirst, isLast } = props;
+  const { id, className: passedClassName, ...htmlProps } = props;
 
   const painting = useSelector((state) =>
     paintingsSelectors.selectById(state, id)
   );
+  const totalPaintings = useSelector(paintingsSelectors.selectTotal);
+  const paintingIds = useSelector(paintingsSelectors.selectIds);
+
+  const currentIndex = useMemo(() => {
+    return paintingIds.indexOf(id);
+  }, [paintingIds, id]);
+
+  const canMoveUp = useMemo(() => {
+    return currentIndex > 0;
+  }, [currentIndex]);
+
+  const canMoveDown = useMemo(() => {
+    return currentIndex < totalPaintings - 1;
+  }, [currentIndex, totalPaintings]);
 
   const paintingImage = useMemo(() => {
     return getPaintingImage(painting);
@@ -36,146 +48,132 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   const dispatch = useDispatch();
 
+  const classNames = ['wrapper']
+    .map((name) => styles[name as keyof typeof styles])
+    .concat(passedClassName || '')
+    .join(' ')
+    .trim();
+
   if (!painting) {
     return null;
   }
 
   return (
-    <>
-      <div className={styles['wrapper']}>
-        <div className={styles['inputs']}>
-          <TextInput
-            id={`painting-id-${id}`}
-            label="ID"
-            value={painting.id}
-            onChange={(e) => {
-              dispatch(updatePainting({ id, changes: { id: e.target.value } }));
-            }}
-          />
-          <TextInput
-            id={`painting-name-${id}`}
-            label="Name"
-            value={painting.name}
-            onChange={(e) => {
-              dispatch(
-                updatePainting({ id, changes: { name: e.target.value } })
-              );
-            }}
-          />
-          <TextInput
-            id={`painting-artist-${id}`}
-            label="Artist"
-            value={painting.artist}
-            onChange={(e) => {
-              dispatch(
-                updatePainting({ id, changes: { artist: e.target.value } })
-              );
-            }}
-          />
-          <NumberInput
-            id={`painting-width-${id}`}
-            label="Width"
-            min={1}
-            max={8}
-            value={painting.width}
-            onChange={(e) => {
-              dispatch(
-                updatePainting({
-                  id,
-                  changes: { width: parseInt(e.target.value, 10) },
-                })
-              );
-            }}
-          />
-          <NumberInput
-            id={`painting-height-${id}`}
-            label="Height"
-            min={1}
-            max={8}
-            value={painting.height}
-            onChange={(e) => {
-              dispatch(
-                updatePainting({
-                  id,
-                  changes: { height: parseInt(e.target.value, 10) },
-                })
-              );
-            }}
-          />
-        </div>
-        <PaintingGrid
-          onClick={() => window.electron.openPaintingFile(id)}
-          maxHeight={8}
-          maxWidth={8}
-          hasImage={painting.path !== undefined}
-          image={paintingImage}
-          height={painting.height}
-          width={painting.width}
+    <div className={classNames} {...htmlProps}>
+      <div className={styles['inputs']}>
+        <TextInput
+          id={`painting-id-${id}`}
+          label="ID"
+          value={painting.id}
+          onChange={(e) => {
+            dispatch(updatePainting({ id, changes: { id: e.target.value } }));
+          }}
         />
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 'var(--size-2)',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-            height: '100%',
+        <TextInput
+          id={`painting-name-${id}`}
+          label="Name"
+          value={painting.name}
+          onChange={(e) => {
+            dispatch(updatePainting({ id, changes: { name: e.target.value } }));
+          }}
+        />
+        <TextInput
+          id={`painting-artist-${id}`}
+          label="Artist"
+          value={painting.artist}
+          onChange={(e) => {
+            dispatch(
+              updatePainting({ id, changes: { artist: e.target.value } })
+            );
+          }}
+        />
+        <NumberInput
+          id={`painting-width-${id}`}
+          label="Width"
+          min={1}
+          max={8}
+          value={painting.width}
+          onChange={(e) => {
+            dispatch(
+              updatePainting({
+                id,
+                changes: { width: parseInt(e.target.value, 10) },
+              })
+            );
+          }}
+        />
+        <NumberInput
+          id={`painting-height-${id}`}
+          label="Height"
+          min={1}
+          max={8}
+          value={painting.height}
+          onChange={(e) => {
+            dispatch(
+              updatePainting({
+                id,
+                changes: { height: parseInt(e.target.value, 10) },
+              })
+            );
+          }}
+        />
+      </div>
+      <PaintingGrid
+        onClick={() => window.electron.openPaintingFile(id)}
+        maxHeight={8}
+        maxWidth={8}
+        hasImage={painting.path !== undefined}
+        image={paintingImage}
+        height={painting.height}
+        width={painting.width}
+      />
+      <div className={styles['actions']}>
+        <Button
+          onClick={() => {
+            dispatch(removePainting(id));
+          }}
+          style={ButtonStyle.ICON}
+          tooltip={{
+            content: 'Remove',
+            direction: TooltipDirection.LEFT,
           }}
         >
-          <Button
-            onClick={() => {
-              dispatch(removePainting(id));
-            }}
-            style={ButtonStyle.ICON}
-            tooltip={{
-              content: 'Remove',
-              direction: TooltipDirection.LEFT,
-            }}
-          >
-            <FontAwesomeIcon icon={'trash'} />
-          </Button>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 'var(--size-2)',
-              alignItems: 'stretch',
-              flex: '0 0 auto',
-            }}
-          >
-            {isFirst ? null : (
-              <Button
-                onClick={() => {
-                  dispatch(movePaintingUp(id));
-                }}
-                style={ButtonStyle.ICON}
-                tooltip={{
-                  content: 'Move Up',
-                  noWrap: true,
-                  direction: TooltipDirection.LEFT,
-                }}
-              >
-                <FontAwesomeIcon icon={'arrow-up'} />
-              </Button>
-            )}
-            {isLast ? null : (
-              <Button
-                onClick={() => {
-                  dispatch(movePaintingDown(id));
-                }}
-                style={ButtonStyle.ICON}
-                tooltip={{
-                  content: 'Move Down',
-                  noWrap: true,
-                  direction: TooltipDirection.LEFT,
-                }}
-              >
-                <FontAwesomeIcon icon={'arrow-down'} />
-              </Button>
-            )}
-          </div>
+          <FontAwesomeIcon icon={'trash'} />
+        </Button>
+        <div className={styles['actions-group']}>
+          {!canMoveUp ? null : (
+            <Button
+              onClick={() => {
+                dispatch(movePaintingUp(id));
+              }}
+              style={ButtonStyle.ICON}
+              tooltip={{
+                content: 'Move Up',
+                noWrap: true,
+                direction: TooltipDirection.LEFT,
+              }}
+            >
+              <FontAwesomeIcon icon={'arrow-up'} />
+            </Button>
+          )}
+          <div>{currentIndex + 1}/{totalPaintings}</div>
+          {!canMoveDown ? null : (
+            <Button
+              onClick={() => {
+                dispatch(movePaintingDown(id));
+              }}
+              style={ButtonStyle.ICON}
+              tooltip={{
+                content: 'Move Down',
+                noWrap: true,
+                direction: TooltipDirection.LEFT,
+              }}
+            >
+              <FontAwesomeIcon icon={'arrow-down'} />
+            </Button>
+          )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
