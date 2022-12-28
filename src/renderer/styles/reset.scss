@@ -32,6 +32,7 @@ div#__next {
 *::before,
 *::after {
   box-sizing: border-box;
+  cursor: default;
 }
 
 :where(:focus-visible) {
@@ -231,12 +232,14 @@ fieldset {
 textarea,
 select,
 input:not(button, button[type], input[type='button'], input[type='submit'], input[type='reset']) {
+  cursor: auto;
   background-color: var(--input);
   border-radius: var(--radius-2);
 }
 
 input,
 textarea {
+  cursor: auto;
   padding-block: var(--size-1);
   padding-inline: var(--size-2);
 }
@@ -267,4 +270,9 @@ input[type='file'] {
   cursor: auto;
   max-inline-size: 100%;
   padding: 0;
+}
+
+button * {
+  pointer-events: none;
+  cursor: inherit;
 }
