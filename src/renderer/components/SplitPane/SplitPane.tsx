@@ -88,17 +88,22 @@ export const SplitPane = (props: SplitPaneProps) => {
 
   const onMouseMove = useCallback(
     (e: MouseEvent) => {
-      e.preventDefault();
+      if (dragging) {
+        e.preventDefault();
+      }
       onMove(e.clientX);
     },
-    [onMove]
+    [dragging, onMove]
   );
 
   const onTouchMove = useCallback(
     (e: TouchEvent) => {
+      if (dragging) {
+        e.preventDefault();
+      }
       onMove(e.touches[0].clientX);
     },
-    [onMove]
+    [dragging, onMove]
   );
 
   const onMouseUp = useCallback(() => {

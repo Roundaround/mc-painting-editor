@@ -97,12 +97,13 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
             onClear={() => {
               setSearch('');
             }}
-            style={{ minWidth: '30ch' }}
           />
-          <Chip label="Filter 1" />
-          <Chip label="Filter 2" onDelete={() => {}} />
-          <Chip label="Filter 3" outline={true} />
-          <Chip label="Filter 4" outline={true} onDelete={() => {}} />
+          <div className={styles['filter-chips']}>
+            <Chip label="Filter 1" />
+            <Chip label="Filter 2" onDelete={() => {}} />
+            <Chip label="Filter 3" outline={true} />
+            <Chip label="Filter 4" outline={true} onDelete={() => {}} />
+          </div>
         </div>
       )}
       <div className={listClassNames}>
