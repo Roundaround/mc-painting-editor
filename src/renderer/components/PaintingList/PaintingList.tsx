@@ -90,7 +90,6 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         <div className={styles['filters']}>
           <TextInput
             id="search"
-            label="Search"
             value={search}
             onChange={(event) => {
               setSearch(event.target.value);

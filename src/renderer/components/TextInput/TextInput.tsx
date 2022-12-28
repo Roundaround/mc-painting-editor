@@ -5,7 +5,7 @@ import styles from './TextInput.module.scss';
 
 interface TextInputProps extends HTMLProps<HTMLDivElement> {
   id: string;
-  label: string;
+  label?: string;
   prefix?: string;
   suffix?: string;
   value: string;
@@ -42,9 +42,11 @@ export const TextInput: FC<TextInputProps> = (props) => {
 
   return (
     <div className={classNames} {...htmlProps}>
-      <label htmlFor={id} className={styles['label']}>
-        {label}
-      </label>
+      {!label ? null : (
+        <label htmlFor={id} className={styles['label']}>
+          {label}
+        </label>
+      )}
       <div className={styles['input-container']}>
         {!prefix ? null : <div className={styles['prefix']}>{prefix}</div>}
         <input
