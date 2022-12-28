@@ -1,4 +1,5 @@
 import { Menu, MenuItemConstructorOptions } from 'electron';
+import contextMenu from 'electron-context-menu';
 import { openZipFile, saveZipFile } from './files';
 import { store } from './store';
 
@@ -130,4 +131,9 @@ export const registerMenu = () => {
     ...(process.env.NODE_ENV === 'development' ? developmentAdditions : []),
   ]);
   Menu.setApplicationMenu(menu);
+
+  contextMenu({
+    showSearchWithGoogle: false,
+    showSelectAll: false,
+  });
 };

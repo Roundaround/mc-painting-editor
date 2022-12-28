@@ -56,6 +56,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@reduxjs/toolkit": "^1.9.1",
     "adm-zip": "^0.5.9",
+    "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
     "fuzzysort": "^2.0.4",
     "immer": "^9.0.16",
