@@ -94,13 +94,13 @@ export default function Home() {
         <div className="footer">
           <div>Made with ❤️ by Roundaround</div>
           <div>
-            <span>Total paintings: {paintingCount}</span>
             {!paintingsWithoutId ? null : (
               <span>Needs ID: {paintingsWithoutId}</span>
             )}
             {!paintingsWithoutImage ? null : (
               <span>Needs image: {paintingsWithoutImage}</span>
             )}
+            <span>Total paintings: {paintingCount}</span>
           </div>
         </div>
       </div>
