@@ -39,9 +39,9 @@ export default function Home() {
         </div>
       )}
 
-      <SplitPane className="page-wrapper">
-        <div className="side-bar">
-          <div className="side-bar__content">
+      <div className="page-wrapper">
+        <SplitPane>
+          <div className="side-bar">
             <TextInput
               id="id"
               label="ID"
@@ -92,35 +92,40 @@ export default function Home() {
               </div>
             </div>
           </div>
-
-          <div className="side-bar__footer">Made with ❤️ by Roundaround</div>
-        </div>
-        <div className="main-panel">
-          <div className="main-panel__header">
-            <span>Paintings</span>
-            <span>({paintingCount})</span>
-            {!paintingsWithoutId ? null : <span>({paintingsWithoutId}*)</span>}
-            {!paintingsWithoutImage ? null : (
-              <span>({paintingsWithoutImage}*)</span>
-            )}
-            <div style={{ flex: '1 1 100%' }} />
-            <Button
-              onClick={() => {
-                dispatch(paintingsSlice.actions.createPainting());
-              }}
-              style={ButtonStyle.ICON}
-              tooltip={{
-                content: 'Add a painting',
-                noWrap: true,
-                direction: TooltipDirection.BOTTOM,
-              }}
-            >
-              <FontAwesomeIcon icon={'plus'} />
-            </Button>
+          <div className="main-panel">
+            <div className="main-panel__header">
+              <span>Paintings</span>
+              <div style={{ flex: '1 1 100%' }} />
+              <Button
+                onClick={() => {
+                  dispatch(paintingsSlice.actions.createPainting());
+                }}
+                style={ButtonStyle.ICON}
+                tooltip={{
+                  content: 'Add a painting',
+                  noWrap: true,
+                  direction: TooltipDirection.BOTTOM,
+                }}
+              >
+                <FontAwesomeIcon icon={'plus'} />
+              </Button>
+            </div>
+            <PaintingList className="main-panel__content" />
           </div>
-          <PaintingList />
+        </SplitPane>
+        <div className="footer">
+          <div>Made with ❤️ by Roundaround</div>
+          <div>
+            <span>Total paintings: {paintingCount}</span>
+            {!paintingsWithoutId ? null : (
+              <span>Needs ID: {paintingsWithoutId}</span>
+            )}
+            {!paintingsWithoutImage ? null : (
+              <span>Needs image: {paintingsWithoutImage}</span>
+            )}
+          </div>
         </div>
-      </SplitPane>
+      </div>
     </>
   );
 }

@@ -14,36 +14,45 @@
 
 .page-wrapper {
   display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
+
+  > * {
+    flex: 1 1 100%;
+    overflow: hidden;
+  }
+}
+
+.footer {
+  flex: 0 0 auto;
+  display: flex;
   flex-direction: row;
+  background-color: var(--accent);
+  padding: calc(var(--size-1) / 2) var(--size-3);
+  gap: var(--size-4);
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-0);
+  font-weight: var(--font-weight-5);
+  color: var(--text-1);
+
+  > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-3);
+  }
 }
 
 .side-bar {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: stretch;
   background-color: hsl(var(--surface-1-hsl) / 0.25);
-}
-
-.side-bar__content {
-  display: flex;
-  flex: 1 1 100%;
-  width: 100%;
-  flex-direction: column;
   padding: var(--size-3);
   gap: var(--size-3);
   overflow-y: auto;
-}
-
-.side-bar__footer {
-  display: flex;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-  padding: var(--size-2);
-  border-top: 1px solid var(--surface-2);
 }
 
 .main-panel {
@@ -65,6 +74,10 @@
   align-items: center;
   justify-content: flex-start;
   font-size: var(--font-size-5);
+}
+
+.main-panel__content {
+  overflow-y: auto;
 }
 
 .icon-input {
