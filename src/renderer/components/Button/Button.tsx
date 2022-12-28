@@ -1,41 +1,66 @@
-import { ReactNode, useMemo } from 'react';
+import {
+  ButtonHTMLAttributes,
+  DetailedHTMLProps,
+  ReactNode,
+  useMemo,
+} from 'react';
 import { Tooltip, TooltipProps } from '../Tooltip';
 import styles from './Button.module.scss';
 
 type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
 
-export enum ButtonStyle {
+export enum ButtonVariant {
   DEFAULT = 'default',
   LARGE = 'large',
   ICON = 'icon',
+  ICON_MINI = 'icon-mini',
 }
 
 const defaultProps = {
-  style: ButtonStyle.DEFAULT,
+  variant: ButtonVariant.DEFAULT,
 };
 
-export interface ButtonProps {
-  onClick: () => void;
-  children: React.ReactNode;
+interface ButtonProps
+  extends Omit<
+    DetailedHTMLProps<
+      ButtonHTMLAttributes<HTMLButtonElement>,
+      HTMLButtonElement
+    >,
+    'variant'
+  > {
   tooltip?: ReactNode | TooltipPropsSansChildren;
-  style?: ButtonStyle;
+  variant?: ButtonVariant;
 }
 
 export const Button = (props: ButtonProps & typeof defaultProps) => {
-  const { onClick, children, tooltip, style } = props;
+  const {
+    onClick,
+    children,
+    tooltip,
+    variant,
+    className: passedClassName,
+    ...htmlProps
+  } = props;
 
   const button = useMemo(() => {
     const classNames = [
       styles['button'],
-      style === ButtonStyle.DEFAULT ? '' : styles[`button--${style}`],
-    ].join(' ');
+      variant === ButtonVariant.DEFAULT ? '' : styles[`button--${variant}`],
+    ]
+      .concat(passedClassName || '')
+      .join(' ')
+      .trim();
 
     return (
-      <button onClick={onClick} className={classNames} type="button">
+      <button
+        onClick={onClick}
+        className={classNames}
+        type="button"
+      >
         {children}
       </button>
     );
-  }, [style, onClick, children]);
+  }, [variant, onClick, children]);
 
   if (tooltip === undefined) {
     return button;

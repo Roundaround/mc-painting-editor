@@ -1,36 +1,68 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FC, HTMLProps } from 'react';
+import { Button, ButtonVariant } from '../Button';
 import styles from './TextInput.module.scss';
 
-interface TextInputProps {
+interface TextInputProps extends HTMLProps<HTMLDivElement> {
   id: string;
   label: string;
   prefix?: string;
   suffix?: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClear?: () => void;
+  inputProps?: HTMLProps<HTMLInputElement>;
 }
 
-export const TextInput = (props: TextInputProps) => {
-  const { id, label, prefix, suffix, value, onChange, ...rest } = props;
+export const TextInput: FC<TextInputProps> = (props) => {
+  const {
+    id,
+    label,
+    prefix,
+    suffix,
+    value,
+    onChange,
+    onClear,
+    inputProps,
+    className: passedClassName,
+    ...htmlProps
+  } = props;
+
+  const classNames = ['wrapper']
+    .map((name) => styles[name as keyof typeof styles])
+    .concat(passedClassName || '')
+    .join(' ')
+    .trim();
+
+  const inputClassNames = ['input', onClear ? 'input--clearable' : null]
+    .map((name) => styles[name as keyof typeof styles])
+    .join(' ')
+    .trim();
 
   return (
-    <div className={styles['text-input']}>
-      <label htmlFor={id} className={styles['text-input__label']}>
+    <div className={classNames} {...htmlProps}>
+      <label htmlFor={id} className={styles['label']}>
         {label}
       </label>
-      <div className={styles['text-input__input-container']}>
-        {!prefix ? null : (
-          <div className={styles['text-input__prefix']}>{prefix}</div>
-        )}
+      <div className={styles['input-container']}>
+        {!prefix ? null : <div className={styles['prefix']}>{prefix}</div>}
         <input
           id={id}
-          className={styles['text-input__input']}
+          className={inputClassNames}
           value={value}
           onChange={onChange}
-          {...rest}
+          {...inputProps}
         />
-        {!suffix ? null : (
-          <div className={styles['text-input__suffix']}>{suffix}</div>
+        {!onClear ? null : (
+          <Button
+            className={styles['clear-button']}
+            variant={ButtonVariant.ICON_MINI}
+            onClick={onClear}
+          >
+            <FontAwesomeIcon icon={'xmark'} />
+          </Button>
         )}
+        {!suffix ? null : <div className={styles['suffix']}>{suffix}</div>}
       </div>
     </div>
   );

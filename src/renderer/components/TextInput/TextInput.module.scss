@@ -1,4 +1,4 @@
-.text-input {
+.wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6,21 +6,31 @@
   width: 100%;
 }
 
-.text-input__label {
+.label {
   font-size: var(--font-size-0);
 }
 
-.text-input__input-container {
+.input-container {
   display: flex;
   flex-direction: row;
   gap: var(--size-0);
   align-items: center;
 }
 
-.text-input__input {
+.input {
   flex: 1;
 }
 
-.text-input__prefix, .text-input__suffix {
+.input--clearable {
+  padding-right: calc(1.5rem + var(--size-1) + var(--size-2));
+}
+
+.prefix, .suffix {
   white-space: nowrap;
+}
+
+.clear-button {
+  position: absolute;
+  right: 0.25rem;
+  bottom: 0.25rem;
 }

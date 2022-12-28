@@ -7,7 +7,7 @@ import {
   useDispatch,
   useSelector,
 } from '../../utils/store';
-import { Button, ButtonStyle } from '../Button';
+import { Button, ButtonVariant } from '../Button';
 import { NumberInput } from '../NumberInput';
 import { PaintingGrid } from '../PaintingGrid';
 import { TextInput } from '../TextInput';
@@ -132,7 +132,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
           onClick={() => {
             dispatch(removePainting(id));
           }}
-          style={ButtonStyle.ICON}
+          variant={ButtonVariant.ICON}
           tooltip={{
             content: 'Remove',
             direction: TooltipDirection.LEFT,
@@ -146,7 +146,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
               onClick={() => {
                 dispatch(movePaintingUp(id));
               }}
-              style={ButtonStyle.ICON}
+              variant={ButtonVariant.ICON}
               tooltip={{
                 content: 'Move Up',
                 noWrap: true,
@@ -156,13 +156,15 @@ export function PaintingListItem(props: PaintingListItemProps) {
               <FontAwesomeIcon icon={'arrow-up'} />
             </Button>
           )}
-          <div>{currentIndex + 1}/{totalPaintings}</div>
+          <div>
+            {currentIndex + 1}/{totalPaintings}
+          </div>
           {!canMoveDown ? null : (
             <Button
               onClick={() => {
                 dispatch(movePaintingDown(id));
               }}
-              style={ButtonStyle.ICON}
+              variant={ButtonVariant.ICON}
               tooltip={{
                 content: 'Move Down',
                 noWrap: true,

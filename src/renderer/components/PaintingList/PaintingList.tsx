@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fuzzysort from 'fuzzysort';
-import { FC, HTMLProps, useEffect, useMemo, useState } from 'react';
+import { FC, HTMLProps, useMemo, useState } from 'react';
 import { Painting, paintingsSlice } from '../../../common/store';
 import {
   paintingsSelectors,
   useDispatch,
   useSelector,
 } from '../../utils/store';
-import { Button, ButtonStyle } from '../Button';
+import { Button, ButtonVariant } from '../Button';
 import { PaintingListItem } from '../PaintingListItem';
 import { TextInput } from '../TextInput';
 import { TooltipDirection } from '../Tooltip';
@@ -61,7 +61,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
             onClick={() => {
               setShowFilters((showFilters) => !showFilters);
             }}
-            style={ButtonStyle.ICON}
+            variant={ButtonVariant.ICON}
             tooltip={{
               content: `${showFilters ? 'Hide' : 'Show'} filters`,
               noWrap: true,
@@ -74,7 +74,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
             onClick={() => {
               dispatch(paintingsSlice.actions.createPainting());
             }}
-            style={ButtonStyle.ICON}
+            variant={ButtonVariant.ICON}
             tooltip={{
               content: 'Add a painting',
               noWrap: true,
@@ -93,6 +93,9 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
             value={search}
             onChange={(event) => {
               setSearch(event.target.value);
+            }}
+            onClear={() => {
+              setSearch('');
             }}
           />
         </div>

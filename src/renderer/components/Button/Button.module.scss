@@ -60,6 +60,21 @@
   justify-content: center;
   border-radius: var(--radius-round);
   width: 2rem;
+  padding: 0;
+  aspect-ratio: 1;
+
+  &::before {
+    border-radius: var(--radius-round);
+  }
+}
+
+.button--icon-mini {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  width: 1.5rem;
+  padding: 0;
   aspect-ratio: 1;
 
   &::before {

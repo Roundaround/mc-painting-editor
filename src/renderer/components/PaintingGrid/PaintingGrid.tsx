@@ -11,12 +11,13 @@ export interface PaintingGridProps extends BaseHTMLAttributes<HTMLDivElement> {
 }
 
 export const PaintingGrid = (props: PaintingGridProps) => {
-  const { onClick, maxHeight, maxWidth, hasImage, image, height, width } = props;
+  const { onClick, maxHeight, maxWidth, hasImage, image, height, width } =
+    props;
 
   return (
     <div
       className={styles['wrapper']}
-      style={
+      variant={
         {
           '--painting-grid-height': `${maxHeight * 2.4}rem`,
           '--painting-grid-width': `${maxWidth * 2.4}rem`,
@@ -27,7 +28,7 @@ export const PaintingGrid = (props: PaintingGridProps) => {
       <img
         src={image}
         className={styles['painting']}
-        style={
+        variant={
           {
             '--painting-height': `${height * 2.4}rem`,
             '--painting-width': `${width * 2.4}rem`,
@@ -37,9 +38,9 @@ export const PaintingGrid = (props: PaintingGridProps) => {
       <div className={styles['edit-overlay']}></div>
       {hasImage ? null : (
         <div className={styles['upload-instructions']}>
-          <span style={{ whiteSpace: 'nowrap' }}>Click here to</span>
+          <span variant={{ whiteSpace: 'nowrap' }}>Click here to</span>
           <br />
-          <span style={{ whiteSpace: 'nowrap' }}>upload an image</span>
+          <span variant={{ whiteSpace: 'nowrap' }}>upload an image</span>
         </div>
       )}
     </div>
