@@ -63,6 +63,10 @@
   padding: 0;
   aspect-ratio: 1;
 
+  > svg {
+    width: 100%;
+  }
+
   &::before {
     border-radius: var(--radius-round);
   }
@@ -76,6 +80,10 @@
   width: 1.5rem;
   padding: 0;
   aspect-ratio: 1;
+
+  > svg {
+    width: 100%;
+  }
 
   &::before {
     border-radius: var(--radius-round);
@@ -91,6 +99,10 @@
   padding: 0;
   font-size: var(--font-size-0);
   aspect-ratio: 1;
+
+  > svg {
+    width: 100%;
+  }
 
   &::before {
     border-radius: var(--radius-round);

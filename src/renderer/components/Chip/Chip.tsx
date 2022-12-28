@@ -5,13 +5,24 @@ import styles from './Chip.module.scss';
 
 interface ChipProps extends HTMLProps<HTMLSpanElement> {
   label: string;
+  outline?: boolean;
   onDelete?: () => void;
 }
 
 export const Chip: FC<ChipProps> = (props) => {
-  const { label, onDelete, className: passedClassName, ...htmlProps } = props;
+  const {
+    label,
+    outline,
+    onDelete,
+    className: passedClassName,
+    ...htmlProps
+  } = props;
 
-  const classNames = ['chip', onDelete ? 'chip--deletable' : null]
+  const classNames = [
+    'chip',
+    outline ? 'chip--outlined' : '',
+    onDelete ? 'chip--deletable' : null,
+  ]
     .map((name) => styles[name as keyof typeof styles])
     .concat(passedClassName || '')
     .join(' ')

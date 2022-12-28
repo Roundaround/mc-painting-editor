@@ -12,6 +12,11 @@
   color: var(--text-1);
 }
 
+.chip--outlined {
+  background-color: transparent;
+  border: 1px solid var(--surface-2);
+}
+
 .chip--deletable {
   padding-inline-end: calc(1rem + 0.3rem + var(--size-2));
 }
@@ -20,5 +25,11 @@
   position: absolute;
   right: 0.3rem;
   bottom: 0.3rem;
-  background-color: var(--surface-3);
+  background-color: var(--surface-2);
+
+  .chip--outlined & {
+    right: calc(0.3rem - 1px);
+    bottom: calc(0.3rem - 1px);
+    background-color: var(--accent);
+  }
 }

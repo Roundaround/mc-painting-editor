@@ -102,6 +102,8 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           />
           <Chip label="Filter 1" />
           <Chip label="Filter 2" onDelete={() => {}} />
+          <Chip label="Filter 3" outline={true} />
+          <Chip label="Filter 4" outline={true} onDelete={() => {}} />
         </div>
       )}
       <div className={listClassNames}>

@@ -57,11 +57,12 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
         onClick={onClick}
         className={classNames}
         type="button"
+        {...htmlProps}
       >
         {children}
       </button>
     );
-  }, [variant, onClick, children]);
+  }, [variant, onClick, children, htmlProps]);
 
   if (tooltip === undefined) {
     return button;
