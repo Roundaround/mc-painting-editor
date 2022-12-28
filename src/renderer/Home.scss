@@ -55,31 +55,6 @@
   overflow-y: auto;
 }
 
-.main-panel {
-  flex: 1 1 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-}
-
-.main-panel__header {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: row;
-  background-color: hsl(var(--surface-1-hsl) / 0.5);
-  border-bottom: 1px solid var(--surface-2);
-  padding: var(--size-2) var(--size-3);
-  gap: var(--size-4);
-  align-items: center;
-  justify-content: flex-start;
-  font-size: var(--font-size-5);
-}
-
-.main-panel__content {
-  overflow-y: auto;
-}
-
 .icon-input {
   position: relative;
   height: 8rem;

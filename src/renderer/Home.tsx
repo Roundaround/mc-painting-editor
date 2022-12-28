@@ -1,12 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useMemo } from 'react';
 import { Blocks } from 'react-loader-spinner';
-import { metadataSlice, paintingsSlice } from '../common/store';
-import { Button, ButtonStyle } from './components/Button';
+import { metadataSlice } from '../common/store';
 import { PaintingList } from './components/PaintingList';
 import { SplitPane } from './components/SplitPane';
 import { TextInput } from './components/TextInput';
-import { TooltipDirection } from './components/Tooltip';
 import './Home.scss';
 import { paintingsSelectors, useDispatch, useSelector } from './utils/store';
 
@@ -92,26 +89,7 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="main-panel">
-            <div className="main-panel__header">
-              <span>Paintings</span>
-              <div style={{ flex: '1 1 100%' }} />
-              <Button
-                onClick={() => {
-                  dispatch(paintingsSlice.actions.createPainting());
-                }}
-                style={ButtonStyle.ICON}
-                tooltip={{
-                  content: 'Add a painting',
-                  noWrap: true,
-                  direction: TooltipDirection.BOTTOM,
-                }}
-              >
-                <FontAwesomeIcon icon={'plus'} />
-              </Button>
-            </div>
-            <PaintingList className="main-panel__content" />
-          </div>
+          <PaintingList />
         </SplitPane>
         <div className="footer">
           <div>Made with ❤️ by Roundaround</div>
