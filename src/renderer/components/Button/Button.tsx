@@ -14,6 +14,7 @@ export enum ButtonVariant {
   LARGE = 'large',
   ICON = 'icon',
   ICON_MINI = 'icon-mini',
+  ICON_TINY = 'icon-tiny',
 }
 
 const defaultProps = {

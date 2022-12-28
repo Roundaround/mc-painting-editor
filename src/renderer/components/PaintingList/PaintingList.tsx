@@ -8,6 +8,7 @@ import {
   useSelector,
 } from '../../utils/store';
 import { Button, ButtonVariant } from '../Button';
+import { Chip } from '../Chip';
 import { PaintingListItem } from '../PaintingListItem';
 import { TextInput } from '../TextInput';
 import { TooltipDirection } from '../Tooltip';
@@ -97,7 +98,10 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
             onClear={() => {
               setSearch('');
             }}
+            style={{ minWidth: '30ch' }}
           />
+          <Chip label="Filter 1" />
+          <Chip label="Filter 2" onDelete={() => {}} />
         </div>
       )}
       <div className={listClassNames}>

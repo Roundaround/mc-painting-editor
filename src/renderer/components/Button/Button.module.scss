@@ -81,3 +81,18 @@
     border-radius: var(--radius-round);
   }
 }
+
+.button--icon-tiny {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-round);
+  width: 1rem;
+  padding: 0;
+  font-size: var(--font-size-0);
+  aspect-ratio: 1;
+
+  &::before {
+    border-radius: var(--radius-round);
+  }
+}

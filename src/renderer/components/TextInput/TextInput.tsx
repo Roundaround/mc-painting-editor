@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, HTMLProps } from 'react';
+import { CSSProperties, FC, HTMLProps } from 'react';
 import { Button, ButtonVariant } from '../Button';
 import styles from './TextInput.module.scss';
 
@@ -11,6 +11,7 @@ interface TextInputProps extends HTMLProps<HTMLDivElement> {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onClear?: () => void;
+  style?: CSSProperties;
   inputProps?: HTMLProps<HTMLInputElement>;
 }
 

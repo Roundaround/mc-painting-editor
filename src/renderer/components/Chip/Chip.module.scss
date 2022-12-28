@@ -1,0 +1,24 @@
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.6rem;
+  border-radius: 0.8rem;
+  padding-inline: 0.6rem;
+  background-color: var(--accent);
+  font-size: var(--font-size-1);
+  font-weight: var(--font-weight-5);
+  color: var(--text-1);
+}
+
+.chip--deletable {
+  padding-inline-end: calc(1rem + 0.3rem + var(--size-2));
+}
+
+.delete-button {
+  position: absolute;
+  right: 0.3rem;
+  bottom: 0.3rem;
+  background-color: var(--surface-3);
+}
