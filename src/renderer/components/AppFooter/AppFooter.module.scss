@@ -1,0 +1,20 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--accent);
+  padding: calc(var(--size-1) / 2) var(--size-3);
+  gap: var(--size-4);
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--font-size-0);
+  font-weight: var(--font-weight-5);
+  color: var(--text-1);
+
+  > * {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: var(--size-3);
+  }
+}
