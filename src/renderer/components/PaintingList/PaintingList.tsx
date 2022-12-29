@@ -8,9 +8,8 @@ import {
   useSelector,
 } from '../../utils/store';
 import { Button, ButtonVariant } from '../Button';
-import { Chip } from '../Chip';
+import { Filters } from '../Filters';
 import { PaintingListItem } from '../PaintingListItem';
-import { TextInput } from '../TextInput';
 import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
 
@@ -22,20 +21,31 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
   const paintings = useSelector(paintingsSelectors.selectAll);
   const [showFilters, setShowFilters] = useState(false);
-  const [search, setSearch] = useState('');
+  const search = useSelector((state) => state.filters.search);
+  const missingImage = useSelector((state) => state.filters.missingImage);
+  const missingId = useSelector((state) => state.filters.missingId);
 
   const filteredPaintings = useMemo(() => {
-    if (!search) {
-      return paintings.map((painting) => painting.uuid);
-    }
-
-    return fuzzysort
-      .go(search, paintings, {
-        keys: searchKeys,
-        threshold: -10000,
+    return paintings
+      .filter((painting) => {
+        if (missingImage && painting.path) {
+          return false;
+        }
+        if (missingId && painting.id) {
+          return false;
+        }
+        if (
+          search &&
+          fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
+            threshold: -10000,
+          }).length === 0
+        ) {
+          return false;
+        }
+        return true;
       })
-      .map((result) => result.obj.uuid);
-  }, [paintings, search]);
+      .map((painting) => painting.uuid);
+  }, [paintings, search, missingImage, missingId]);
 
   const dispatch = useDispatch();
 
@@ -86,26 +96,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           </Button>
         </div>
       </div>
-      {!showFilters ? null : (
-        <div className={styles['filters']}>
-          <TextInput
-            id="search"
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
-            }}
-            onClear={() => {
-              setSearch('');
-            }}
-          />
-          <div className={styles['filter-chips']}>
-            <Chip label="Filter 1" />
-            <Chip label="Filter 2" onDelete={() => {}} />
-            <Chip label="Filter 3" outline={true} />
-            <Chip label="Filter 4" outline={true} onDelete={() => {}} />
-          </div>
-        </div>
-      )}
+      {!showFilters ? null : <Filters className={styles['filters']} />}
       <div className={listClassNames}>
         {paintingCount > 0 ? null : <div>No paintings...yet!</div>}
         {paintingCount === 0 || filteredPaintings.length > 0 ? null : (

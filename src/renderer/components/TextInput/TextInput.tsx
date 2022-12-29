@@ -8,8 +8,10 @@ interface TextInputProps extends HTMLProps<HTMLDivElement> {
   label?: string;
   prefix?: string;
   suffix?: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onClear?: () => void;
   style?: CSSProperties;
   inputProps?: HTMLProps<HTMLInputElement>;
@@ -23,6 +25,8 @@ export const TextInput: FC<TextInputProps> = (props) => {
     suffix,
     value,
     onChange,
+    onBlur,
+    onEnter,
     onClear,
     inputProps,
     className: passedClassName,
@@ -54,6 +58,14 @@ export const TextInput: FC<TextInputProps> = (props) => {
           className={inputClassNames}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
+          onKeyDown={(event) => {
+            if (onEnter && event.key === 'Enter') {
+              onEnter(event);
+            } else if (onClear && event.key === 'Escape') {
+              onClear();
+            }
+          }}
           {...inputProps}
         />
         {!onClear ? null : (

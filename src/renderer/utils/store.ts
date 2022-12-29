@@ -10,9 +10,13 @@ import {
   syncWithExternal,
   trackDirty,
 } from '../../common/store';
+import { filtersReducer } from './filtersSlice';
 
 export const store = configureStore({
-  reducer: { ...reducers },
+  reducer: {
+    ...reducers,
+    filters: filtersReducer,
+  },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(trackDirty)
