@@ -69,7 +69,7 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
   }
 
   const tooltipProps = isTooltipProps(tooltip) ? tooltip : { content: tooltip };
-  return <Tooltip {...tooltipProps}>{button}</Tooltip>;
+  return <Tooltip directTabbable={false} {...tooltipProps}>{button}</Tooltip>;
 };
 
 Button.defaultProps = defaultProps;
