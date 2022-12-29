@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fuzzysort from 'fuzzysort';
 import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
-import { Painting, paintingsSlice } from '../../../common/store';
+import { paintingsSlice } from '../../../common/store';
 import {
   paintingsSelectors,
   useDispatch,
@@ -12,8 +12,6 @@ import { Filters } from '../Filters';
 import { PaintingListItem } from '../PaintingListItem';
 import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
-
-const searchKeys: (keyof Painting)[] = ['id', 'name', 'artist'];
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
