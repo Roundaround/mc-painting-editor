@@ -1,8 +1,8 @@
+import { IconInput } from '@/components/IconInput';
+import { TextInput } from '@/components/TextInput';
+import { useDispatch, useSelector } from '@/utils/store';
+import { metadataSlice } from '@common/store';
 import { FC, HTMLProps } from 'react';
-import { metadataSlice } from '../../../common/store';
-import { useDispatch, useSelector } from '../../utils/store';
-import { IconInput } from '../IconInput';
-import { TextInput } from '../TextInput';
 import styles from './MetadataEditor.module.scss';
 
 const { setId, setName, setDescription } = metadataSlice.actions;

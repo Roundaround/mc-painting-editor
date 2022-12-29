@@ -1,16 +1,16 @@
-import { nanoid } from '@reduxjs/toolkit';
-import AdmZip, { IZipEntry } from 'adm-zip';
-import { app, BrowserWindow, dialog } from 'electron';
-import fs from 'fs/promises';
-import path from 'path';
-import url from 'url';
 import {
   editorSlice,
   getDefaultPainting,
   metadataSlice,
   paintingsSlice,
   savedSnapshotSlice,
-} from '../common/store';
+} from '@common/store';
+import { nanoid } from '@reduxjs/toolkit';
+import AdmZip, { IZipEntry } from 'adm-zip';
+import { app, BrowserWindow, dialog } from 'electron';
+import fs from 'fs/promises';
+import path from 'path';
+import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
 import { paintingsSelectors, store } from './store';
 

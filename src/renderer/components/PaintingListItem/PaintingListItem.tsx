@@ -1,17 +1,13 @@
+import { Button, ButtonVariant } from '@/components/Button';
+import { NumberInput } from '@/components/NumberInput';
+import { PaintingGrid } from '@/components/PaintingGrid';
+import { TextInput } from '@/components/TextInput';
+import { Tooltip, TooltipDirection } from '@/components/Tooltip';
+import { getPaintingImage } from '@/utils/painting';
+import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
+import { paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HTMLProps, useMemo } from 'react';
-import { paintingsSlice } from '../../../common/store';
-import { getPaintingImage } from '../../utils/painting';
-import {
-  paintingsSelectors,
-  useDispatch,
-  useSelector,
-} from '../../utils/store';
-import { Button, ButtonVariant } from '../Button';
-import { NumberInput } from '../NumberInput';
-import { PaintingGrid } from '../PaintingGrid';
-import { TextInput } from '../TextInput';
-import { Tooltip, TooltipDirection } from '../Tooltip';
 import styles from './PaintingListItem.module.scss';
 
 const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
@@ -157,7 +153,9 @@ export function PaintingListItem(props: PaintingListItemProps) {
             </Button>
           )}
           <Tooltip
-            content={`Currently at position ${currentIndex + 1} of ${totalPaintings}`}
+            content={`Currently at position ${
+              currentIndex + 1
+            } of ${totalPaintings}`}
             direction={TooltipDirection.LEFT}
             noWrap={true}
           >

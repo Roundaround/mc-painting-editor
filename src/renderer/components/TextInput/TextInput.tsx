@@ -1,6 +1,6 @@
+import { Button, ButtonVariant } from '@/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CSSProperties, FC, HTMLProps } from 'react';
-import { Button, ButtonVariant } from '../Button';
 import styles from './TextInput.module.scss';
 
 interface TextInputProps extends HTMLProps<HTMLDivElement> {

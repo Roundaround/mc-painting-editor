@@ -1,16 +1,12 @@
+import { Button, ButtonVariant } from '@/components/Button';
+import { Filters } from '@/components/Filters';
+import { PaintingListItem } from '@/components/PaintingListItem';
+import { TooltipDirection } from '@/components/Tooltip';
+import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
+import { paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fuzzysort from 'fuzzysort';
 import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
-import { paintingsSlice } from '../../../common/store';
-import {
-  paintingsSelectors,
-  useDispatch,
-  useSelector,
-} from '../../utils/store';
-import { Button, ButtonVariant } from '../Button';
-import { Filters } from '../Filters';
-import { PaintingListItem } from '../PaintingListItem';
-import { TooltipDirection } from '../Tooltip';
 import styles from './PaintingList.module.scss';
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {

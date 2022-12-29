@@ -1,5 +1,5 @@
+import { useSelector } from '@/utils/store';
 import { FC, HTMLProps } from 'react';
-import { useSelector } from '../../utils/store';
 import styles from './IconInput.module.scss';
 
 interface IconInputProps extends HTMLProps<HTMLDivElement> {}

@@ -1,10 +1,10 @@
+import { AppFooter } from '@/components/AppFooter';
+import { MetadataEditor } from '@/components/MetadataEditor';
+import { PaintingList } from '@/components/PaintingList';
+import { SplitPane } from '@/components/SplitPane';
+import { useSelector } from '@/utils/store';
 import { Blocks } from 'react-loader-spinner';
-import { AppFooter } from './components/AppFooter';
-import { MetadataEditor } from './components/MetadataEditor';
-import { PaintingList } from './components/PaintingList';
-import { SplitPane } from './components/SplitPane';
 import './Home.scss';
-import { useSelector } from './utils/store';
 
 export default function Home() {
   const loading = useSelector((state) => state.editor.loading);

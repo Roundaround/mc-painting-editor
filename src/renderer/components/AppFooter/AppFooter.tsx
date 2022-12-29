@@ -1,5 +1,5 @@
+import { paintingsSelectors, useSelector } from '@/utils/store';
 import { FC, HTMLProps, useMemo } from 'react';
-import { paintingsSelectors, useSelector } from '../../utils/store';
 import styles from './AppFooter.module.scss';
 
 interface AppFooterProps extends HTMLProps<HTMLDivElement> {}

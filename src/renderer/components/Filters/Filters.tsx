@@ -1,8 +1,8 @@
+import { Checkbox } from '@/components/Checkbox';
+import { TextInput } from '@/components/TextInput';
+import { filtersActions } from '@/utils/filtersSlice';
+import { useDispatch, useSelector } from '@/utils/store';
 import { FC, HTMLProps } from 'react';
-import { filtersActions } from '../../utils/filtersSlice';
-import { useDispatch, useSelector } from '../../utils/store';
-import { Checkbox } from '../Checkbox';
-import { TextInput } from '../TextInput';
 import styles from './Filters.module.scss';
 
 const { setSearch, clearSearch, setMissingImage, setMissingId } =

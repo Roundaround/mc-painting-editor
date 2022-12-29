@@ -1,11 +1,11 @@
-import { configureStore, PayloadAction } from '@reduxjs/toolkit';
-import { BrowserWindow, ipcMain } from 'electron';
 import {
   paintingsAdapter,
   reducers,
   syncWithExternal,
   trackDirty,
-} from '../common/store';
+} from '@common/store';
+import { configureStore, PayloadAction } from '@reduxjs/toolkit';
+import { BrowserWindow, ipcMain } from 'electron';
 
 export function createStore(mainWindow: BrowserWindow) {
   const newStore = configureStore({

@@ -16,12 +16,13 @@
     "incremental": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    "baseUrl": "src",
     "outDir": "dist",
     "paths": {
-      "*": ["node_modules/*"]
+      "@common/*": ["./src/common/*"],
+      "@/*": ["./src/renderer/*"],
+      "*": ["./node_modules/*"]
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src/**/*"]
+  "include": ["./src/**/*"]
 }

@@ -1,10 +1,10 @@
+import { Tooltip, TooltipProps } from '@/components/Tooltip';
 import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   ReactNode,
   useMemo,
 } from 'react';
-import { Tooltip, TooltipProps } from '../Tooltip';
 import styles from './Button.module.scss';
 
 type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
@@ -69,7 +69,11 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
   }
 
   const tooltipProps = isTooltipProps(tooltip) ? tooltip : { content: tooltip };
-  return <Tooltip directTabbable={false} {...tooltipProps}>{button}</Tooltip>;
+  return (
+    <Tooltip directTabbable={false} {...tooltipProps}>
+      {button}
+    </Tooltip>
+  );
 };
 
 Button.defaultProps = defaultProps;

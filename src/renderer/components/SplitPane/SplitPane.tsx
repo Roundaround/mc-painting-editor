@@ -1,3 +1,4 @@
+import { useBoundingRect } from '@/utils/useBoundingRect';
 import React, {
   BaseHTMLAttributes,
   ReactElement,
@@ -7,7 +8,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useBoundingRect } from '../../utils/useBoundingRect';
 import styles from './SplitPane.module.scss';
 
 const MIN_WIDTH = 380;

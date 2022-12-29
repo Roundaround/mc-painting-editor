@@ -1,3 +1,4 @@
+import { useBoundingRect } from '@/utils/useBoundingRect';
 import {
   CSSProperties,
   ReactNode,
@@ -7,7 +8,6 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { useBoundingRect } from '../../utils/useBoundingRect';
 import styles from './Tooltip.module.scss';
 
 export enum TooltipDirection {

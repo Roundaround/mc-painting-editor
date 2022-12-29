@@ -1,6 +1,6 @@
+import { Button, ButtonVariant } from '@/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
-import { Button, ButtonVariant } from '../Button';
 import styles from './Chip.module.scss';
 
 interface ChipProps extends HTMLProps<HTMLSpanElement> {
