@@ -4,7 +4,6 @@ import { Button, ButtonVariant } from '../Button';
 import styles from './TextInput.module.scss';
 
 interface TextInputProps extends HTMLProps<HTMLDivElement> {
-  id: string;
   label?: string;
   prefix?: string;
   suffix?: string;

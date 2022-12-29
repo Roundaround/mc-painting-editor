@@ -7,3 +7,11 @@
   background-color: hsl(var(--surface-1-hsl) / 0.8);
   border-bottom: 1px solid var(--surface-2);
 }
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: var(--size-3);
+  align-items: center;
+  justify-content: flex-start;
+}

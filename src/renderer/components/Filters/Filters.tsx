@@ -1,6 +1,7 @@
 import { FC, HTMLProps } from 'react';
 import { filtersActions } from '../../utils/filtersSlice';
 import { useDispatch, useSelector } from '../../utils/store';
+import { Checkbox } from '../Checkbox';
 import { TextInput } from '../TextInput';
 import styles from './Filters.module.scss';
 
@@ -39,29 +40,25 @@ export const Filters: FC<FiltersProps> = (props) => {
           }}
         />
       </div>
-      <div>
-        <div>
-          <label htmlFor="missing-image">Missing an image</label>
-          <input
-            type="checkbox"
-            id="missing-image"
-            checked={missingImage}
-            onChange={(e) => {
-              dispatch(setMissingImage(e.currentTarget.checked));
-            }}
-          />
-        </div>
-        <div>
-          <label htmlFor="missing-id">Missing an id</label>
-          <input
-            type="checkbox"
-            id="missing-id"
-            checked={missingId}
-            onChange={(e) => {
-              dispatch(setMissingId(e.currentTarget.checked));
-            }}
-          />
-        </div>
+      <div className={styles['row']}>
+        <Checkbox
+          id="missing-image"
+          label="Missing an image"
+          inline={true}
+          checked={missingImage}
+          onChange={(e) => {
+            dispatch(setMissingImage(e.currentTarget.checked));
+          }}
+        />
+        <Checkbox
+          id="missing-id"
+          label="Missing an ID"
+          inline={true}
+          checked={missingId}
+          onChange={(e) => {
+            dispatch(setMissingId(e.currentTarget.checked));
+          }}
+        />
       </div>
     </div>
   );

@@ -1,0 +1,17 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-0);
+}
+
+.wrapper--inline {
+  flex-direction: row;
+  gap: var(--size-1);
+  align-items: center;
+}
+
+.label {
+  font-size: var(--font-size-0);
+  user-select: none;
+}
