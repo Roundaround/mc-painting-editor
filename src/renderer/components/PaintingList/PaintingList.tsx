@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fuzzysort from 'fuzzysort';
-import { FC, HTMLProps, useMemo, useState } from 'react';
+import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
 import { Painting, paintingsSlice } from '../../../common/store';
 import {
   paintingsSelectors,
@@ -102,8 +102,13 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         {paintingCount === 0 || filteredPaintings.length > 0 ? null : (
           <div>No paintings found</div>
         )}
-        {filteredPaintings.map((id) => (
-          <PaintingListItem key={id} id={id} />
+        {filteredPaintings.map((id, index) => (
+          <Fragment key={id}>
+            <PaintingListItem id={id} />
+            {index === filteredPaintings.length - 1 ? null : (
+              <hr className={styles['divider']} />
+            )}
+          </Fragment>
         ))}
       </div>
     </div>

@@ -68,3 +68,11 @@
   justify-content: center;
   overflow-y: auto;
 }
+
+.divider {
+  flex: 0 0 auto;
+  height: 1px;
+  width: 100%;
+  background-color: var(--surface-2);
+  margin: 0;
+}
