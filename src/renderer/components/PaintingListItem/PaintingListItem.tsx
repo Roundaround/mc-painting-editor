@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { HTMLProps, useEffect, useMemo } from 'react';
+import { HTMLProps, useMemo } from 'react';
 import { paintingsSlice } from '../../../common/store';
 import { getPaintingImage } from '../../utils/painting';
 import {
@@ -11,7 +11,7 @@ import { Button, ButtonVariant } from '../Button';
 import { NumberInput } from '../NumberInput';
 import { PaintingGrid } from '../PaintingGrid';
 import { TextInput } from '../TextInput';
-import { TooltipDirection } from '../Tooltip';
+import { Tooltip, TooltipDirection } from '../Tooltip';
 import styles from './PaintingListItem.module.scss';
 
 const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
@@ -156,9 +156,13 @@ export function PaintingListItem(props: PaintingListItemProps) {
               <FontAwesomeIcon icon={'arrow-up'} />
             </Button>
           )}
-          <div>
+          <Tooltip
+            content={`Currently at position ${currentIndex + 1} of ${totalPaintings}`}
+            direction={TooltipDirection.LEFT}
+            noWrap={true}
+          >
             {currentIndex + 1}/{totalPaintings}
-          </div>
+          </Tooltip>
           {!canMoveDown ? null : (
             <Button
               onClick={() => {

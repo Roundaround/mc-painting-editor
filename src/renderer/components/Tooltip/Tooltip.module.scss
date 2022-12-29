@@ -4,7 +4,6 @@
 
   display: var(--tooltip-display);
   position: relative;
-  line-height: 0;
 
   &:focus-visible {
     border-radius: var(--tooltip-anchor-border-radius);
