@@ -118,7 +118,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         onClick={() => window.electron.openPaintingFile(id)}
         maxHeight={8}
         maxWidth={8}
-        hasImage={painting.path !== undefined}
+        hasImage={painting.path !== undefined && painting.path !== ''}
         image={paintingImage}
         height={painting.height}
         width={painting.width}
