@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-interface SizeFilter<T extends 'width' | 'height'> {
+export interface SizeFilter<T extends 'width' | 'height'> {
   readonly dimension: T;
   operator: 'gt' | 'lt' | 'eq' | 'ne';
   value: number;

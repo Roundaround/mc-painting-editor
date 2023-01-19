@@ -1,27 +1,45 @@
+import { FC, HTMLProps, ReactNode } from 'react';
 import styles from './NumberInput.module.scss';
 
-export interface NumberInputProps {
-  id: string;
-  label: string;
+export interface NumberInputProps
+  extends Omit<HTMLProps<HTMLDivElement>, 'label'> {
+  label?: ReactNode;
   min?: number;
   max?: number;
   step?: number;
   value: number;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export const NumberInput = (props: NumberInputProps) => {
-  const { id, label, value, onChange, ...rest } = props;
+export const NumberInput: FC<NumberInputProps> = (props: NumberInputProps) => {
+  const {
+    id,
+    label,
+    value,
+    onChange,
+    className: passedClassName,
+    ...htmlProps
+  } = props;
+
+  const classNames = ['wrapper']
+    .map((name) => styles[name as keyof typeof styles])
+    .concat(passedClassName || '')
+    .join(' ')
+    .trim();
 
   return (
-    <div className={styles['number-input']}>
-      <label htmlFor={id} className={styles['number-input__label']}>
-        {label}
-      </label>
-      <div className={styles['number-input__input-container']}>
+    <div className={classNames} {...htmlProps}>
+      {!label ? null : (
+        <label htmlFor={id} className={styles['label']}>
+          {label}
+        </label>
+      )}
+      <div className={styles['input-container']}>
         <input
           id={id}
-          className={styles['number-input__input']}
+          className={styles['input']}
           type="number"
           value={value}
           onChange={(e) => {
@@ -36,9 +54,8 @@ export const NumberInput = (props: NumberInputProps) => {
             } else if (props.max !== undefined && value > props.max) {
               e.target.value = props.max.toString();
             }
-            onChange(e);
+            onChange?.(e);
           }}
-          {...rest}
         />
       </div>
     </div>

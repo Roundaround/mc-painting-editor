@@ -2,12 +2,35 @@ import { Button, ButtonVariant } from '@/components/Button';
 import { Filters } from '@/components/Filters';
 import { PaintingListItem } from '@/components/PaintingListItem';
 import { TooltipDirection } from '@/components/Tooltip';
+import { SizeFilter } from '@/utils/filtersSlice';
 import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
-import { paintingsSlice } from '@common/store';
+import { Painting, paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import fuzzysort from 'fuzzysort';
 import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
 import styles from './PaintingList.module.scss';
+
+function matchesSizeFilter<T extends 'width' | 'height'>(
+  painting: Painting,
+  filter: SizeFilter<T>
+): boolean {
+  const { operator, value } = filter;
+
+  if (operator === 'eq' && painting[filter.dimension] !== value) {
+    return false;
+  }
+  if (operator === 'ne' && painting[filter.dimension] === value) {
+    return false;
+  }
+  if (operator === 'gt' && painting[filter.dimension] <= value) {
+    return false;
+  }
+  if (operator === 'lt' && painting[filter.dimension] >= value) {
+    return false;
+  }
+
+  return true;
+}
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
@@ -18,6 +41,8 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const search = useSelector((state) => state.filters.search);
   const missingImage = useSelector((state) => state.filters.missingImage);
   const missingId = useSelector((state) => state.filters.missingId);
+  const widthFilter = useSelector((state) => state.filters.width);
+  const heightFilter = useSelector((state) => state.filters.height);
 
   const filteredPaintings = useMemo(() => {
     return paintings
@@ -26,6 +51,12 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           return false;
         }
         if (missingId && painting.id) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, widthFilter)) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, heightFilter)) {
           return false;
         }
         if (
@@ -39,7 +70,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         return true;
       })
       .map((painting) => painting.uuid);
-  }, [paintings, search, missingImage, missingId]);
+  }, [paintings, search, missingImage, missingId, widthFilter, heightFilter]);
 
   const dispatch = useDispatch();
 

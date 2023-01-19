@@ -1,4 +1,4 @@
-.number-input {
+.wrapper {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -6,17 +6,17 @@
   width: 100%;
 }
 
-.number-input__label {
+.label {
   font-size: var(--font-size-0);
 }
 
-.number-input__input-container {
+.input-container {
   display: flex;
   flex-direction: row;
   gap: var(--size-0);
   align-items: center;
 }
 
-.number-input__input {
+.input {
   flex: 1;
 }

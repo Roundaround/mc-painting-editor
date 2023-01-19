@@ -1,10 +1,10 @@
 import { Button, ButtonVariant } from '@/components/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CSSProperties, FC, HTMLProps } from 'react';
+import { CSSProperties, FC, HTMLProps, ReactNode } from 'react';
 import styles from './TextInput.module.scss';
 
-interface TextInputProps extends HTMLProps<HTMLDivElement> {
-  label?: string;
+interface TextInputProps extends Omit<HTMLProps<HTMLDivElement>, 'label'> {
+  label?: ReactNode;
   prefix?: string;
   suffix?: string;
   value?: string;
