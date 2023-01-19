@@ -48,7 +48,17 @@
   text-align: center;
 }
 
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: var(--painting-height);
+  width: var(--painting-width);
+  background-color: black;
+}
+
 .painting {
+  position: relative;
   image-rendering: pixelated;
   max-height: 100%;
   max-width: 100%;

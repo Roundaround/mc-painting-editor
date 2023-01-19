@@ -21,20 +21,14 @@ export const PaintingGrid = (props: PaintingGridProps) => {
         {
           '--painting-grid-height': `${maxHeight * 2.4}rem`,
           '--painting-grid-width': `${maxWidth * 2.4}rem`,
+          '--painting-height': `${height * 2.4}rem`,
+          '--painting-width': `${width * 2.4}rem`,
         } as CSSProperties
       }
       onClick={onClick}
     >
-      <img
-        src={image}
-        className={styles['painting']}
-        style={
-          {
-            '--painting-height': `${height * 2.4}rem`,
-            '--painting-width': `${width * 2.4}rem`,
-          } as CSSProperties
-        }
-      />
+      <div className={styles['background']}></div>
+      <img src={image} className={styles['painting']} />
       <div className={styles['edit-overlay']}></div>
       {hasImage ? null : (
         <div className={styles['upload-instructions']}>
