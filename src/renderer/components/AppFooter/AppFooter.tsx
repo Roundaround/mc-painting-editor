@@ -1,3 +1,4 @@
+import { selectMatchingPaintings } from '@/utils/filtersSlice';
 import { paintingsSelectors, useSelector } from '@/utils/store';
 import { FC, HTMLProps, useMemo } from 'react';
 import styles from './AppFooter.module.scss';
@@ -17,6 +18,9 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
   const paintingsWithoutId = useMemo(() => {
     return paintings.filter((painting) => !painting.id).length;
   }, [paintings]);
+  const filteredPaintings = useSelector((state) =>
+    selectMatchingPaintings(paintings)(state.filters)
+  );
 
   const classNames = ['wrapper']
     .map((name) => styles[name as keyof typeof styles])
@@ -25,7 +29,7 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
     .trim();
 
   return (
-    <div className={classNames}>
+    <div className={classNames} {...htmlProps}>
       <div>Made with ❤️ by Roundaround</div>
       <div>
         {!paintingsWithoutId ? null : (
@@ -33,6 +37,9 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
         )}
         {!paintingsWithoutImage ? null : (
           <span>Needs image: {paintingsWithoutImage}</span>
+        )}
+        {filteredPaintings.length === paintingCount ? null : (
+          <span>Matching filters: {filteredPaintings.length}</span>
         )}
         <span>Total paintings: {paintingCount}</span>
       </div>

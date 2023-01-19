@@ -2,7 +2,7 @@ import { Button, ButtonVariant } from '@/components/Button';
 import { Filters } from '@/components/Filters';
 import { PaintingListItem } from '@/components/PaintingListItem';
 import { TooltipDirection } from '@/components/Tooltip';
-import { SizeFilter } from '@/utils/filtersSlice';
+import { selectMatchingPaintings, SizeFilter } from '@/utils/filtersSlice';
 import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
 import { Painting, paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,67 +10,13 @@ import fuzzysort from 'fuzzysort';
 import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
 import styles from './PaintingList.module.scss';
 
-function matchesSizeFilter<T extends 'width' | 'height'>(
-  painting: Painting,
-  filter: SizeFilter<T>
-): boolean {
-  const { operator, value } = filter;
-
-  if (operator === 'eq' && painting[filter.dimension] !== value) {
-    return false;
-  }
-  if (operator === 'ne' && painting[filter.dimension] === value) {
-    return false;
-  }
-  if (operator === 'gt' && painting[filter.dimension] <= value) {
-    return false;
-  }
-  if (operator === 'lt' && painting[filter.dimension] >= value) {
-    return false;
-  }
-
-  return true;
-}
-
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
   const paintings = useSelector(paintingsSelectors.selectAll);
   const [showFilters, setShowFilters] = useState(false);
-  const search = useSelector((state) => state.filters.search);
-  const missingImage = useSelector((state) => state.filters.missingImage);
-  const missingId = useSelector((state) => state.filters.missingId);
-  const widthFilter = useSelector((state) => state.filters.width);
-  const heightFilter = useSelector((state) => state.filters.height);
-
-  const filteredPaintings = useMemo(() => {
-    return paintings
-      .filter((painting) => {
-        if (missingImage && painting.path) {
-          return false;
-        }
-        if (missingId && painting.id) {
-          return false;
-        }
-        if (!matchesSizeFilter(painting, widthFilter)) {
-          return false;
-        }
-        if (!matchesSizeFilter(painting, heightFilter)) {
-          return false;
-        }
-        if (
-          search &&
-          fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
-            threshold: -10000,
-          }).length === 0
-        ) {
-          return false;
-        }
-        return true;
-      })
-      .map((painting) => painting.uuid);
-  }, [paintings, search, missingImage, missingId, widthFilter, heightFilter]);
+  const filteredPaintings = useSelector((state) => selectMatchingPaintings(paintings)(state.filters));
 
   const dispatch = useDispatch();
 

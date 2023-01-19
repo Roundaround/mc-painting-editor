@@ -1,4 +1,6 @@
+import { Painting } from '@common/store';
 import { createSlice } from '@reduxjs/toolkit';
+import fuzzysort from 'fuzzysort';
 
 export interface SizeFilter<T extends 'width' | 'height'> {
   readonly dimension: T;
@@ -69,3 +71,55 @@ export const filtersSlice = createSlice({
 
 export const { reducer: filtersReducer, actions: filtersActions } =
   filtersSlice;
+
+function matchesSizeFilter<T extends 'width' | 'height'>(
+  painting: Painting,
+  filter: SizeFilter<T>
+): boolean {
+  const { operator, value } = filter;
+
+  if (operator === 'eq' && painting[filter.dimension] !== value) {
+    return false;
+  }
+  if (operator === 'ne' && painting[filter.dimension] === value) {
+    return false;
+  }
+  if (operator === 'gt' && painting[filter.dimension] <= value) {
+    return false;
+  }
+  if (operator === 'lt' && painting[filter.dimension] >= value) {
+    return false;
+  }
+
+  return true;
+}
+
+export const selectMatchingPaintings =
+  (paintings: Painting[]) => (filters: FiltersState) => {
+    const { search, missingImage, missingId, width, height } = filters;
+    return paintings
+      .filter((painting) => {
+        if (missingImage && painting.path) {
+          return false;
+        }
+        if (missingId && painting.id) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, width)) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, height)) {
+          return false;
+        }
+        if (
+          search &&
+          fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
+            threshold: -10000,
+          }).length === 0
+        ) {
+          return false;
+        }
+        return true;
+      })
+      .map((painting) => painting.uuid);
+  };
