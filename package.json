@@ -2,7 +2,7 @@
   "name": "mc-painting-editor",
   "productName": "mc-painting-editor",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Utility for creating special resource packs for the Custom Paintings mod for Minecraft",
   "main": ".webpack/main",
   "scripts": {
     "start": "electron-forge start",
