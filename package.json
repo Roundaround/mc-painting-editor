@@ -1,6 +1,6 @@
 {
   "name": "mc-painting-editor",
-  "productName": "mc-painting-editor",
+  "productName": "Custom Paintings Pack Editor",
   "version": "1.0.0",
   "description": "Utility for creating special resource packs for the Custom Paintings mod for Minecraft",
   "main": ".webpack/main",
@@ -13,8 +13,8 @@
   },
   "keywords": [],
   "author": {
-    "name": "Evan Steinkerchner",
-    "email": "esteinkerchner@gmail.com"
+    "name": "Roundaround",
+    "email": "roundaroundna@gmail.com"
   },
   "repository": "github:roundaround/mc-painting-editor",
   "license": "MIT",

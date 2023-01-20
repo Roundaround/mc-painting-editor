@@ -42,7 +42,7 @@ export function updateTitleFromStore(
   const state = store.getState();
   const filename = state.editor.filename || '(Untitled)';
   const prefix = state.editor.dirty ? '• ' : '';
-  const title = `${prefix}${filename} - Custom Painting Editor`;
+  const title = `${prefix}${filename} - Custom Paintings Pack Editor`;
   if (mainWindow.getTitle() !== title) {
     mainWindow.setTitle(title);
   }
