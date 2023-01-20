@@ -24,5 +24,8 @@
     },
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["./src/**/*"]
+  "include": [
+    "./src/renderer/declaration.d.ts",
+    "./src/**/*",
+  ]
 }

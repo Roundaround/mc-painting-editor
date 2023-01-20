@@ -4,7 +4,7 @@ import { PaintingList } from '@/components/PaintingList';
 import { SplitPane } from '@/components/SplitPane';
 import { useSelector } from '@/utils/store';
 import { Blocks } from 'react-loader-spinner';
-import './Home.scss';
+import styles from './Home.module.scss';
 
 export default function Home() {
   const loading = useSelector((state) => state.editor.loading);
@@ -12,17 +12,17 @@ export default function Home() {
   return (
     <>
       {!loading ? null : (
-        <div className="loading-overlay">
+        <div className={styles['loading-overlay']}>
           <Blocks height={200} width={200} />
         </div>
       )}
 
-      <div className="page-wrapper">
+      <div className={styles['page-wrapper']}>
         <SplitPane>
           <MetadataEditor />
           <PaintingList />
         </SplitPane>
-        <AppFooter className="footer" />
+        <AppFooter className={styles['footer']} />
       </div>
     </>
   );

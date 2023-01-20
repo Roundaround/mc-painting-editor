@@ -17,9 +17,7 @@ html {
 }
 
 body,
-div#root,
-div.app,
-div#__next {
+div:global(#root) {
   height: 100%;
   width: 100%;
   margin: 0;

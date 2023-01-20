@@ -1,28 +1,51 @@
 import path from 'path';
 import type { Configuration } from 'webpack';
 
-import { plugins } from './webpack.plugins';
+import ForkTsCheckerWebpackPlugin from 'fork-ts-checker-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
 import { rules } from './webpack.rules';
 
-rules.push({
-  test: /\.css$/,
-  use: [{ loader: 'style-loader' }, { loader: 'css-loader' }],
-});
-
-rules.push({
-  test: /\.s[ac]ss$/,
-  use: [
-    { loader: 'style-loader' },
-    { loader: 'css-loader' },
-    { loader: 'sass-loader' },
-  ],
-});
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 export const rendererConfig: Configuration = {
   module: {
-    rules,
+    rules: [
+      {
+        test: /\.s[ac]ss$/,
+        use: [
+          {
+            loader: isDevelopment
+              ? 'style-loader'
+              : MiniCssExtractPlugin.loader,
+          },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              sourceMap: isDevelopment,
+            },
+          },
+          {
+            loader: 'sass-loader',
+            options: {
+              sourceMap: isDevelopment,
+            },
+          },
+        ],
+      },
+      ...rules,
+    ],
   },
-  plugins,
+  plugins: [
+    new ForkTsCheckerWebpackPlugin({
+      logger: 'webpack-infrastructure',
+    }),
+    new MiniCssExtractPlugin({
+      filename: isDevelopment ? '[name].css' : '[name].[fullhash].css',
+      chunkFilename: isDevelopment ? '[id].css' : '[id].[fullhash].css',
+    }),
+  ],
   resolve: {
     alias: {
       '@common': path.resolve(__dirname, 'src/common'),

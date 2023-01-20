@@ -52,7 +52,6 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     useBoundingRect<HTMLDivElement>();
 
   const portalEl = useRef<HTMLElement>();
-  const contentEl = useRef<HTMLDivElement>();
   const [mounted, setMounted] = useState(false);
   const timeout = useRef<number>();
   const [active, setActive] = useState(false);
