@@ -41,7 +41,7 @@ export const Filters: FC<FiltersProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
-      <div>
+      <div className={styles['row']}>
         <TextInput
           id="search"
           label="Search"

@@ -11,10 +11,11 @@ import styles from './PaintingList.module.scss';
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
+  
+  const [showFilters, setShowFilters] = useState(false);
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
   const paintings = useSelector(paintingsSelectors.selectAll);
-  const [showFilters, setShowFilters] = useState(false);
   const filteredPaintings = useSelector((state) =>
     selectMatchingPaintings(paintings)(state.filters)
   );
