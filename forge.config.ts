@@ -1,6 +1,7 @@
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+import { MakerDMG } from '@electron-forge/maker-dmg';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { WebpackPlugin } from '@electron-forge/plugin-webpack';
 import { PublisherGithub } from '@electron-forge/publisher-github';
@@ -10,13 +11,30 @@ import { mainConfig } from './webpack.main.config';
 import { rendererConfig } from './webpack.renderer.config';
 
 const config: ForgeConfig = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: './icons/icon',
+  },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
+    new MakerSquirrel({
+      iconUrl:
+        'https://raw.githubusercontent.com/Roundaround/mc-painting-editor/main/icons/icon.ico',
+      setupIcon: './icons/icon.ico',
+    }),
     new MakerZIP({}, ['darwin']),
-    new MakerRpm({}),
-    new MakerDeb({}),
+    new MakerRpm({
+      options: {
+        icon: './icons/icon.png',
+      },
+    }),
+    new MakerDeb({
+      options: {
+        icon: './icons/icon.png',
+      },
+    }),
+    new MakerDMG({
+      icon: './icons/icon.icns',
+    }),
   ],
   publishers: [
     new PublisherGithub({
