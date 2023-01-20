@@ -1,11 +1,11 @@
 import { IconInput } from '@/components/IconInput';
 import { TextInput } from '@/components/TextInput';
 import { useDispatch, useSelector } from '@/utils/store';
-import { metadataSlice } from '@common/store';
+import { metadataActions } from '@common/store/metadata';
 import { FC, HTMLProps } from 'react';
 import styles from './MetadataEditor.module.scss';
 
-const { setId, setName, setDescription } = metadataSlice.actions;
+const { setId, setName, setDescription } = metadataActions;
 
 interface MetadataEditorProps extends HTMLProps<HTMLDivElement> {}
 

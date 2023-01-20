@@ -1,4 +1,4 @@
-import { Painting } from '@common/store';
+import { Painting } from '@common/store/paintings';
 import { createSlice } from '@reduxjs/toolkit';
 import fuzzysort from 'fuzzysort';
 
@@ -70,8 +70,8 @@ export const filtersSlice = createSlice({
   },
 });
 
-export const { reducer: filtersReducer, actions: filtersActions } =
-  filtersSlice;
+export const filtersReducer = filtersSlice.reducer;
+export const filtersActions = filtersSlice.actions;
 
 function matchesSizeFilter<T extends 'width' | 'height'>(
   painting: Painting,
@@ -95,7 +95,7 @@ function matchesSizeFilter<T extends 'width' | 'height'>(
   return true;
 }
 
-export const selectMatchingPaintings =
+const selectMatchingPaintings =
   (paintings: Painting[]) => (filters: FiltersState) => {
     const { search, missingImage, missingId, width, height } = filters;
     return paintings
@@ -125,7 +125,7 @@ export const selectMatchingPaintings =
       .map((painting) => painting.uuid);
   };
 
-export const selectHasFilters = (filters: FiltersState) => {
+const selectHasFilters = (filters: FiltersState) => {
   const { search, missingImage, missingId, width, height } = filters;
   return (
     search !== '' ||
@@ -136,4 +136,9 @@ export const selectHasFilters = (filters: FiltersState) => {
     height.operator !== 'gt' ||
     height.value !== 0
   );
+};
+
+export const filtersSelectors = {
+  selectMatchingPaintings,
+  selectHasFilters,
 };

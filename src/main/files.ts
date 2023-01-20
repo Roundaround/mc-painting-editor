@@ -1,10 +1,11 @@
+import { editorActions } from '@common/store/editor';
+import { metadataActions } from '@common/store/metadata';
 import {
-  editorSlice,
   getDefaultPainting,
-  metadataSlice,
-  paintingsSlice,
-  savedSnapshotSlice,
-} from '@common/store';
+  paintingsActions,
+  paintingsSelectors,
+} from '@common/store/paintings';
+import { savedSnapshotActions } from '@common/store/savedSnapshot';
 import { nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
@@ -12,13 +13,13 @@ import fs from 'fs/promises';
 import path from 'path';
 import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
-import { paintingsSelectors, store } from './store';
+import { store } from './store';
 
-const { setLoading, setFilename } = editorSlice.actions;
+const { setLoading, setFilename } = editorActions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
-  metadataSlice.actions;
-const { updatePainting, upsertPainting, setPaintings } = paintingsSlice.actions;
-const { captureSnapshot } = savedSnapshotSlice.actions;
+  metadataActions;
+const { updatePainting, upsertPainting, setPaintings } = paintingsActions;
+const { captureSnapshot } = savedSnapshotActions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
 
@@ -282,7 +283,7 @@ export async function saveZipFile(
     store.dispatch(setLoading(true));
 
     const zip = new AdmZip();
-    const paintings = paintingsSelectors.selectAll(state);
+    const paintings = paintingsSelectors.selectAll(state.paintings);
 
     const mcmeta = {
       pack: {

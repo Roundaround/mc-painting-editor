@@ -4,14 +4,14 @@ import { PaintingGrid } from '@/components/PaintingGrid';
 import { TextInput } from '@/components/TextInput';
 import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 import { getPaintingImage } from '@/utils/painting';
-import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
-import { paintingsSlice } from '@common/store';
+import { useDispatch, useSelector } from '@/utils/store';
+import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HTMLProps, useMemo } from 'react';
 import styles from './PaintingListItem.module.scss';
 
 const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
-  paintingsSlice.actions;
+  paintingsActions;
 
 export interface PaintingListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
@@ -21,10 +21,14 @@ export function PaintingListItem(props: PaintingListItemProps) {
   const { id, className: passedClassName, ...htmlProps } = props;
 
   const painting = useSelector((state) =>
-    paintingsSelectors.selectById(state, id)
+    paintingsSelectors.selectById(state.paintings, id)
   );
-  const totalPaintings = useSelector(paintingsSelectors.selectTotal);
-  const paintingIds = useSelector(paintingsSelectors.selectIds);
+  const totalPaintings = useSelector((state) =>
+    paintingsSelectors.selectTotal(state.paintings)
+  );
+  const paintingIds = useSelector((state) =>
+    paintingsSelectors.selectIds(state.paintings)
+  );
 
   const currentIndex = useMemo(() => {
     return paintingIds.indexOf(id);

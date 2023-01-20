@@ -1,4 +1,4 @@
-import { Painting } from '../../common/store';
+import { Painting } from '@common/store/paintings';
 
 const generateBlankImage = (width: number, height: number) => {
   const canvas = document.createElement('canvas');

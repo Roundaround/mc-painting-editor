@@ -1,16 +1,11 @@
+import { reducers, syncWithExternal, trackDirty } from '@common/store';
 import { configureStore } from '@reduxjs/toolkit';
 import {
   TypedUseSelectorHook,
   useDispatch as useDispatchBase,
   useSelector as useSelectorBase,
 } from 'react-redux';
-import {
-  paintingsAdapter,
-  reducers,
-  syncWithExternal,
-  trackDirty,
-} from '../../common/store';
-import { filtersReducer } from './filtersSlice';
+import { filtersReducer } from './filters';
 
 export const store = configureStore({
   reducer: {
@@ -30,10 +25,6 @@ export const store = configureStore({
 window.electron.listenForReduxActions((action) => {
   store.dispatch(action);
 });
-
-export const paintingsSelectors = paintingsAdapter.getSelectors(
-  (state: RootState) => state.paintings
-);
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = typeof store.dispatch;

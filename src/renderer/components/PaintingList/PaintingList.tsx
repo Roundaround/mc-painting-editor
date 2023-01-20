@@ -2,26 +2,27 @@ import { Button, ButtonVariant } from '@/components/Button';
 import { Filters } from '@/components/Filters';
 import { PaintingListItem } from '@/components/PaintingListItem';
 import { TooltipDirection } from '@/components/Tooltip';
-import {
-  selectHasFilters,
-  selectMatchingPaintings,
-  filtersActions,
-} from '@/utils/filtersSlice';
-import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
-import { paintingsSlice } from '@common/store';
+import { useDispatch, useSelector } from '@/utils/store';
+import { filtersActions, filtersSelectors } from '@/utils/store/filters';
+import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps, useState } from 'react';
 import styles from './PaintingList.module.scss';
 
 const { resetAll } = filtersActions;
+const { selectHasFilters, selectMatchingPaintings } = filtersSelectors;
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
 
   const [showFilters, setShowFilters] = useState(false);
 
-  const paintingCount = useSelector(paintingsSelectors.selectTotal);
-  const paintings = useSelector(paintingsSelectors.selectAll);
+  const paintingCount = useSelector((state) =>
+    paintingsSelectors.selectTotal(state.paintings)
+  );
+  const paintings = useSelector((state) =>
+    paintingsSelectors.selectAll(state.paintings)
+  );
   const filteredPaintings = useSelector((state) =>
     selectMatchingPaintings(paintings)(state.filters)
   );
@@ -79,7 +80,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           </Button>
           <Button
             onClick={() => {
-              dispatch(paintingsSlice.actions.createPainting());
+              dispatch(paintingsActions.createPainting());
             }}
             variant={ButtonVariant.ICON}
             tooltip={{

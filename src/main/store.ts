@@ -1,9 +1,4 @@
-import {
-  paintingsAdapter,
-  reducers,
-  syncWithExternal,
-  trackDirty,
-} from '@common/store';
+import { reducers, syncWithExternal, trackDirty } from '@common/store';
 import { configureStore, PayloadAction } from '@reduxjs/toolkit';
 import { BrowserWindow, ipcMain } from 'electron';
 
@@ -47,10 +42,6 @@ export function updateTitleFromStore(
     mainWindow.setTitle(title);
   }
 }
-
-export const paintingsSelectors = paintingsAdapter.getSelectors(
-  (state: RootState) => state.paintings
-);
 
 export type MainStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<MainStore['getState']>;
