@@ -2,12 +2,11 @@ import { Button, ButtonVariant } from '@/components/Button';
 import { Filters } from '@/components/Filters';
 import { PaintingListItem } from '@/components/PaintingListItem';
 import { TooltipDirection } from '@/components/Tooltip';
-import { selectMatchingPaintings, SizeFilter } from '@/utils/filtersSlice';
+import { selectMatchingPaintings } from '@/utils/filtersSlice';
 import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
-import { Painting, paintingsSlice } from '@common/store';
+import { paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import fuzzysort from 'fuzzysort';
-import { FC, Fragment, HTMLProps, useMemo, useState } from 'react';
+import { FC, Fragment, HTMLProps, useState } from 'react';
 import styles from './PaintingList.module.scss';
 
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
@@ -16,7 +15,9 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
   const paintings = useSelector(paintingsSelectors.selectAll);
   const [showFilters, setShowFilters] = useState(false);
-  const filteredPaintings = useSelector((state) => selectMatchingPaintings(paintings)(state.filters));
+  const filteredPaintings = useSelector((state) =>
+    selectMatchingPaintings(paintings)(state.filters)
+  );
 
   const dispatch = useDispatch();
 
