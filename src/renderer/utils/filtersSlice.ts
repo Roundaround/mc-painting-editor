@@ -66,6 +66,7 @@ export const filtersSlice = createSlice({
     resetHeight: (state) => {
       state.height = { ...initialFiltersState.height };
     },
+    resetAll: () => initialFiltersState,
   },
 });
 
@@ -123,3 +124,16 @@ export const selectMatchingPaintings =
       })
       .map((painting) => painting.uuid);
   };
+
+export const selectHasFilters = (filters: FiltersState) => {
+  const { search, missingImage, missingId, width, height } = filters;
+  return (
+    search !== '' ||
+    missingImage ||
+    missingId ||
+    width.operator !== 'gt' ||
+    width.value !== 0 ||
+    height.operator !== 'gt' ||
+    height.value !== 0
+  );
+};

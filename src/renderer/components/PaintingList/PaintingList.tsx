@@ -2,16 +2,22 @@ import { Button, ButtonVariant } from '@/components/Button';
 import { Filters } from '@/components/Filters';
 import { PaintingListItem } from '@/components/PaintingListItem';
 import { TooltipDirection } from '@/components/Tooltip';
-import { selectMatchingPaintings } from '@/utils/filtersSlice';
+import {
+  selectHasFilters,
+  selectMatchingPaintings,
+  filtersActions,
+} from '@/utils/filtersSlice';
 import { paintingsSelectors, useDispatch, useSelector } from '@/utils/store';
 import { paintingsSlice } from '@common/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps, useState } from 'react';
 import styles from './PaintingList.module.scss';
 
+const { resetAll } = filtersActions;
+
 export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
-  
+
   const [showFilters, setShowFilters] = useState(false);
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
@@ -19,6 +25,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   const filteredPaintings = useSelector((state) =>
     selectMatchingPaintings(paintings)(state.filters)
   );
+  const hasFilters = useSelector((state) => selectHasFilters(state.filters));
 
   const dispatch = useDispatch();
 
@@ -41,6 +48,22 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
       <div className={styles['header']}>
         <span className={styles['title']}>Paintings</span>
         <div className={styles['actions']}>
+          {!hasFilters ? null : (
+            <Button
+              onClick={() => {
+                dispatch(resetAll());
+                setShowFilters(false);
+              }}
+              variant={ButtonVariant.ICON}
+              tooltip={{
+                content: `Reset filters`,
+                noWrap: true,
+                direction: TooltipDirection.BOTTOM,
+              }}
+            >
+              <FontAwesomeIcon icon={'rotate-left'} />
+            </Button>
+          )}
           <Button
             onClick={() => {
               setShowFilters((showFilters) => !showFilters);
