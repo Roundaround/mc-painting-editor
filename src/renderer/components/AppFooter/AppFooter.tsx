@@ -6,7 +6,7 @@ import { InlineButton } from '../InlineButton';
 import styles from './AppFooter.module.scss';
 
 const { selectMatchingPaintings } = filtersSelectors;
-const { resetAll, setMissingImage, setMissingId } = filtersActions;
+const { showMissingId, showMissingImage } = filtersActions;
 
 interface AppFooterProps extends HTMLProps<HTMLDivElement> {}
 
@@ -46,8 +46,7 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
         <InlineButton
           className={styles['error']}
           onClick={() => {
-            dispatch(resetAll());
-            dispatch(setMissingId(true));
+            dispatch(showMissingId());
           }}
         >
           Needs ID:&nbsp;
@@ -58,8 +57,7 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
         <InlineButton
           className={styles['error']}
           onClick={() => {
-            dispatch(resetAll());
-            dispatch(setMissingImage(true));
+            dispatch(showMissingImage());
           }}
         >
           Needs image:&nbsp;

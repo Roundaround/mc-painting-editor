@@ -67,6 +67,18 @@ export const filtersSlice = createSlice({
       state.height = { ...initialFiltersState.height };
     },
     resetAll: () => initialFiltersState,
+    showMissingImage: (state) => {
+      return {
+        ...initialFiltersState,
+        missingImage: true,
+      };
+    },
+    showMissingId: (state) => {
+      return {
+        ...initialFiltersState,
+        missingId: true,
+      };
+    },
   },
 });
 
