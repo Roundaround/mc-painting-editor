@@ -29,18 +29,22 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
       <TextInput
         id="id"
         label="ID"
+        required
+        maxLength={32}
         value={id}
         onChange={(e) => dispatch(setId(e.target.value))}
       />
       <TextInput
         id="name"
         label="Name"
+        maxLength={32}
         value={name}
         onChange={(e) => dispatch(setName(e.target.value))}
       />
       <TextInput
         id="description"
         label="Description"
+        maxLength={128}
         value={description}
         onChange={(e) => dispatch(setDescription(e.target.value))}
       />

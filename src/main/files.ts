@@ -13,7 +13,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
-import { store } from './store';
+import { RootState, store } from './store';
 
 const { setLoading, setFilename } = editorActions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
@@ -272,9 +272,8 @@ export async function saveZipFile(
     return;
   }
 
-  // Some simple validation
-  const state = store.getState();
-  if (!state.metadata.id) {
+  const error = validate();
+  if (!!error) {
     // TODO: Show error message
     return;
   }
@@ -283,7 +282,7 @@ export async function saveZipFile(
     store.dispatch(setLoading(true));
 
     const zip = new AdmZip();
-    const paintings = paintingsSelectors.selectAll(state);
+    const state = store.getState();
 
     const mcmeta = {
       pack: {
@@ -293,6 +292,7 @@ export async function saveZipFile(
     };
     zip.addFile('pack.mcmeta', Buffer.from(JSON.stringify(mcmeta, null, 2)));
 
+    const paintings = paintingsSelectors.selectAll(state);
     const pack = {
       id: state.metadata.id,
       name: state.metadata.name,
@@ -324,5 +324,34 @@ export async function saveZipFile(
     store.dispatch(captureSnapshot(store.getState()));
   } finally {
     store.dispatch(setLoading(false));
+  }
+}
+
+function validate() {
+  const state = store.getState();
+  const paintings = paintingsSelectors.selectAll(state);
+
+  if (!state.metadata.id) {
+    return 'Pack ID is required';
+  }
+  if (state.metadata.id.length < 3 || state.metadata.id.length > 32) {
+    return 'Pack ID must be between 3 and 32 characters';
+  }
+  if (!/^[a-z0-9._-]+$/.test(state.metadata.id)) {
+    return 'Pack ID can only contain lowercase letters, numbers, periods, underscores, and dashes';
+  }
+
+  if (
+    !!state.metadata.name &&
+    (state.metadata.name.length < 3 || state.metadata.name.length > 32)
+  ) {
+    return 'Pack name must be between 3 and 32 characters';
+  }
+
+  if (
+    !!state.metadata.description &&
+    state.metadata.description.length > 128
+  ) {
+    return 'Pack description must be 128 characters or less';
   }
 }
