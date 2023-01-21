@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from '@/utils/store';
 import { filtersActions, filtersSelectors } from '@/utils/store/filters';
 import { paintingsSelectors } from '@common/store/paintings';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps, useMemo } from 'react';
 import { InlineButton } from '../InlineButton';
 import styles from './AppFooter.module.scss';
@@ -45,7 +46,8 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
             dispatch(showMissingId());
           }}
         >
-          Needs ID:&nbsp;
+          <FontAwesomeIcon icon={'triangle-exclamation'} />
+          <span>Needs ID:</span>
           <span className={styles['stat']}>{paintingsWithoutId}</span>
         </InlineButton>
       )}
@@ -56,7 +58,8 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
             dispatch(showMissingImage());
           }}
         >
-          Needs image:&nbsp;
+          <FontAwesomeIcon icon={'triangle-exclamation'} />
+          <span>Needs image:</span>
           <span className={styles['stat']}>{paintingsWithoutImage}</span>
         </InlineButton>
       )}

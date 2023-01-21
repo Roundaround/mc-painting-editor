@@ -22,6 +22,15 @@
 
 .error {
   background-color: var(--red-9);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size-1);
+
+  > svg {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
 }
 
 .stat {
