@@ -1,0 +1,23 @@
+.wrapper {
+  position: relative;
+  padding: 0;
+
+  --overlay-opacity: 0;
+
+  &:hover {
+    --overlay-opacity: 0.1;
+  }
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  background: var(--smoke);
+  pointer-events: none;
+  opacity: var(--overlay-opacity);
+  transition: opacity 0.075s var(--ease-in-out-2);
+}

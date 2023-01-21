@@ -1,10 +1,12 @@
-import { useSelector } from '@/utils/store';
-import { filtersSelectors } from '@/utils/store/filters';
+import { useDispatch, useSelector } from '@/utils/store';
+import { filtersActions, filtersSelectors } from '@/utils/store/filters';
 import { paintingsSelectors } from '@common/store/paintings';
 import { FC, HTMLProps, useMemo } from 'react';
+import { InlineButton } from '../InlineButton';
 import styles from './AppFooter.module.scss';
 
 const { selectMatchingPaintings } = filtersSelectors;
+const { resetAll, setMissingImage, setMissingId } = filtersActions;
 
 interface AppFooterProps extends HTMLProps<HTMLDivElement> {}
 
@@ -28,6 +30,8 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
     return paintings.filter((painting) => !painting.id).length;
   }, [paintings]);
 
+  const dispatch = useDispatch();
+
   const classNames = ['wrapper']
     .map((name) => styles[name as keyof typeof styles])
     .concat(passedClassName || '')
@@ -39,16 +43,28 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
       <span>Made with ❤️ by Roundaround</span>
       <span className={styles['spacer']}></span>
       {!paintingsWithoutId ? null : (
-        <span className={styles['error']}>
+        <InlineButton
+          className={styles['error']}
+          onClick={() => {
+            dispatch(resetAll());
+            dispatch(setMissingId(true));
+          }}
+        >
           Needs ID:&nbsp;
           <span className={styles['stat']}>{paintingsWithoutId}</span>
-        </span>
+        </InlineButton>
       )}
       {!paintingsWithoutImage ? null : (
-        <span className={styles['error']}>
+        <InlineButton
+          className={styles['error']}
+          onClick={() => {
+            dispatch(resetAll());
+            dispatch(setMissingImage(true));
+          }}
+        >
           Needs image:&nbsp;
           <span className={styles['stat']}>{paintingsWithoutImage}</span>
-        </span>
+        </InlineButton>
       )}
       {filteredPaintings.length === paintingCount ? null : (
         <span>

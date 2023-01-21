@@ -8,7 +8,7 @@
   color: var(--text-1);
 
   > * {
-    padding-inline: var(--size-2);
+    padding: 0 var(--size-2);
     flex: 0 0 auto;
     line-height: 1.7;
     display: inline-flex;
