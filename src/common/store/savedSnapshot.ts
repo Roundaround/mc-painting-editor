@@ -41,15 +41,14 @@ export function areSavedSnapshotsEqual(
     a.metadata.description === b.metadata.description &&
     a.metadata.id === b.metadata.id &&
     a.metadata.name === b.metadata.name &&
-    paintingsSelectors.selectTotal(a.paintings) ===
-      paintingsSelectors.selectTotal(b.paintings) &&
-    paintingsSelectors.selectIds(a.paintings).every((id, index) => {
-      if (paintingsSelectors.selectIds(b.paintings)[index] !== id) {
+    paintingsSelectors.selectTotal(a) === paintingsSelectors.selectTotal(b) &&
+    paintingsSelectors.selectIds(a).every((id, index) => {
+      if (paintingsSelectors.selectIds(b)[index] !== id) {
         return false;
       }
 
-      const aPainting = paintingsSelectors.selectById(a.paintings, id);
-      const bPainting = paintingsSelectors.selectById(b.paintings, id);
+      const aPainting = paintingsSelectors.selectById(a, id);
+      const bPainting = paintingsSelectors.selectById(b, id);
       return aPainting && bPainting && arePaintingsEqual(aPainting, bPainting);
     })
   );

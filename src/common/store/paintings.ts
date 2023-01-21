@@ -64,7 +64,9 @@ export const paintingsReducer = paintingsSlice.reducer;
 export const paintingsActions = paintingsSlice.actions;
 
 export const paintingsInitialState = paintingsAdapter.getInitialState();
-export const paintingsSelectors = paintingsAdapter.getSelectors();
+export const paintingsSelectors = paintingsAdapter.getSelectors<{
+  paintings: PaintingsState;
+}>((state) => state.paintings);
 
 export type PaintingsState = ReturnType<typeof paintingsReducer>;
 

@@ -17,16 +17,12 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
 
   const [showFilters, setShowFilters] = useState(false);
 
-  const paintingCount = useSelector((state) =>
-    paintingsSelectors.selectTotal(state.paintings)
-  );
-  const paintings = useSelector((state) =>
-    paintingsSelectors.selectAll(state.paintings)
-  );
+  const paintingCount = useSelector(paintingsSelectors.selectTotal);
+  const paintings = useSelector(paintingsSelectors.selectAll);
   const filteredPaintings = useSelector((state) =>
-    selectMatchingPaintings(paintings)(state.filters)
+    selectMatchingPaintings(state, paintings)
   );
-  const hasFilters = useSelector((state) => selectHasFilters(state.filters));
+  const hasFilters = useSelector(selectHasFilters);
 
   const dispatch = useDispatch();
 

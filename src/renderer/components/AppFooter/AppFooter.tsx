@@ -13,14 +13,10 @@ interface AppFooterProps extends HTMLProps<HTMLDivElement> {}
 export const AppFooter: FC<AppFooterProps> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
 
-  const paintingCount = useSelector((state) =>
-    paintingsSelectors.selectTotal(state.paintings)
-  );
-  const paintings = useSelector((state) =>
-    paintingsSelectors.selectAll(state.paintings)
-  );
+  const paintingCount = useSelector(paintingsSelectors.selectTotal);
+  const paintings = useSelector(paintingsSelectors.selectAll);
   const filteredPaintings = useSelector((state) =>
-    selectMatchingPaintings(paintings)(state.filters)
+    selectMatchingPaintings(state, paintings)
   );
 
   const paintingsWithoutImage = useMemo(() => {

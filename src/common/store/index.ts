@@ -17,6 +17,8 @@ export const reducers = {
   [savedSnapshotSlice.name]: savedSnapshotReducer,
 };
 
+export type RootState = {[key in keyof typeof reducers]: ReturnType<typeof reducers[key]>};
+
 export const SYNC_META = 'sync';
 export const LOCAL_META = 'local';
 export type ActionMeta = typeof SYNC_META | typeof LOCAL_META | undefined;

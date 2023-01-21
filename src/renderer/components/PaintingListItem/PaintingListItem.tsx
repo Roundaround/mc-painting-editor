@@ -21,14 +21,10 @@ export function PaintingListItem(props: PaintingListItemProps) {
   const { id, className: passedClassName, ...htmlProps } = props;
 
   const painting = useSelector((state) =>
-    paintingsSelectors.selectById(state.paintings, id)
+    paintingsSelectors.selectById(state, id)
   );
-  const totalPaintings = useSelector((state) =>
-    paintingsSelectors.selectTotal(state.paintings)
-  );
-  const paintingIds = useSelector((state) =>
-    paintingsSelectors.selectIds(state.paintings)
-  );
+  const totalPaintings = useSelector(paintingsSelectors.selectTotal);
+  const paintingIds = useSelector(paintingsSelectors.selectIds);
 
   const currentIndex = useMemo(() => {
     return paintingIds.indexOf(id);
