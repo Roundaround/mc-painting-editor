@@ -283,7 +283,7 @@ export async function saveZipFile(
     store.dispatch(setLoading(true));
 
     const zip = new AdmZip();
-    const paintings = paintingsSelectors.selectAll(state.paintings);
+    const paintings = paintingsSelectors.selectAll(state);
 
     const mcmeta = {
       pack: {
