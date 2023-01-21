@@ -36,19 +36,30 @@ export const AppFooter: FC<AppFooterProps> = (props) => {
 
   return (
     <div className={classNames} {...htmlProps}>
-      <div>Made with ❤️ by Roundaround</div>
-      <div>
-        {!paintingsWithoutId ? null : (
-          <span>Needs ID: {paintingsWithoutId}</span>
-        )}
-        {!paintingsWithoutImage ? null : (
-          <span>Needs image: {paintingsWithoutImage}</span>
-        )}
-        {filteredPaintings.length === paintingCount ? null : (
-          <span>Matching filters: {filteredPaintings.length}</span>
-        )}
-        <span>Total paintings: {paintingCount}</span>
-      </div>
+      <span>Made with ❤️ by Roundaround</span>
+      <span className={styles['spacer']}></span>
+      {!paintingsWithoutId ? null : (
+        <span className={styles['error']}>
+          Needs ID:&nbsp;
+          <span className={styles['stat']}>{paintingsWithoutId}</span>
+        </span>
+      )}
+      {!paintingsWithoutImage ? null : (
+        <span className={styles['error']}>
+          Needs image:&nbsp;
+          <span className={styles['stat']}>{paintingsWithoutImage}</span>
+        </span>
+      )}
+      {filteredPaintings.length === paintingCount ? null : (
+        <span>
+          Matching filters:&nbsp;
+          <span className={styles['stat']}>{filteredPaintings.length}</span>
+        </span>
+      )}
+      <span>
+        Total paintings:&nbsp;
+        <span className={styles['stat']}>{paintingCount}</span>
+      </span>
     </div>
   );
 };

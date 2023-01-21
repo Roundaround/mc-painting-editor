@@ -2,19 +2,28 @@
   display: flex;
   flex-direction: row;
   background-color: var(--accent);
-  padding: calc(var(--size-1) / 2) var(--size-3);
-  gap: var(--size-4);
-  align-items: center;
-  justify-content: space-between;
+  padding-inline: var(--size-2);
+  align-items: stretch;
   font-size: var(--font-size-0);
-  font-weight: var(--font-weight-5);
   color: var(--text-1);
 
   > * {
-    display: flex;
-    flex-direction: row;
+    padding-inline: var(--size-2);
+    flex: 0 0 auto;
+    line-height: 1.7;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--size-3);
   }
+}
+
+.spacer {
+  flex: 1;
+}
+
+.error {
+  background-color: var(--red-9);
+}
+
+.stat {
+  font-family: var(--font-mono);
 }

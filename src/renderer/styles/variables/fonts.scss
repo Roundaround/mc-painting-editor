@@ -1,9 +1,9 @@
 :root {
-  --font-sans: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
+  --font-sans: 'Urbanist', 'Catamaran', system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell,
     Noto Sans, sans-serif;
   --font-serif: ui-serif, serif;
-  --font-mono: Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace,
-    SF Mono, Monaco, Droid Sans Mono, Source Code Pro, monospace;
+  --font-mono: 'Source Code Pro', Dank Mono, Operator Mono, Inconsolata, Fira Mono, ui-monospace,
+    SF Mono, Monaco, Droid Sans Mono, monospace;
 
   --font-weight-1: 100;
   --font-weight-2: 200;
@@ -43,9 +43,9 @@
   --font-size-7: 3rem;
   --font-size-8: 3.5rem;
 
-  --header-text-font: 'Urbanist', 'Catamaran', var(--font-sans);
+  --header-text-font: var(--font-sans);
   --header-text-weight: 500;
-  --body-text-font: 'Urbanist', 'Catamaran', var(--font-sans);
+  --body-text-font: var(--font-sans);
   --body-text-weight: 400;
 
   --text-font: var(--body-text-font);
