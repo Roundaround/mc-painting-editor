@@ -1,6 +1,3 @@
-# Environment file
-.env
-
 # Logs
 logs
 *.log
@@ -90,3 +87,9 @@ typings/
 
 # Electron-Forge
 out/
+
+# Code signing
+certs/
+*.key
+*.cert
+*.pfx
