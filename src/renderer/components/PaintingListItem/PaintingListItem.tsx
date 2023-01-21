@@ -60,6 +60,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         <TextInput
           id={`painting-id-${id}`}
           label="ID"
+          maxLength={32}
           value={painting.id}
           onChange={(e) => {
             dispatch(updatePainting({ id, changes: { id: e.target.value } }));
@@ -68,6 +69,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         <TextInput
           id={`painting-name-${id}`}
           label="Name"
+          maxLength={32}
           value={painting.name}
           onChange={(e) => {
             dispatch(updatePainting({ id, changes: { name: e.target.value } }));
@@ -76,6 +78,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         <TextInput
           id={`painting-artist-${id}`}
           label="Artist"
+          maxLength={32}
           value={painting.artist}
           onChange={(e) => {
             dispatch(

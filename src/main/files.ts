@@ -263,18 +263,18 @@ export async function saveZipFile(
   parentWindow: BrowserWindow,
   requestNewFilename = false
 ) {
+  const error = validate();
+  if (!!error) {
+    dialog.showErrorBox('Validation error', error);
+    return;
+  }
+
   let filename = store.getState().editor.filename;
   if (!filename || requestNewFilename) {
     filename = await getSaveFilename(parentWindow);
   }
 
   if (!filename) {
-    return;
-  }
-
-  const error = validate();
-  if (!!error) {
-    // TODO: Show error message
     return;
   }
 
@@ -348,10 +348,43 @@ function validate() {
     return 'Pack name must be between 3 and 32 characters';
   }
 
-  if (
-    !!state.metadata.description &&
-    state.metadata.description.length > 128
-  ) {
+  if (!!state.metadata.description && state.metadata.description.length > 128) {
     return 'Pack description must be 128 characters or less';
+  }
+
+  if (paintings.length === 0) {
+    return 'At least one painting is required';
+  }
+
+  for (let i = 0; i < paintings.length; i++) {
+    const painting = paintings[i];
+    const num = i + 1;
+
+    if (!painting.id) {
+      return `Painting ${num} invalid: ID is required`;
+    }
+    if (painting.id.length < 3 || painting.id.length > 32) {
+      return `Painting ${num} invalid: ID must be between 3 and 32 characters`;
+    }
+    if (!/^[a-z0-9._-]+$/.test(painting.id)) {
+      return `Painting ${num} invalid: ID can only contain lowercase letters, numbers, periods, underscores, and dashes`;
+    }
+
+    if (
+      !!painting.name &&
+      (painting.name.length < 3 || painting.name.length > 32)
+    ) {
+      return `Painting ${num} invalid: name must be between 3 and 32 characters`;
+    }
+    if (
+      !!painting.artist &&
+      (painting.artist.length < 3 || painting.artist.length > 32)
+    ) {
+      return `Painting ${num} invalid: artist must be between 3 and 32 characters`;
+    }
+
+    if (!painting.path) {
+      return `Painting ${num} invalid: image is required`;
+    }
   }
 }
