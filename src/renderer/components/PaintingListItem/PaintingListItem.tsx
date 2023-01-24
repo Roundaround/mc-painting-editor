@@ -17,11 +17,16 @@ export interface PaintingListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
 }
 
+interface Issue {
+  severity: 'error' | 'warning';
+  message: string;
+}
+
 export function PaintingListItem(props: PaintingListItemProps) {
   const { id, className: passedClassName, ...htmlProps } = props;
 
-  const painting = useSelector((state) =>
-    paintingsSelectors.selectById(state, id)
+  const painting = useSelector(
+    (state) => paintingsSelectors.selectById(state, id)!
   );
   const totalPaintings = useSelector(paintingsSelectors.selectTotal);
   const paintingIds = useSelector(paintingsSelectors.selectIds);
@@ -40,12 +45,69 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   const paintingImage = useMemo(() => {
     return getPaintingImage(painting);
-  }, [painting]);
+  }, [painting.width, painting.height, painting.path]);
 
-  const missingId = !painting?.id;
-  const missingImage = !painting?.path;
+  const issues = useMemo(() => {
+    const result: Issue[] = [];
 
-  const hasIssues = missingId || missingImage;
+    if (!painting.id) {
+      result.push({
+        severity: 'error',
+        message: 'Missing ID',
+      });
+    }
+
+    if (!painting.path) {
+      result.push({
+        severity: 'error',
+        message: 'Missing image',
+      });
+    }
+
+    if (
+      !!painting.path &&
+      (painting.pixelWidth < painting.width * 16 ||
+        painting.pixelHeight < painting.height * 16)
+    ) {
+      result.push({
+        severity: 'warning',
+        message:
+          'Image is too small. Min recommended resolution is 16 pixels per block.',
+      });
+    }
+
+    if (
+      !!painting.path &&
+      (painting.pixelWidth > painting.width * 160 ||
+        painting.pixelHeight > painting.height * 160)
+    ) {
+      result.push({
+        severity: 'warning',
+        message:
+          'Image is unnecessarily large. Max recommended resolution is 160 pixels per block.',
+      });
+    }
+
+    if (
+      !!painting.path &&
+      painting.pixelWidth * painting.height !==
+        painting.pixelHeight * painting.width
+    ) {
+      result.push({
+        severity: 'warning',
+        message: 'Image aspect ratio does not match painting aspect ratio.',
+      });
+    }
+
+    return result;
+  }, [
+    painting.id,
+    painting.path,
+    painting.width,
+    painting.height,
+    painting.pixelWidth,
+    painting.pixelHeight,
+  ]);
 
   const dispatch = useDispatch();
 
@@ -61,30 +123,26 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   return (
     <div className={classNames} {...htmlProps}>
-      {!hasIssues ? null : (
+      {!issues.length ? null : (
         <div className={styles['icon-column']}>
-          {!missingId ? null : (
-            <Tooltip
-              content="Missing ID"
-              direction={TooltipDirection.RIGHT}
-              noWrap={true}
-            >
-              <div className={styles['issue-icon']}>
-                <FontAwesomeIcon icon={'triangle-exclamation'} />
-              </div>
-            </Tooltip>
-          )}
-          {!missingImage ? null : (
-            <Tooltip
-              content="Missing image"
-              direction={TooltipDirection.RIGHT}
-              noWrap={true}
-            >
-              <div className={styles['issue-icon']}>
-                <FontAwesomeIcon icon={'triangle-exclamation'} />
-              </div>
-            </Tooltip>
-          )}
+          {issues.map((issue) => {
+            const classes = ['issue-icon', issue.severity]
+              .map((name) => styles[name as keyof typeof styles])
+              .join(' ');
+
+            return (
+              <Tooltip
+                content={issue.message}
+                direction={TooltipDirection.RIGHT}
+                noWrap={issue.message.length < 20}
+                wide={issue.message.length >= 20}
+              >
+                <div className={classes}>
+                  <FontAwesomeIcon icon={'triangle-exclamation'} />
+                </div>
+              </Tooltip>
+            );
+          })}
         </div>
       )}
       <div className={styles['inputs']}>

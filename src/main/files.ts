@@ -10,10 +10,11 @@ import { nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
 import fs from 'fs/promises';
+import sizeOf from 'image-size';
 import path from 'path';
 import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
-import { RootState, store } from './store';
+import { store } from './store';
 
 const { setLoading, setFilename } = editorActions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
@@ -102,6 +103,8 @@ export async function openZipFile(parentWindow: BrowserWindow) {
               paintingUuids[painting.id] = nanoid();
               return {
                 ...painting,
+                pixelWidth: 0,
+                pixelHeight: 0,
                 uuid: paintingUuids[painting.id],
               };
             })
@@ -153,11 +156,15 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       zip.extractEntryTo(entry, dir, false, true, false, newFilename);
 
       const filePath = path.join(appTempDir, 'paintings', newFilename);
+      const { width, height } = sizeOf(filePath);
+
       store.dispatch(
         updatePainting({
           id: uuid,
           changes: {
             path: fileUrl(filePath),
+            pixelWidth: width || 0,
+            pixelHeight: height || 0,
           },
         })
       );
@@ -232,8 +239,17 @@ export async function openPaintingFile(
     });
   await fs.copyFile(filename, newPath);
 
+  const { width, height } = sizeOf(newPath);
+
   store.dispatch(
-    updatePainting({ id: paintingId, changes: { path: fileUrl(newPath) } })
+    updatePainting({
+      id: paintingId,
+      changes: {
+        path: fileUrl(newPath),
+        pixelWidth: width || 0,
+        pixelHeight: height || 0,
+      },
+    })
   );
 }
 

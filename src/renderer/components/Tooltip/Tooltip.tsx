@@ -23,6 +23,7 @@ const defaultProps = {
   inline: false,
   directTabbable: true,
   noWrap: false,
+  wide: false,
 };
 
 export interface TooltipProps {
@@ -33,6 +34,7 @@ export interface TooltipProps {
   inline?: boolean;
   directTabbable?: boolean;
   noWrap?: boolean;
+  wide?: boolean;
 }
 
 export function Tooltip(props: TooltipProps & typeof defaultProps) {
@@ -44,6 +46,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     content,
     directTabbable,
     noWrap,
+    wide,
   } = props;
 
   const [boundingRect, updateBoundingRect, anchorRef] =
@@ -89,6 +92,9 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     ];
     if (noWrap) {
       result.push('tooltip--nowrap');
+    }
+    if (wide) {
+      result.push('tooltip--wide');
     }
     return result
       .map((name) => styles[name])

@@ -12,6 +12,8 @@ export interface Painting {
   height: number;
   width: number;
   path: string;
+  pixelWidth: number;
+  pixelHeight: number;
   uuid: string; // For maintinging tracking in React
 }
 
@@ -22,6 +24,8 @@ export const getDefaultPainting = (): Painting => ({
   height: 1,
   width: 1,
   path: '',
+  pixelWidth: 0,
+  pixelHeight: 0,
   uuid: nanoid(),
 });
 

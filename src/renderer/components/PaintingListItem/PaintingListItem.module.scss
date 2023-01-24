@@ -3,7 +3,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--size-3);
+  gap: var(--size-4);
 
   > * {
     flex: 0 0 auto;
@@ -16,7 +16,7 @@
   flex-direction: column;
   justify-content: flex-start;
   align-items: stretch;
-  gap: var(--size-1);
+  gap: var(--size-3);
 }
 
 .icon-column {
@@ -33,7 +33,6 @@
 }
 
 .issue-icon {
-  background-color: var(--red-9);
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
@@ -42,8 +41,17 @@
   width: 2rem;
   padding: 0;
   aspect-ratio: 1;
+  color: var(--text-1);
 
   > svg {
     width: 100%;
   }
+}
+
+.warning {
+  background-color: var(--orange-7);
+}
+
+.error {
+  background-color: var(--red-9);
 }

@@ -24,7 +24,7 @@
 }
 
 .tooltip {
-  --tooltip-background-color: hsl(var(--surface-2-hsl) / 0.98);
+  --tooltip-background-color: var(--surface-1);
   --tooltip-foreground-color: var(--text-1);
   --tooltip-margin: var(--size-3);
   --tooltip-arrow: var(--size-2);
@@ -105,4 +105,8 @@
 
 .tooltip--nowrap {
   white-space: nowrap;
+}
+
+.tooltip--wide {
+  min-width: 32ch;
 }
