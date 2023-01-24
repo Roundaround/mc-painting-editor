@@ -14,24 +14,36 @@
   flex: 1 1 100%;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   justify-content: flex-start;
+  align-items: stretch;
   gap: var(--size-1);
 }
 
-.actions {
+.icon-column {
   display: flex;
   flex-direction: column;
   gap: var(--size-2);
-  justify-content: space-between;
-  align-items: stretch;
+  justify-content: flex-start;
+  align-items: center;
   height: 100%;
 }
 
-.actions-group {
+.icon-column-gap {
+  flex: 1 1 100%;
+}
+
+.issue-icon {
+  background-color: var(--red-9);
   flex: 0 0 auto;
   display: flex;
-  flex-direction: column;
-  gap: var(--size-2);
+  justify-content: center;
   align-items: center;
+  border-radius: var(--radius-round);
+  width: 2rem;
+  padding: 0;
+  aspect-ratio: 1;
+
+  > svg {
+    width: 100%;
+  }
 }

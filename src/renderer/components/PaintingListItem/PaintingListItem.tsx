@@ -42,6 +42,11 @@ export function PaintingListItem(props: PaintingListItemProps) {
     return getPaintingImage(painting);
   }, [painting]);
 
+  const missingId = !painting?.id;
+  const missingImage = !painting?.path;
+
+  const hasIssues = missingId || missingImage;
+
   const dispatch = useDispatch();
 
   const classNames = ['wrapper']
@@ -56,6 +61,32 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   return (
     <div className={classNames} {...htmlProps}>
+      {!hasIssues ? null : (
+        <div className={styles['icon-column']}>
+          {!missingId ? null : (
+            <Tooltip
+              content="Missing ID"
+              direction={TooltipDirection.RIGHT}
+              noWrap={true}
+            >
+              <div className={styles['issue-icon']}>
+                <FontAwesomeIcon icon={'triangle-exclamation'} />
+              </div>
+            </Tooltip>
+          )}
+          {!missingImage ? null : (
+            <Tooltip
+              content="Missing image"
+              direction={TooltipDirection.RIGHT}
+              noWrap={true}
+            >
+              <div className={styles['issue-icon']}>
+                <FontAwesomeIcon icon={'triangle-exclamation'} />
+              </div>
+            </Tooltip>
+          )}
+        </div>
+      )}
       <div className={styles['inputs']}>
         <TextInput
           id={`painting-id-${id}`}
@@ -126,7 +157,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
         height={painting.height}
         width={painting.width}
       />
-      <div className={styles['actions']}>
+      <div className={styles['icon-column']}>
         <Button
           onClick={() => {
             dispatch(removePainting(id));
@@ -139,47 +170,48 @@ export function PaintingListItem(props: PaintingListItemProps) {
         >
           <FontAwesomeIcon icon={'trash'} />
         </Button>
-        <div className={styles['actions-group']}>
-          {!canMoveUp ? null : (
-            <Button
-              onClick={() => {
-                dispatch(movePaintingUp(id));
-              }}
-              variant={ButtonVariant.ICON}
-              tooltip={{
-                content: 'Move Up',
-                noWrap: true,
-                direction: TooltipDirection.LEFT,
-              }}
-            >
-              <FontAwesomeIcon icon={'arrow-up'} />
-            </Button>
-          )}
-          <Tooltip
-            content={`Currently at position ${
-              currentIndex + 1
-            } of ${totalPaintings}`}
-            direction={TooltipDirection.LEFT}
-            noWrap={true}
+
+        <div className={styles['icon-column-gap']}></div>
+
+        {!canMoveUp ? null : (
+          <Button
+            onClick={() => {
+              dispatch(movePaintingUp(id));
+            }}
+            variant={ButtonVariant.ICON}
+            tooltip={{
+              content: 'Move Up',
+              noWrap: true,
+              direction: TooltipDirection.LEFT,
+            }}
           >
-            {currentIndex + 1}/{totalPaintings}
-          </Tooltip>
-          {!canMoveDown ? null : (
-            <Button
-              onClick={() => {
-                dispatch(movePaintingDown(id));
-              }}
-              variant={ButtonVariant.ICON}
-              tooltip={{
-                content: 'Move Down',
-                noWrap: true,
-                direction: TooltipDirection.LEFT,
-              }}
-            >
-              <FontAwesomeIcon icon={'arrow-down'} />
-            </Button>
-          )}
-        </div>
+            <FontAwesomeIcon icon={'arrow-up'} />
+          </Button>
+        )}
+        <Tooltip
+          content={`Currently at position ${
+            currentIndex + 1
+          } of ${totalPaintings}`}
+          direction={TooltipDirection.LEFT}
+          noWrap={true}
+        >
+          {currentIndex + 1}/{totalPaintings}
+        </Tooltip>
+        {!canMoveDown ? null : (
+          <Button
+            onClick={() => {
+              dispatch(movePaintingDown(id));
+            }}
+            variant={ButtonVariant.ICON}
+            tooltip={{
+              content: 'Move Down',
+              noWrap: true,
+              direction: TooltipDirection.LEFT,
+            }}
+          >
+            <FontAwesomeIcon icon={'arrow-down'} />
+          </Button>
+        )}
       </div>
     </div>
   );
