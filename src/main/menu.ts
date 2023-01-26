@@ -1,4 +1,4 @@
-import { paintingsSelectors } from '@common/store/paintings';
+import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { Menu, MenuItemConstructorOptions } from 'electron';
 import contextMenu from 'electron-context-menu';
 import { openZipFile, saveZipFile } from './files';
@@ -77,6 +77,7 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
       {
         label: 'Remove selected',
         id: 'remove-selected',
+        enabled: false,
         click: (menuItem, focusedWindow, event) => {
           if (!focusedWindow) {
             return;
@@ -96,7 +97,7 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
               if (!confirmed) {
                 return;
               }
-              openZipFile(focusedWindow);
+              store.dispatch(paintingsActions.removeSelected());
             }
           );
           focusedWindow.webContents.send(

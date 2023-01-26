@@ -23,19 +23,16 @@ export function createStore(mainWindow: BrowserWindow) {
     }
   );
 
+  store = newStore;
   newStore.subscribe(() => {
-    updateTitleFromStore(mainWindow, newStore);
-    updateBatchActionsFromStore(newStore);
+    updateTitleFromStore(mainWindow);
+    updateBatchActionsFromStore();
   });
 
-  store = newStore;
   return newStore;
 }
 
-export function updateTitleFromStore(
-  mainWindow: BrowserWindow,
-  store: MainStore
-) {
+export function updateTitleFromStore(mainWindow: BrowserWindow) {
   const state = store.getState();
   const filename = state.editor.filename || '(Untitled)';
   const prefix = state.editor.dirty ? '• ' : '';
@@ -45,14 +42,14 @@ export function updateTitleFromStore(
   }
 }
 
-export function updateBatchActionsFromStore(store: MainStore) {
+export function updateBatchActionsFromStore() {
   const menuItems = ['remove-selected'];
   menuItems.forEach((id) => {
     const menuItem = Menu.getApplicationMenu()?.getMenuItemById(id);
     if (!menuItem) {
       return;
     }
-    menuItem.enabled = !paintingsSelectors
+    menuItem.enabled = paintingsSelectors
       .selectAll(store.getState())
       .some((p) => p.marked);
   });
