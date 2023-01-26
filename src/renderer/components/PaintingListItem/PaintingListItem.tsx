@@ -5,13 +5,24 @@ import { TextInput } from '@/components/TextInput';
 import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 import { getPaintingImage } from '@/utils/painting';
 import { useDispatch, useSelector } from '@/utils/store';
-import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
+import {
+  arePaintingsEqual,
+  getDefaultPainting,
+  paintingsActions,
+  paintingsSelectors,
+} from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HTMLProps, useMemo } from 'react';
+import { Checkbox } from '../Checkbox';
 import styles from './PaintingListItem.module.scss';
 
-const { updatePainting, movePaintingUp, movePaintingDown, removePainting } =
-  paintingsActions;
+const {
+  updatePainting,
+  movePaintingUp,
+  movePaintingDown,
+  removePainting,
+  setPaintingMarked,
+} = paintingsActions;
 
 export interface PaintingListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
@@ -111,7 +122,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
+  const classNames = ['wrapper', painting.marked ? 'marked' : '']
     .map((name) => styles[name as keyof typeof styles])
     .concat(passedClassName || '')
     .join(' ')
@@ -136,6 +147,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
                 direction={TooltipDirection.RIGHT}
                 noWrap={issue.message.length < 20}
                 wide={issue.message.length >= 20}
+                key={issue.message}
               >
                 <div className={classes}>
                   <FontAwesomeIcon icon={'triangle-exclamation'} />
@@ -216,9 +228,29 @@ export function PaintingListItem(props: PaintingListItemProps) {
         width={painting.width}
       />
       <div className={styles['icon-column']}>
+        <Checkbox
+          id={`marked-${id}`}
+          className={styles['mark-checkbox']}
+          onChange={(e) => {
+            dispatch(
+              setPaintingMarked({ id, marked: e.currentTarget.checked })
+            );
+          }}
+          checked={painting.marked}
+          tooltip={{
+            content: 'Select for batch operations',
+            direction: TooltipDirection.LEFT,
+            noWrap: true,
+          }}
+        />
+
         <Button
+          className={styles['delete-button']}
           onClick={() => {
-            dispatch(removePainting(id));
+            const isDefault = arePaintingsEqual(painting, getDefaultPainting());
+            if (isDefault || confirm('Remove painting?')) {
+              dispatch(removePainting(id));
+            }
           }}
           variant={ButtonVariant.ICON}
           tooltip={{

@@ -17,7 +17,9 @@ export const reducers = {
   [savedSnapshotSlice.name]: savedSnapshotReducer,
 };
 
-export type RootState = {[key in keyof typeof reducers]: ReturnType<typeof reducers[key]>};
+export type RootState = {
+  [key in keyof typeof reducers]: ReturnType<typeof reducers[key]>;
+};
 
 export const SYNC_META = 'sync';
 export const LOCAL_META = 'local';
@@ -107,11 +109,14 @@ export const trackDirty: Middleware<
         paintings: state.paintings,
       };
 
-      dispatch(
-        editorSlice.actions.setDirty(
-          !areSavedSnapshotsEqual(savedSnapshot, newSnapshot)
-        )
-      );
+      const wasDirty = state.editor.dirty;
+      const isDirty = !areSavedSnapshotsEqual(savedSnapshot, newSnapshot);
+
+      if (wasDirty === isDirty) {
+        return;
+      }
+
+      dispatch(editorSlice.actions.setDirty(isDirty));
     });
 
     return next(action);

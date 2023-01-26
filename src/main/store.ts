@@ -1,6 +1,7 @@
 import { reducers, syncWithExternal, trackDirty } from '@common/store';
+import { paintingsSelectors } from '@common/store/paintings';
 import { configureStore, PayloadAction } from '@reduxjs/toolkit';
-import { BrowserWindow, ipcMain } from 'electron';
+import { BrowserWindow, ipcMain, Menu } from 'electron';
 
 export function createStore(mainWindow: BrowserWindow) {
   const newStore = configureStore({
@@ -24,6 +25,7 @@ export function createStore(mainWindow: BrowserWindow) {
 
   newStore.subscribe(() => {
     updateTitleFromStore(mainWindow, newStore);
+    updateBatchActionsFromStore(newStore);
   });
 
   store = newStore;
@@ -41,6 +43,19 @@ export function updateTitleFromStore(
   if (mainWindow.getTitle() !== title) {
     mainWindow.setTitle(title);
   }
+}
+
+export function updateBatchActionsFromStore(store: MainStore) {
+  const menuItems = ['remove-selected'];
+  menuItems.forEach((id) => {
+    const menuItem = Menu.getApplicationMenu()?.getMenuItemById(id);
+    if (!menuItem) {
+      return;
+    }
+    menuItem.enabled = !paintingsSelectors
+      .selectAll(store.getState())
+      .some((p) => p.marked);
+  });
 }
 
 export type MainStore = ReturnType<typeof createStore>;

@@ -1,3 +1,4 @@
+import { paintingsSelectors } from '@common/store/paintings';
 import { Menu, MenuItemConstructorOptions } from 'electron';
 import contextMenu from 'electron-context-menu';
 import { openZipFile, saveZipFile } from './files';
@@ -43,6 +44,9 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
           if (!focusedWindow) {
             return;
           }
+          if (!store.getState().editor.dirty) {
+            return;
+          }
           saveZipFile(focusedWindow);
         },
       },
@@ -63,6 +67,42 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             return;
           }
           focusedWindow.close();
+        },
+      },
+    ],
+  },
+  {
+    label: '&Batch',
+    submenu: [
+      {
+        label: 'Remove selected',
+        id: 'remove-selected',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+
+          const selected = paintingsSelectors
+            .selectAll(store.getState())
+            .filter((p) => p.marked).length;
+
+          if (!selected) {
+            return;
+          }
+
+          focusedWindow.webContents.ipc.once(
+            'confirmation',
+            (event, confirmed) => {
+              if (!confirmed) {
+                return;
+              }
+              openZipFile(focusedWindow);
+            }
+          );
+          focusedWindow.webContents.send(
+            'confirmation',
+            `Are you sure you want to remove ${selected} paintings?`
+          );
         },
       },
     ],

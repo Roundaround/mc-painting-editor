@@ -35,10 +35,9 @@ interface ButtonProps
 
 export const Button = (props: ButtonProps & typeof defaultProps) => {
   const {
-    onClick,
     children,
-    tooltip,
     variant,
+    tooltip,
     className: passedClassName,
     ...htmlProps
   } = props;
@@ -54,7 +53,6 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
 
     return (
       <button
-        onClick={onClick}
         className={classNames}
         type="button"
         {...htmlProps}
@@ -62,7 +60,7 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
         {children}
       </button>
     );
-  }, [variant, onClick, children, htmlProps]);
+  }, [children, variant, passedClassName, htmlProps]);
 
   if (tooltip === undefined) {
     return button;

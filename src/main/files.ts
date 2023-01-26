@@ -102,9 +102,8 @@ export async function openZipFile(parentWindow: BrowserWindow) {
             pack.paintings.map((painting) => {
               paintingUuids[painting.id] = nanoid();
               return {
+                ...getDefaultPainting(),
                 ...painting,
-                pixelWidth: 0,
-                pixelHeight: 0,
                 uuid: paintingUuids[painting.id],
               };
             })

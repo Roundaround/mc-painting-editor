@@ -14,6 +14,7 @@ export interface Painting {
   path: string;
   pixelWidth: number;
   pixelHeight: number;
+  marked: boolean;
   uuid: string; // For maintinging tracking in React
 }
 
@@ -26,6 +27,7 @@ export const getDefaultPainting = (): Painting => ({
   path: '',
   pixelWidth: 0,
   pixelHeight: 0,
+  marked: false,
   uuid: nanoid(),
 });
 
@@ -60,6 +62,24 @@ export const paintingsSlice = createSlice({
         state.ids[index + 1] = state.ids[index];
         state.ids[index] = temp;
       }
+    },
+    setPaintingMarked(
+      state,
+      action: PayloadAction<{ id: string; marked: boolean }>
+    ) {
+      return paintingsAdapter.updateOne(state, {
+        id: action.payload.id,
+        changes: { marked: action.payload.marked },
+      });
+    },
+    removeSelected(state) {
+      return paintingsAdapter.removeMany(
+        state,
+        state.ids.filter((id) => {
+          const painting = state.entities[id];
+          return painting && painting.marked;
+        })
+      );
     },
   },
 });
