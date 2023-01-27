@@ -43,7 +43,7 @@ export function updateTitleFromStore(mainWindow: BrowserWindow) {
 }
 
 export function updateBatchActionsFromStore() {
-  const menuItems = ['remove-selected'];
+  const menuItems = ['remove-selected', 'create-pack-from-selected'];
   menuItems.forEach((id) => {
     const menuItem = Menu.getApplicationMenu()?.getMenuItemById(id);
     if (!menuItem) {

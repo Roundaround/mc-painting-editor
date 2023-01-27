@@ -11,6 +11,9 @@ const api = {
   openPaintingFile(paintingId: string): Promise<void> {
     return ipcRenderer.invoke('openPaintingFile', paintingId);
   },
+  splitSelected(): Promise<void> {
+    return ipcRenderer.invoke('splitSelected');
+  },
   sendReduxAction<T>(action: PayloadAction<T, string, any>) {
     ipcRenderer.send('reduxAction', action);
   },

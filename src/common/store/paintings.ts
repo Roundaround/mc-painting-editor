@@ -47,6 +47,7 @@ export const paintingsSlice = createSlice({
     updatePainting: paintingsAdapter.updateOne,
     setPaintings: paintingsAdapter.setAll,
     removePainting: paintingsAdapter.removeOne,
+    removeManyPaintings: paintingsAdapter.removeMany,
     movePaintingUp(state, action: PayloadAction<string>) {
       const index = state.ids.indexOf(action.payload);
       if (index > 0) {

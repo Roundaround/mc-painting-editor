@@ -89,7 +89,7 @@ export const trackDirty: Middleware<
       return next(action);
     }
 
-    if (getState().editor.loading) {
+    if (getState().editor.overlay) {
       return next(action);
     }
 

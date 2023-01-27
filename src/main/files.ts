@@ -1,7 +1,8 @@
 import { editorActions } from '@common/store/editor';
-import { metadataActions } from '@common/store/metadata';
+import { metadataActions, MetadataState } from '@common/store/metadata';
 import {
   getDefaultPainting,
+  Painting,
   paintingsActions,
   paintingsSelectors,
 } from '@common/store/paintings';
@@ -16,10 +17,11 @@ import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
 import { store } from './store';
 
-const { setLoading, setFilename } = editorActions;
+const { setLoading, setFilename, clearOverlay } = editorActions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
   metadataActions;
-const { updatePainting, upsertPainting, setPaintings } = paintingsActions;
+const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
+  paintingsActions;
 const { captureSnapshot } = savedSnapshotActions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
@@ -56,7 +58,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     return '';
   }
 
-  store.dispatch(setLoading(true));
+  store.dispatch(setLoading());
 
   try {
     const filename = files.filePaths[0];
@@ -169,12 +171,12 @@ export async function openZipFile(parentWindow: BrowserWindow) {
       );
     }
 
-    store.dispatch(setLoading(false));
+    store.dispatch(clearOverlay());
     store.dispatch(setFilename(filename));
     store.dispatch(captureSnapshot(store.getState()));
     return filename;
   } catch (err) {
-    store.dispatch(setLoading(false));
+    store.dispatch(clearOverlay());
     store.dispatch(setFilename(''));
     return '';
   }
@@ -252,8 +254,11 @@ export async function openPaintingFile(
   );
 }
 
-async function getSaveFilename(parentWindow: BrowserWindow) {
-  let name = store.getState().metadata.name;
+async function getSaveFilename(
+  parentWindow: BrowserWindow,
+  metadata: MetadataState
+) {
+  let name = metadata.name;
   if (!name) {
     name = 'Custom Paintings';
   }
@@ -274,11 +279,99 @@ async function getSaveFilename(parentWindow: BrowserWindow) {
   return result.filePath || '';
 }
 
+async function getCurrentSaveFilename(parentWindow: BrowserWindow) {
+  return getSaveFilename(parentWindow, store.getState().metadata);
+}
+
+export async function saveSplitZipFile(parentWindow: BrowserWindow) {
+  const editorState = store.getState().editor;
+  const baseMetadata = store.getState().metadata;
+  const metadata: MetadataState = {
+    icon: baseMetadata.icon,
+    packFormat: baseMetadata.packFormat,
+    description: `Split from "${baseMetadata.name}"`,
+    id: editorState.split.id,
+    name: editorState.split.name,
+  };
+
+  const paintings = paintingsSelectors
+    .selectAll(store.getState())
+    .filter((painting) => painting.marked);
+
+  const error = validate(metadata, paintings);
+  if (!!error) {
+    dialog.showErrorBox('Validation error', error);
+    return;
+  }
+
+  let filename = await getSaveFilename(parentWindow, metadata);
+
+  if (!filename) {
+    return;
+  }
+
+  try {
+    store.dispatch(setLoading());
+
+    const zip = new AdmZip();
+
+    const mcmeta = {
+      pack: {
+        pack_format: metadata.packFormat,
+        description: metadata.description,
+      },
+    };
+    zip.addFile('pack.mcmeta', Buffer.from(JSON.stringify(mcmeta, null, 2)));
+
+    const pack = {
+      id: metadata.id,
+      name: metadata.name,
+      paintings: paintings.map(({ uuid, path, ...painting }) => painting),
+      migrations: [
+        {
+          id: new Date().toISOString(),
+          pairs: paintings.map((painting) => [
+            painting.id.replace(
+              new RegExp(`^${store.getState().metadata.id}`),
+              metadata.id
+            ),
+          ]),
+        },
+      ],
+    };
+    zip.addFile(
+      'custompaintings.json',
+      Buffer.from(JSON.stringify(pack, null, 2))
+    );
+
+    const iconPath = metadata.icon;
+    if (iconPath) {
+      zip.addLocalFile(filePath(iconPath), '', 'pack.png');
+    }
+
+    for (const painting of paintings) {
+      if (!painting.path || !painting.id) {
+        continue;
+      }
+      zip.addLocalFile(
+        filePath(painting.path),
+        `assets/${metadata.id}/textures/painting/`,
+        `${painting.id}.png`
+      );
+    }
+
+    zip.writeZip(filename);
+  } finally {
+    store.dispatch(clearOverlay());
+    store.dispatch(removeManyPaintings(paintings.map((p) => p.uuid)));
+  }
+}
+
 export async function saveZipFile(
   parentWindow: BrowserWindow,
   requestNewFilename = false
 ) {
-  const error = validate();
+  const error = validateCurrentState();
   if (!!error) {
     dialog.showErrorBox('Validation error', error);
     return;
@@ -286,7 +379,7 @@ export async function saveZipFile(
 
   let filename = store.getState().editor.filename;
   if (!filename || requestNewFilename) {
-    filename = await getSaveFilename(parentWindow);
+    filename = await getCurrentSaveFilename(parentWindow);
   }
 
   if (!filename) {
@@ -294,7 +387,7 @@ export async function saveZipFile(
   }
 
   try {
-    store.dispatch(setLoading(true));
+    store.dispatch(setLoading());
 
     const zip = new AdmZip();
     const state = store.getState();
@@ -338,32 +431,34 @@ export async function saveZipFile(
     store.dispatch(setFilename(filename));
     store.dispatch(captureSnapshot(store.getState()));
   } finally {
-    store.dispatch(setLoading(false));
+    store.dispatch(clearOverlay());
   }
 }
 
-function validate() {
+function validateCurrentState() {
   const state = store.getState();
-  const paintings = paintingsSelectors.selectAll(state);
+  return validate(state.metadata, paintingsSelectors.selectAll(state));
+}
 
-  if (!state.metadata.id) {
+function validate(metadata: MetadataState, paintings: Painting[]) {
+  if (!metadata.id) {
     return 'Pack ID is required';
   }
-  if (state.metadata.id.length < 3 || state.metadata.id.length > 32) {
+  if (metadata.id.length < 3 || metadata.id.length > 32) {
     return 'Pack ID must be between 3 and 32 characters';
   }
-  if (!/^[a-z0-9._-]+$/.test(state.metadata.id)) {
+  if (!/^[a-z0-9._-]+$/.test(metadata.id)) {
     return 'Pack ID can only contain lowercase letters, numbers, periods, underscores, and dashes';
   }
 
   if (
-    !!state.metadata.name &&
-    (state.metadata.name.length < 3 || state.metadata.name.length > 32)
+    !!metadata.name &&
+    (metadata.name.length < 3 || metadata.name.length > 32)
   ) {
     return 'Pack name must be between 3 and 32 characters';
   }
 
-  if (!!state.metadata.description && state.metadata.description.length > 128) {
+  if (!!metadata.description && metadata.description.length > 128) {
     return 'Pack description must be 128 characters or less';
   }
 

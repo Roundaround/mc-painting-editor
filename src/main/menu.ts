@@ -1,3 +1,4 @@
+import { editorActions } from '@common/store/editor';
 import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { Menu, MenuItemConstructorOptions } from 'electron';
 import contextMenu from 'electron-context-menu';
@@ -104,6 +105,26 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             'confirmation',
             `Are you sure you want to remove ${selected} paintings?`
           );
+        },
+      },
+      {
+        label: 'Create pack from selected',
+        id: 'create-pack-from-selected',
+        enabled: false,
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+
+          const selected = paintingsSelectors
+            .selectAll(store.getState())
+            .filter((p) => p.marked).length;
+
+          if (!selected) {
+            return;
+          }
+
+          store.dispatch(editorActions.setSplitting());
         },
       },
     ],
