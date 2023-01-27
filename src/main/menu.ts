@@ -73,8 +73,18 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
     ],
   },
   {
-    label: '&Batch',
+    label: '&Select',
     submenu: [
+      {
+        label: 'Deselect all',
+        id: 'clear-selection',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+          store.dispatch(paintingsActions.clearSelection());
+        },
+      },
       {
         label: 'Remove selected',
         id: 'remove-selected',

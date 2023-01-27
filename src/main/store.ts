@@ -43,15 +43,22 @@ export function updateTitleFromStore(mainWindow: BrowserWindow) {
 }
 
 export function updateBatchActionsFromStore() {
-  const menuItems = ['remove-selected', 'create-pack-from-selected'];
+  const menuItems = [
+    'clear-selection',
+    'remove-selected',
+    'create-pack-from-selected',
+  ];
+
+  const anySelected = paintingsSelectors
+    .selectAll(store.getState())
+    .some((p) => p.marked);
+
   menuItems.forEach((id) => {
     const menuItem = Menu.getApplicationMenu()?.getMenuItemById(id);
     if (!menuItem) {
       return;
     }
-    menuItem.enabled = paintingsSelectors
-      .selectAll(store.getState())
-      .some((p) => p.marked);
+    menuItem.enabled = anySelected;
   });
 }
 

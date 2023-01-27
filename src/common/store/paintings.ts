@@ -82,6 +82,15 @@ export const paintingsSlice = createSlice({
         })
       );
     },
+    clearSelection(state) {
+      return paintingsAdapter.updateMany(
+        state,
+        state.ids.map((id) => ({
+          id,
+          changes: { marked: false },
+        }))
+      );
+    },
   },
 });
 
