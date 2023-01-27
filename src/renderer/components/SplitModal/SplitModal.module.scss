@@ -1,0 +1,26 @@
+.modal {
+  width: 40%;
+  min-width: 30ch;
+  max-width: 60ch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  gap: var(--size-3);
+  background-color: var(--surface-1);
+  border: var(--border-size-2) solid var(--surface-2);
+  border-radius: var(--radius-2);
+  box-shadow: var(--shadow-3);
+  padding: var(--size-4);
+}
+
+.modal-buttons {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  gap: var(--size-3);
+
+  > * {
+    flex: 1 1 0;
+  }
+}
