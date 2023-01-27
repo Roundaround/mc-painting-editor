@@ -331,10 +331,8 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
         {
           id: new Date().toISOString(),
           pairs: paintings.map((painting) => [
-            painting.id.replace(
-              new RegExp(`^${store.getState().metadata.id}`),
-              metadata.id
-            ),
+            `${store.getState().metadata.id}:${painting.id}`,
+            `${metadata.id}:${painting.id}`,
           ]),
         },
       ],
