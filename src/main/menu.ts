@@ -134,7 +134,25 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             return;
           }
 
-          store.dispatch(editorActions.setSplitting());
+          store.dispatch(editorActions.openSplitModal());
+        },
+      },
+    ],
+  },
+];
+
+const helpTemplate: MenuItemConstructorOptions[] = [
+  {
+    label: '&Help',
+    submenu: [
+      {
+        label: 'About',
+        click: (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+          
+          store.dispatch(editorActions.openAboutModal());
         },
       },
     ],
@@ -201,6 +219,7 @@ export const registerMenu = () => {
   const menu = Menu.buildFromTemplate([
     ...menuTemplate,
     ...(process.env.NODE_ENV === 'development' ? developmentAdditions : []),
+    ...helpTemplate,
   ]);
   Menu.setApplicationMenu(menu);
 

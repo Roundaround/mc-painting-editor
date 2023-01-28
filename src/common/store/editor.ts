@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 export interface EditorState {
   filename: string;
   dirty: boolean;
-  overlay: false | 'loading' | 'splitting';
+  overlay: false | 'loading' | 'splitting' | 'about';
   split: {
     id: string;
     name: string;
@@ -36,12 +36,15 @@ export const editorSlice = createSlice({
     setLoading: (state) => {
       state.overlay = 'loading';
     },
-    setSplitting: (state) => {
+    openSplitModal: (state) => {
       state.overlay = 'splitting';
       state.split = {
         id: '',
         name: '',
       };
+    },
+    openAboutModal: (state) => {
+      state.overlay = 'about';
     },
     setSplitId: (state, action: PayloadAction<string>) => {
       state.split.id = action.payload;
