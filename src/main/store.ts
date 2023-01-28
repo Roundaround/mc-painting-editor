@@ -1,7 +1,8 @@
 import { reducers, syncWithExternal, trackDirty } from '@common/store';
+import { editorActions } from '@common/store/editor';
 import { paintingsSelectors } from '@common/store/paintings';
 import { configureStore, PayloadAction } from '@reduxjs/toolkit';
-import { BrowserWindow, ipcMain, Menu } from 'electron';
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 
 export function createStore(mainWindow: BrowserWindow) {
   const newStore = configureStore({
@@ -60,6 +61,15 @@ export function updateBatchActionsFromStore() {
     }
     menuItem.enabled = anySelected;
   });
+}
+
+export function updateAppInfoInStore() {
+  store.dispatch(
+    editorActions.setAppInfo({
+      name: app.getName(),
+      version: app.getVersion(),
+    })
+  );
 }
 
 export type MainStore = ReturnType<typeof createStore>;

@@ -14,6 +14,9 @@ const api = {
   splitSelected(): Promise<void> {
     return ipcRenderer.invoke('splitSelected');
   },
+  requestAppInfo(): Promise<void> {
+    return ipcRenderer.invoke('requestAppInfo');
+  },
   sendReduxAction<T>(action: PayloadAction<T, string, any>) {
     ipcRenderer.send('reduxAction', action);
   },

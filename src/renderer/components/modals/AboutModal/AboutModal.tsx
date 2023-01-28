@@ -1,5 +1,5 @@
 import { Button } from '@/components/input/Button';
-import { useDispatch } from '@/utils/store';
+import { useDispatch, useSelector } from '@/utils/store';
 import { editorActions } from '@common/store/editor';
 import { FC, HTMLProps, useEffect } from 'react';
 
@@ -10,6 +10,9 @@ const { clearOverlay } = editorActions;
 interface AboutModalProps extends HTMLProps<HTMLDivElement> {}
 
 export const AboutModal: FC<AboutModalProps> = (props) => {
+  const appName = useSelector((state) => state.editor.name);
+  const appVersion = useSelector((state) => state.editor.version);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,16 +31,19 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
 
   return (
     <div className={styles['modal']}>
-      <div className={styles['header']}>
-        Custom Paintings Pack Editor v1.0.0
+      <div className={styles['section']}>
+        <div className={styles['name']}>{appName}</div>
+        <div className={styles['version']}>v{appVersion}</div>
       </div>
-      <Button
-        onClick={() => {
-          dispatch(clearOverlay());
-        }}
-      >
-        Close
-      </Button>
+      <div className={styles['section']}>
+        <Button
+          onClick={() => {
+            dispatch(clearOverlay());
+          }}
+        >
+          Close
+        </Button>
+      </div>
     </div>
   );
 };

@@ -25,6 +25,7 @@ export const store = configureStore({
 window.electron.listenForReduxActions((action) => {
   store.dispatch(action);
 });
+window.electron.requestAppInfo();
 
 export type RootState = ReturnType<typeof store.getState>;
 export type Dispatch = typeof store.dispatch;
