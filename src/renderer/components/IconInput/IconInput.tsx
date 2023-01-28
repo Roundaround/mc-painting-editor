@@ -1,4 +1,5 @@
 import { useSelector } from '@/utils/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
 import styles from './IconInput.module.scss';
 
@@ -29,6 +30,11 @@ export const IconInput: FC<IconInputProps> = (props) => {
           window.electron.openIconFile();
         }}
       >
+        <div className={styles['overlay']}>
+          <div className={styles['overlay-icon']}>
+            <FontAwesomeIcon icon="edit" />
+          </div>
+        </div>
         {!icon ? null : <img src={icon} className={styles['image']} />}
       </div>
     </div>

@@ -1,7 +1,8 @@
-import { BaseHTMLAttributes, CSSProperties } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CSSProperties, HTMLProps } from 'react';
 import styles from './PaintingGrid.module.scss';
 
-export interface PaintingGridProps extends BaseHTMLAttributes<HTMLDivElement> {
+export interface PaintingGridProps extends HTMLProps<HTMLDivElement> {
   maxHeight: number;
   maxWidth: number;
   hasImage: boolean;
@@ -11,12 +12,28 @@ export interface PaintingGridProps extends BaseHTMLAttributes<HTMLDivElement> {
 }
 
 export const PaintingGrid = (props: PaintingGridProps) => {
-  const { onClick, maxHeight, maxWidth, hasImage, image, height, width } =
-    props;
+  const {
+    maxHeight,
+    maxWidth,
+    hasImage,
+    image,
+    height,
+    width,
+    className: passedClassName,
+    ...htmlProps
+  } = props;
+
+  const classNames = [
+    styles['wrapper'],
+    hasImage ? '' : styles['wrapper--empty'],
+    passedClassName || '',
+  ]
+    .join(' ')
+    .trim();
 
   return (
     <div
-      className={styles['wrapper']}
+      className={classNames}
       style={
         {
           '--painting-grid-height': `${maxHeight * 2.4}rem`,
@@ -25,18 +42,15 @@ export const PaintingGrid = (props: PaintingGridProps) => {
           '--painting-width': `${width * 2.4}rem`,
         } as CSSProperties
       }
-      onClick={onClick}
+      {...htmlProps}
     >
       <div className={styles['background']}></div>
       <img src={image} className={styles['painting']} />
-      <div className={styles['edit-overlay']}></div>
-      {hasImage ? null : (
-        <div className={styles['upload-instructions']}>
-          <span style={{ whiteSpace: 'nowrap' }}>Click here to</span>
-          <br />
-          <span style={{ whiteSpace: 'nowrap' }}>upload an image</span>
+      <div className={styles['overlay']}>
+        <div className={styles['overlay-icon']}>
+          <FontAwesomeIcon icon="edit" />
         </div>
-      )}
+      </div>
     </div>
   );
 };
