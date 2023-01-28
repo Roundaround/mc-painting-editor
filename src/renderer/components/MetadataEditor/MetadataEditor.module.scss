@@ -1,7 +1,11 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  padding: var(--size-3);
+  padding: var(--size-2);
   gap: var(--size-3);
   overflow-y: auto;
+}
+
+.header {
+  font-size: var(--font-size-3);
 }
