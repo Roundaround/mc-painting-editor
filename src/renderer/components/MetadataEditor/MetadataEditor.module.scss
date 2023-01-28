@@ -1,7 +1,6 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  background-color: hsl(var(--surface-1-hsl) / 0.25);
   padding: var(--size-3);
   gap: var(--size-3);
   overflow-y: auto;

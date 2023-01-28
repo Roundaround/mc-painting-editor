@@ -27,6 +27,26 @@
   }
 }
 
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+  justify-content: space-between;
+  align-items: stretch;
+  overflow: hidden;
+  background-color: hsl(var(--surface-1-hsl) / 0.25);
+
+  > * {
+    flex: 0 0 auto;
+  }
+}
+
+.primary {
+  flex: 1 1 100%;
+  overflow: auto;
+  border-bottom: var(--border-size-1) solid var(--surface-2);
+}
+
 .footer {
   flex: 0 0 auto;
 }

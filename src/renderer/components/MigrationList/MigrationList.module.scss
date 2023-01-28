@@ -1,0 +1,27 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.header {
+  font-size: var(--font-size-3);
+}
+
+.list {
+  flex: 1 1 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.divider {
+  flex: 0 0 auto;
+  height: 1px;
+  width: 100%;
+  background-color: var(--surface-2);
+  margin: 0;
+}

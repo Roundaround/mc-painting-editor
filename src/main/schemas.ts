@@ -9,10 +9,16 @@ export const paintingSchema = z.object({
   path: z.string().optional().default(''),
 });
 
+export const migrationSchema = z.object({
+  id: z.string().optional().default(''),
+  pairs: z.array(z.tuple([z.string(), z.string()])).default([]),
+});
+
 export const packSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
   paintings: z.array(paintingSchema).default([]),
+  migrations: z.array(migrationSchema).default([]),
 });
 
 export const mcmetaSchema = z.object({

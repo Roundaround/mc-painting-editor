@@ -2,6 +2,11 @@ import { Middleware, PayloadAction } from '@reduxjs/toolkit';
 import produce from 'immer';
 import { editorReducer, editorSlice, EditorState } from './editor';
 import { metadataReducer, metadataSlice, MetadataState } from './metadata';
+import {
+  migrationsReducer,
+  migrationsSlice,
+  MigrationsState,
+} from './migrations';
 import { paintingsReducer, paintingsSlice, PaintingsState } from './paintings';
 import {
   areSavedSnapshotsEqual,
@@ -14,6 +19,7 @@ export const reducers = {
   [editorSlice.name]: editorReducer,
   [metadataSlice.name]: metadataReducer,
   [paintingsSlice.name]: paintingsReducer,
+  [migrationsSlice.name]: migrationsReducer,
   [savedSnapshotSlice.name]: savedSnapshotReducer,
 };
 
@@ -79,6 +85,7 @@ export const trackDirty: Middleware<
     editor: EditorState;
     metadata: MetadataState;
     paintings: PaintingsState;
+    migrations: MigrationsState;
     savedSnapshot: SavedSnapshotState;
   }
 > =
@@ -96,6 +103,7 @@ export const trackDirty: Middleware<
     if (
       !action.type.startsWith(metadataSlice.name) &&
       !action.type.startsWith(paintingsSlice.name) &&
+      !action.type.startsWith(migrationsSlice.name) &&
       !action.type.startsWith(savedSnapshotSlice.name)
     ) {
       return next(action);
@@ -107,6 +115,7 @@ export const trackDirty: Middleware<
       const newSnapshot: SavedSnapshotState = {
         metadata: state.metadata,
         paintings: state.paintings,
+        migrations: state.migrations,
       };
 
       const wasDirty = state.editor.dirty;

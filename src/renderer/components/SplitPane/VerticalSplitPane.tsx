@@ -1,6 +1,7 @@
 import { useBoundingRect } from '@/utils/useBoundingRect';
 import React, {
   BaseHTMLAttributes,
+  FC,
   ReactElement,
   useCallback,
   useEffect,
@@ -8,82 +9,82 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import styles from './SplitPane.module.scss';
+import styles from './VerticalSplitPane.module.scss';
 
-const MIN_WIDTH = 380;
+const MIN_HEIGHT = 100;
 
-interface SplitPaneProps extends BaseHTMLAttributes<HTMLDivElement> {
+interface VerticalSplitPaneProps extends BaseHTMLAttributes<HTMLDivElement> {
   children: [ReactElement, ReactElement];
 }
 
-export const SplitPane = (props: SplitPaneProps) => {
+export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
   const {
-    children: [left, right],
+    children: [top, bottom],
     className: passedClassName,
   } = props;
 
   const splitPaneRef = useRef<HTMLDivElement>(null);
-  const [separatorXPosition, setSeparatorXPosition] = useState<
+  const [separatorYPosition, setSeparatorYPosition] = useState<
     undefined | number
   >(undefined);
   const [dragging, setDragging] = useState(false);
 
-  const [leftRect, updateLeftRect, leftRef] = useBoundingRect<HTMLDivElement>();
+  const [topRect, updateTopRect, topRef] = useBoundingRect<HTMLDivElement>();
 
-  const leftWidth = useMemo(() => {
-    if (!leftRect) {
+  const topHeight = useMemo(() => {
+    if (!topRect) {
       return undefined;
     }
-    return leftRect.width;
-  }, [leftRect]);
+    return topRect.height;
+  }, [topRect]);
 
-  const setLeftWidth = useCallback(
-    (width: number) => {
-      if (!leftRef.current) {
+  const setTopHeight = useCallback(
+    (height: number) => {
+      if (!topRef.current) {
         return;
       }
-      leftRef.current.style.width = `${width}px`;
-      updateLeftRect();
+      topRef.current.style.height = `${height}px`;
+      updateTopRect();
     },
-    [leftRef, updateLeftRect]
+    [topRef, updateTopRect]
   );
 
   const onMouseDown = (e: React.MouseEvent) => {
-    setSeparatorXPosition(e.clientX);
+    setSeparatorYPosition(e.clientY);
     setDragging(true);
   };
 
   const onTouchStart = (e: React.TouchEvent) => {
-    setSeparatorXPosition(e.touches[0].clientX);
+    setSeparatorYPosition(e.touches[0].clientY);
     setDragging(true);
   };
 
   const onMove = useCallback(
-    (clientX: number) => {
-      if (!dragging || !leftWidth || !separatorXPosition) {
+    (clientY: number) => {
+      if (!dragging || !topHeight || !separatorYPosition) {
         return;
       }
 
-      const newLeftWidth = leftWidth + clientX - separatorXPosition;
-      setSeparatorXPosition(clientX);
+      const newTopHeight = topHeight + (clientY - separatorYPosition);
+      setSeparatorYPosition(clientY);
 
-      if (newLeftWidth < MIN_WIDTH) {
-        setLeftWidth(MIN_WIDTH);
+      if (newTopHeight < MIN_HEIGHT) {
+        setTopHeight(MIN_HEIGHT);
         return;
       }
 
       if (splitPaneRef.current) {
-        const splitPaneWidth = splitPaneRef.current.clientWidth;
+        const splitPaneHeight = splitPaneRef.current.clientHeight;
 
-        if (newLeftWidth > splitPaneWidth - MIN_WIDTH) {
-          setLeftWidth(splitPaneWidth - MIN_WIDTH);
+        if (newTopHeight > splitPaneHeight - MIN_HEIGHT) {
+          setTopHeight(splitPaneHeight - MIN_HEIGHT);
           return;
         }
       }
 
-      setLeftWidth(newLeftWidth);
+      setTopHeight(newTopHeight);
     },
-    [dragging, leftWidth, separatorXPosition, setLeftWidth]
+    [dragging, separatorYPosition, topHeight, setTopHeight]
   );
 
   const onMouseMove = useCallback(
@@ -91,7 +92,7 @@ export const SplitPane = (props: SplitPaneProps) => {
       if (dragging) {
         e.preventDefault();
       }
-      onMove(e.clientX);
+      onMove(e.clientY);
     },
     [dragging, onMove]
   );
@@ -101,7 +102,7 @@ export const SplitPane = (props: SplitPaneProps) => {
       if (dragging) {
         e.preventDefault();
       }
-      onMove(e.touches[0].clientX);
+      onMove(e.touches[0].clientY);
     },
     [dragging, onMove]
   );
@@ -135,8 +136,8 @@ export const SplitPane = (props: SplitPaneProps) => {
 
   return (
     <div className={wrapperClasses} ref={splitPaneRef}>
-      <div className={styles['left-pane']} ref={leftRef}>
-        {left}
+      <div className={styles['top-pane']} ref={topRef}>
+        {top}
       </div>
       <div className={styles['divider']}>
         <div
@@ -145,7 +146,7 @@ export const SplitPane = (props: SplitPaneProps) => {
           onTouchStart={onTouchStart}
         ></div>
       </div>
-      <div className={styles['right-pane']}>{right}</div>
+      <div className={styles['bottom-pane']}>{bottom}</div>
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import { AppFooter } from '@/components/AppFooter';
 import { MetadataEditor } from '@/components/MetadataEditor';
 import { PaintingList } from '@/components/PaintingList';
-import { SplitPane } from '@/components/SplitPane';
+import { HorizontalSplitPane, VerticalSplitPane } from '@/components/SplitPane';
 import { useSelector } from '@/utils/store';
 import { Blocks } from 'react-loader-spinner';
+import { MigrationList } from './components/MigrationList';
 import { SplitModal } from './components/SplitModal';
 import styles from './Home.module.scss';
 
@@ -29,10 +30,13 @@ export default function Home() {
       )}
 
       <fieldset disabled={hasOverlay} className={styles['page-wrapper']}>
-        <SplitPane>
-          <MetadataEditor />
+        <HorizontalSplitPane>
+          <VerticalSplitPane>
+            <MetadataEditor className={styles['primary']} />
+            <MigrationList />
+          </VerticalSplitPane>
           <PaintingList />
-        </SplitPane>
+        </HorizontalSplitPane>
         <AppFooter className={styles['footer']} />
       </fieldset>
     </>

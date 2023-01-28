@@ -1,6 +1,10 @@
 import { editorActions } from '@common/store/editor';
 import { metadataActions, MetadataState } from '@common/store/metadata';
 import {
+  getDefaultMigration,
+  migrationsActions,
+} from '@common/store/migrations';
+import {
   getDefaultPainting,
   Painting,
   paintingsActions,
@@ -22,6 +26,7 @@ const { setIcon, setPackFormat, setDescription, setId, setName } =
   metadataActions;
 const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
   paintingsActions;
+const { setMigrations } = migrationsActions;
 const { captureSnapshot } = savedSnapshotActions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
@@ -109,6 +114,14 @@ export async function openZipFile(parentWindow: BrowserWindow) {
                 uuid: paintingUuids[painting.id],
               };
             })
+          )
+        );
+
+        store.dispatch(
+          setMigrations(
+            pack.migrations.map((migration) =>
+              getDefaultMigration(migration.id, migration.pairs)
+            )
           )
         );
 
