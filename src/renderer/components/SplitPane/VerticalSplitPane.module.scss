@@ -8,8 +8,8 @@
 .top-pane {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   justify-content: flex-start;
+  align-items: stretch;
   width: 100%;
   height: calc(100% - 100px);
 
@@ -22,14 +22,18 @@
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
   justify-content: flex-start;
+  align-items: stretch;
   width: 100%;
-  min-height: 100px;
 
   > * {
     width: 100%;
   }
+}
+
+.pane-header {
+  font-size: var(--font-size-2);
+  height: 20px;
 }
 
 .divider {

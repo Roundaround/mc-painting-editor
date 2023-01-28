@@ -18,17 +18,14 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
-      <div className={styles['header']}>Migrations</div>
-      <div className={styles['list']}>
-        {migrations.map((migration, index) => (
-          <Fragment key={migration.id}>
-            <div>{migration.id}</div>
-            {index === migrations.length - 1 ? null : (
-              <hr className={styles['divider']} />
-            )}
-          </Fragment>
-        ))}
-      </div>
+      {migrations.map((migration, index) => (
+        <Fragment key={migration.id}>
+          <div>{migration.id}</div>
+          {index === migrations.length - 1 ? null : (
+            <hr className={styles['divider']} />
+          )}
+        </Fragment>
+      ))}
     </div>
   );
 };

@@ -7,7 +7,7 @@ import React, {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from 'react';
 import styles from './VerticalSplitPane.module.scss';
 
@@ -15,12 +15,14 @@ const MIN_HEIGHT = 100;
 
 interface VerticalSplitPaneProps extends BaseHTMLAttributes<HTMLDivElement> {
   children: [ReactElement, ReactElement];
+  titles: [string, string];
 }
 
 export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
   const {
     children: [top, bottom],
     className: passedClassName,
+    titles,
   } = props;
 
   const splitPaneRef = useRef<HTMLDivElement>(null);
@@ -137,6 +139,7 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
   return (
     <div className={wrapperClasses} ref={splitPaneRef}>
       <div className={styles['top-pane']} ref={topRef}>
+        <div className={styles['pane-header']}>{titles[0]}</div>
         {top}
       </div>
       <div className={styles['divider']}>
@@ -146,7 +149,10 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
           onTouchStart={onTouchStart}
         ></div>
       </div>
-      <div className={styles['bottom-pane']}>{bottom}</div>
+      <div className={styles['bottom-pane']}>
+        <div className={styles['pane-header']}>{titles[1]}</div>
+        {bottom}
+      </div>
     </div>
   );
 };

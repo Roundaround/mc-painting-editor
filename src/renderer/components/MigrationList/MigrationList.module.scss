@@ -1,17 +1,5 @@
 .wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
   padding: var(--size-2);
-}
-
-.header {
-  font-size: var(--font-size-3);
-}
-
-.list {
-  flex: 1 1 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
