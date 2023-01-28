@@ -1,7 +1,7 @@
-import { Checkbox } from '@/components/Checkbox';
-import { CompareSelect } from '@/components/CompareSelect';
-import { NumberInput } from '@/components/NumberInput';
-import { TextInput } from '@/components/TextInput';
+import { Checkbox } from '@/components/input/Checkbox';
+import { CompareSelect } from '@/components/input/CompareSelect';
+import { NumberInput } from '@/components/input/NumberInput';
+import { TextInput } from '@/components/input/TextInput';
 import { useDispatch, useSelector } from '@/utils/store';
 import { filtersActions } from '@/utils/store/filters';
 import { FC, HTMLProps } from 'react';

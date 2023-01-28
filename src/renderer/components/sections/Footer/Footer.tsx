@@ -3,15 +3,15 @@ import { filtersActions, filtersSelectors } from '@/utils/store/filters';
 import { paintingsSelectors } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps, useMemo } from 'react';
-import { InlineButton } from '../InlineButton';
-import styles from './AppFooter.module.scss';
+import { InlineButton } from '../../InlineButton';
+import styles from './Footer.module.scss';
 
 const { selectMatchingPaintings } = filtersSelectors;
 const { showMissingId, showMissingImage } = filtersActions;
 
-interface AppFooterProps extends HTMLProps<HTMLDivElement> {}
+interface FooterProps extends HTMLProps<HTMLDivElement> {}
 
-export const AppFooter: FC<AppFooterProps> = (props) => {
+export const Footer: FC<FooterProps> = (props) => {
   const { className: passedClassName, ...htmlProps } = props;
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);

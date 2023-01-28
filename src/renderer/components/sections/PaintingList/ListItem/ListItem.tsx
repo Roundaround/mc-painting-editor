@@ -1,7 +1,7 @@
-import { Button, ButtonVariant } from '@/components/Button';
-import { NumberInput } from '@/components/NumberInput';
-import { PaintingGrid } from '@/components/PaintingGrid';
-import { TextInput } from '@/components/TextInput';
+import { Button, ButtonVariant } from '@/components/input/Button';
+import { Checkbox } from '@/components/input/Checkbox';
+import { NumberInput } from '@/components/input/NumberInput';
+import { TextInput } from '@/components/input/TextInput';
 import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 import { getPaintingImage } from '@/utils/painting';
 import { useDispatch, useSelector } from '@/utils/store';
@@ -13,8 +13,8 @@ import {
 } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { HTMLProps, useMemo } from 'react';
-import { Checkbox } from '../Checkbox';
-import styles from './PaintingListItem.module.scss';
+import { ImageInput } from './ImageInput';
+import styles from './ListItem.module.scss';
 
 const {
   updatePainting,
@@ -24,7 +24,7 @@ const {
   setPaintingMarked,
 } = paintingsActions;
 
-export interface PaintingListItemProps extends HTMLProps<HTMLDivElement> {
+export interface ListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
 }
 
@@ -33,7 +33,7 @@ interface Issue {
   message: string;
 }
 
-export function PaintingListItem(props: PaintingListItemProps) {
+export function ListItem(props: ListItemProps) {
   const { id, className: passedClassName, ...htmlProps } = props;
 
   const painting = useSelector(
@@ -218,7 +218,7 @@ export function PaintingListItem(props: PaintingListItemProps) {
           }}
         />
       </div>
-      <PaintingGrid
+      <ImageInput
         onClick={() => window.electron.openPaintingFile(id)}
         maxHeight={8}
         maxWidth={8}

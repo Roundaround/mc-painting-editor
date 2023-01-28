@@ -1,9 +1,9 @@
-import { AboutModal } from '@/components/AboutModal';
-import { AppFooter } from '@/components/AppFooter';
-import { MetadataEditor } from '@/components/MetadataEditor';
-import { MigrationList } from '@/components/MigrationList';
-import { PaintingList } from '@/components/PaintingList';
-import { SplitModal } from '@/components/SplitModal';
+import { Footer } from '@/components/sections/Footer';
+import { MetadataEditor } from '@/components/sections/MetadataEditor';
+import { MigrationList } from '@/components/sections/MigrationList';
+import { AboutModal } from '@/components/modals/AboutModal';
+import { SplitModal } from '@/components/modals/SplitModal';
+import { PaintingList } from '@/components/sections/PaintingList';
 import { HorizontalSplitPane, VerticalSplitPane } from '@/components/SplitPane';
 import { useSelector } from '@/utils/store';
 import { migrationsSelectors } from '@common/store/migrations';
@@ -53,7 +53,7 @@ export default function Home() {
           )}
           <PaintingList />
         </HorizontalSplitPane>
-        <AppFooter className={styles['footer']} />
+        <Footer className={styles['footer']} />
       </fieldset>
     </>
   );

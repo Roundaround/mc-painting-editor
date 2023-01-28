@@ -1,5 +1,5 @@
 import { FC, HTMLProps, ReactNode, useMemo } from 'react';
-import { Tooltip, TooltipProps } from '../Tooltip';
+import { Tooltip, TooltipProps } from '../../Tooltip';
 import styles from './Checkbox.module.scss';
 
 type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;

@@ -1,8 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CSSProperties, HTMLProps } from 'react';
-import styles from './PaintingGrid.module.scss';
+import styles from './ImageInput.module.scss';
 
-export interface PaintingGridProps extends HTMLProps<HTMLDivElement> {
+export interface ImageInputProps extends HTMLProps<HTMLDivElement> {
   maxHeight: number;
   maxWidth: number;
   hasImage: boolean;
@@ -11,7 +11,7 @@ export interface PaintingGridProps extends HTMLProps<HTMLDivElement> {
   width: number;
 }
 
-export const PaintingGrid = (props: PaintingGridProps) => {
+export const ImageInput = (props: ImageInputProps) => {
   const {
     maxHeight,
     maxWidth,

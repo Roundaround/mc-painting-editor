@@ -1,5 +1,5 @@
-import { Button } from '@/components/Button';
-import { TextInput } from '@/components/TextInput';
+import { Button } from '@/components/input/Button';
+import { TextInput } from '@/components/input/TextInput';
 import { useDispatch, useSelector } from '@/utils/store';
 import { editorActions } from '@common/store/editor';
 import { FC, HTMLProps, useEffect } from 'react';

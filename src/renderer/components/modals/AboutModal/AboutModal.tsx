@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { Button } from '@/components/input/Button';
 import { useDispatch } from '@/utils/store';
 import { editorActions } from '@common/store/editor';
 import { FC, HTMLProps, useEffect } from 'react';

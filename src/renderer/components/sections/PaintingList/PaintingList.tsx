@@ -1,12 +1,12 @@
-import { Button, ButtonVariant } from '@/components/Button';
-import { Filters } from '@/components/Filters';
-import { PaintingListItem } from '@/components/PaintingListItem';
+import { Button, ButtonVariant } from '@/components/input/Button';
 import { TooltipDirection } from '@/components/Tooltip';
 import { useDispatch, useSelector } from '@/utils/store';
 import { filtersActions, filtersSelectors } from '@/utils/store/filters';
 import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps, useState } from 'react';
+import { Filters } from './Filters';
+import { ListItem } from './ListItem';
 import styles from './PaintingList.module.scss';
 
 const { resetAll } = filtersActions;
@@ -97,7 +97,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         )}
         {filteredPaintings.map((id, index) => (
           <Fragment key={id}>
-            <PaintingListItem id={id} />
+            <ListItem id={id} />
             {index === filteredPaintings.length - 1 ? null : (
               <hr className={styles['divider']} />
             )}

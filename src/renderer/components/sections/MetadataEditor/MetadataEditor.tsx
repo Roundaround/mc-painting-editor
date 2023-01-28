@@ -1,5 +1,5 @@
-import { IconInput } from '@/components/IconInput';
-import { TextInput } from '@/components/TextInput';
+import { IconInput } from '@/components/input/IconInput';
+import { TextInput } from '@/components/input/TextInput';
 import { useDispatch, useSelector } from '@/utils/store';
 import { metadataActions } from '@common/store/metadata';
 import { FC, HTMLProps } from 'react';
