@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from '@/utils/store';
 import {
   arePaintingsEqual,
   getDefaultPainting,
+  getIssuesForPainting,
   paintingsActions,
   paintingsSelectors,
 } from '@common/store/paintings';
@@ -26,11 +27,6 @@ const {
 
 export interface ListItemProps extends HTMLProps<HTMLDivElement> {
   id: string;
-}
-
-interface Issue {
-  severity: 'error' | 'warning';
-  message: string;
 }
 
 export function ListItem(props: ListItemProps) {
@@ -59,58 +55,7 @@ export function ListItem(props: ListItemProps) {
   }, [painting.width, painting.height, painting.path]);
 
   const issues = useMemo(() => {
-    const result: Issue[] = [];
-
-    if (!painting.id) {
-      result.push({
-        severity: 'error',
-        message: 'Missing ID',
-      });
-    }
-
-    if (!painting.path) {
-      result.push({
-        severity: 'error',
-        message: 'Missing image',
-      });
-    }
-
-    if (
-      !!painting.path &&
-      (painting.pixelWidth < painting.width * 16 ||
-        painting.pixelHeight < painting.height * 16)
-    ) {
-      result.push({
-        severity: 'warning',
-        message:
-          'Image is too small. Min recommended resolution is 16 pixels per block.',
-      });
-    }
-
-    if (
-      !!painting.path &&
-      (painting.pixelWidth > painting.width * 160 ||
-        painting.pixelHeight > painting.height * 160)
-    ) {
-      result.push({
-        severity: 'warning',
-        message:
-          'Image is unnecessarily large. Max recommended resolution is 160 pixels per block.',
-      });
-    }
-
-    if (
-      !!painting.path &&
-      painting.pixelWidth * painting.height !==
-        painting.pixelHeight * painting.width
-    ) {
-      result.push({
-        severity: 'warning',
-        message: 'Image aspect ratio does not match painting aspect ratio.',
-      });
-    }
-
-    return result;
+    return getIssuesForPainting(painting);
   }, [
     painting.id,
     painting.path,

@@ -19,6 +19,9 @@ export const Footer: FC<FooterProps> = (props) => {
   const filteredPaintings = useSelector((state) =>
     selectMatchingPaintings(state, paintings)
   );
+  const paintingsWithWarnings = useSelector(
+    paintingsSelectors.selectWithWarnings
+  );
 
   const paintingsWithoutImage = useMemo(() => {
     return paintings.filter((painting) => !painting.path).length;
@@ -41,37 +44,46 @@ export const Footer: FC<FooterProps> = (props) => {
       <span className={styles['spacer']}></span>
       {!paintingsWithoutId ? null : (
         <InlineButton
-          className={styles['error']}
+          className={styles['stat'] + ' ' + styles['error']}
           onClick={() => {
             dispatch(showMissingId());
           }}
         >
           <FontAwesomeIcon icon={'triangle-exclamation'} />
           <span>Needs ID:</span>
-          <span className={styles['stat']}>{paintingsWithoutId}</span>
+          <span className={styles['number']}>{paintingsWithoutId}</span>
         </InlineButton>
       )}
       {!paintingsWithoutImage ? null : (
         <InlineButton
-          className={styles['error']}
+          className={styles['stat'] + ' ' + styles['error']}
           onClick={() => {
             dispatch(showMissingImage());
           }}
         >
           <FontAwesomeIcon icon={'triangle-exclamation'} />
           <span>Needs image:</span>
-          <span className={styles['stat']}>{paintingsWithoutImage}</span>
+          <span className={styles['number']}>{paintingsWithoutImage}</span>
         </InlineButton>
       )}
-      {filteredPaintings.length === paintingCount ? null : (
-        <span>
-          Matching filters:&nbsp;
-          <span className={styles['stat']}>{filteredPaintings.length}</span>
+      {paintingsWithWarnings.length === 0 ? null : (
+        <span className={styles['stat']}>
+          <FontAwesomeIcon icon={'triangle-exclamation'} />
+          <span>With warnings:</span>
+          <span className={styles['number']}>
+            {paintingsWithWarnings.length}
+          </span>
         </span>
       )}
-      <span>
-        Total paintings:&nbsp;
-        <span className={styles['stat']}>{paintingCount}</span>
+      {filteredPaintings.length === paintingCount ? null : (
+        <span className={styles['stat']}>
+          <span>Matching filters:</span>
+          <span className={styles['number']}>{filteredPaintings.length}</span>
+        </span>
+      )}
+      <span className={styles['stat']}>
+        <span>Total paintings:</span>
+        <span className={styles['number']}>{paintingCount}</span>
       </span>
     </div>
   );

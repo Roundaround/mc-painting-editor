@@ -98,9 +98,21 @@ export const paintingsReducer = paintingsSlice.reducer;
 export const paintingsActions = paintingsSlice.actions;
 
 export const paintingsInitialState = paintingsAdapter.getInitialState();
-export const paintingsSelectors = paintingsAdapter.getSelectors<{
-  paintings: PaintingsState;
-}>((state) => state.paintings);
+export const paintingsSelectors = {
+  ...paintingsAdapter.getSelectors<{
+    paintings: PaintingsState;
+  }>((state) => state.paintings),
+  selectWithWarnings: (state: { paintings: PaintingsState }) => {
+    return paintingsSelectors
+      .selectAll(state)
+      .filter(
+        (painting) =>
+          getIssuesForPainting(painting).filter(
+            (issue) => issue.severity === 'warning'
+          ).length > 0
+      );
+  },
+};
 
 export type PaintingsState = ReturnType<typeof paintingsReducer>;
 
@@ -117,4 +129,64 @@ export function arePaintingsEqual(a: Painting, b: Painting) {
     a.width === b.width &&
     removeCacheBuster(a.path || '') === removeCacheBuster(b.path || '')
   );
+}
+
+export interface PaintingIssue {
+  severity: 'error' | 'warning';
+  message: string;
+}
+
+export function getIssuesForPainting(painting: Painting) {
+  const result: PaintingIssue[] = [];
+
+  if (!painting.id) {
+    result.push({
+      severity: 'error',
+      message: 'Missing ID',
+    });
+  }
+
+  if (!painting.path) {
+    result.push({
+      severity: 'error',
+      message: 'Missing image',
+    });
+  }
+
+  if (
+    !!painting.path &&
+    (painting.pixelWidth < painting.width * 16 ||
+      painting.pixelHeight < painting.height * 16)
+  ) {
+    result.push({
+      severity: 'warning',
+      message:
+        'Image is too small. Min recommended resolution is 16 pixels per block.',
+    });
+  }
+
+  if (
+    !!painting.path &&
+    (painting.pixelWidth > painting.width * 160 ||
+      painting.pixelHeight > painting.height * 160)
+  ) {
+    result.push({
+      severity: 'warning',
+      message:
+        'Image is unnecessarily large. Max recommended resolution is 160 pixels per block.',
+    });
+  }
+
+  if (
+    !!painting.path &&
+    painting.pixelWidth * painting.height !==
+      painting.pixelHeight * painting.width
+  ) {
+    result.push({
+      severity: 'warning',
+      message: 'Image aspect ratio does not match painting aspect ratio.',
+    });
+  }
+
+  return result;
 }
