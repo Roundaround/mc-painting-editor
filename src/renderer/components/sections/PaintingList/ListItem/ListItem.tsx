@@ -202,7 +202,7 @@ export function ListItem(props: ListItemProps) {
             direction: TooltipDirection.LEFT,
           }}
         >
-          <FontAwesomeIcon icon={'trash'} />
+          <FontAwesomeIcon icon="trash" />
         </Button>
 
         <div className={styles['icon-column-gap']}></div>
