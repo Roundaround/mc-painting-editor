@@ -23,7 +23,6 @@ const defaultProps = {
   inline: false,
   directTabbable: true,
   noWrap: false,
-  wide: false,
 };
 
 export interface TooltipProps {
@@ -34,7 +33,7 @@ export interface TooltipProps {
   inline?: boolean;
   directTabbable?: boolean;
   noWrap?: boolean;
-  wide?: boolean;
+  force?: boolean;
 }
 
 export function Tooltip(props: TooltipProps & typeof defaultProps) {
@@ -46,7 +45,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     content,
     directTabbable,
     noWrap,
-    wide,
+    force,
   } = props;
 
   const [boundingRect, updateBoundingRect, anchorRef] =
@@ -62,7 +61,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   const [focused, setFocused] = useState(false);
 
   useEffect(() => {
-    if (hovered || focused) {
+    if (force || hovered || focused) {
       updateBoundingRect();
       timeout.current = setTimeout(() => {
         setActive(true);
@@ -71,7 +70,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
       clearInterval(timeout.current);
       setActive(false);
     }
-  }, [hovered, focused, updateBoundingRect, updateContentRect, delay]);
+  }, [force, hovered, focused, updateBoundingRect, updateContentRect, delay]);
 
   useEffect(() => {
     updateContentRect();
@@ -93,13 +92,10 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     if (noWrap) {
       result.push('tooltip--nowrap');
     }
-    if (wide) {
-      result.push('tooltip--wide');
-    }
     return result
       .map((name) => styles[name])
-      .concat('test')
-      .join(' ');
+      .join(' ')
+      .trim();
   }, [direction, noWrap]);
 
   const { top, left } = useMemo(() => {

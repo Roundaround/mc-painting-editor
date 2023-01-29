@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface EditorState {
-  name: string;
-  version: string;
+  appInfo: {
+    name: string;
+    version: string;
+  };
   filename: string;
   dirty: boolean;
   overlay: false | 'loading' | 'splitting' | 'about';
@@ -13,8 +15,10 @@ export interface EditorState {
 }
 
 export const editorInitialState: EditorState = {
-  name: '',
-  version: '',
+  appInfo: {
+    name: '',
+    version: '',
+  },
   filename: '',
   dirty: false,
   overlay: false,
@@ -32,8 +36,8 @@ export const editorSlice = createSlice({
       state,
       action: PayloadAction<{ name: string; version: string }>
     ) => {
-      state.name = action.payload.name;
-      state.version = action.payload.version;
+      state.appInfo.name = action.payload.name;
+      state.appInfo.version = action.payload.version;
     },
     setFilename: (state, action: PayloadAction<string>) => {
       state.filename = action.payload;

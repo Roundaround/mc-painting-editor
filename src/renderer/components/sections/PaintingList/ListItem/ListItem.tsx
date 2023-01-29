@@ -91,7 +91,6 @@ export function ListItem(props: ListItemProps) {
                 content={issue.message}
                 direction={TooltipDirection.RIGHT}
                 noWrap={issue.message.length < 20}
-                wide={issue.message.length >= 20}
                 key={issue.message}
               >
                 <div className={classes}>

@@ -147,6 +147,7 @@ const helpTemplate: MenuItemConstructorOptions[] = [
     submenu: [
       {
         label: 'About',
+        accelerator: 'CmdOrCtrl+H',
         click: (menuItem, focusedWindow, event) => {
           if (!focusedWindow) {
             return;

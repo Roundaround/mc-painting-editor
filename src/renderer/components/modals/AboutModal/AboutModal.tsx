@@ -2,16 +2,19 @@ import { Button } from '@/components/input/Button';
 import { useDispatch, useSelector } from '@/utils/store';
 import { editorActions } from '@common/store/editor';
 import { FC, HTMLProps, useEffect } from 'react';
+import Github from '@/img/github.svg';
+import Kofi from '@/img/kofi.svg';
+import Modrinth from '@/img/modrinth.svg';
 
 import styles from './AboutModal.module.scss';
+import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 
 const { clearOverlay } = editorActions;
 
 interface AboutModalProps extends HTMLProps<HTMLDivElement> {}
 
 export const AboutModal: FC<AboutModalProps> = (props) => {
-  const appName = useSelector((state) => state.editor.name);
-  const appVersion = useSelector((state) => state.editor.version);
+  const appInfo = useSelector((state) => state.editor.appInfo);
 
   const dispatch = useDispatch();
 
@@ -32,8 +35,47 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
   return (
     <div className={styles['modal']}>
       <div className={styles['section']}>
-        <div className={styles['name']}>{appName}</div>
-        <div className={styles['version']}>v{appVersion}</div>
+        <div className={styles['name']}>{appInfo.name}</div>
+        <div>Version {appInfo.version}</div>
+        <div>Made with ❤️ by Roundaround</div>
+      </div>
+      <div className={styles['row']}>
+        <Tooltip
+          content="Check out the source code on GitHub"
+          direction={TooltipDirection.TOP}
+        >
+          <a
+            className={styles['link']}
+            target="_blank"
+            href="https://github.com/Roundaround/mc-painting-editor"
+          >
+            <Github />
+          </a>
+        </Tooltip>
+        <Tooltip
+          content="View all my Minecraft mods on Modrinth"
+          direction={TooltipDirection.TOP}
+        >
+          <a
+            className={styles['link']}
+            target="_blank"
+            href="https://modrinth.com/user/Roundaround"
+          >
+            <Modrinth />
+          </a>
+        </Tooltip>
+        <Tooltip
+          content="Support me by buying me a coffee!"
+          direction={TooltipDirection.TOP}
+        >
+          <a
+            className={styles['link']}
+            target="_blank"
+            href="https://ko-fi.com/roundaround"
+          >
+            <Kofi />
+          </a>
+        </Tooltip>
       </div>
       <div className={styles['section']}>
         <Button

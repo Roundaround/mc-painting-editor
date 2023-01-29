@@ -27,6 +27,7 @@
     "@electron-forge/maker-zip": "^6.0.4",
     "@electron-forge/plugin-webpack": "^6.0.4",
     "@electron-forge/publisher-github": "^6.0.4",
+    "@svgr/webpack": "^6.5.1",
     "@types/adm-zip": "^0.5.0",
     "@types/node": "^18.11.16",
     "@types/react": "^18.0.26",

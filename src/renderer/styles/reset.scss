@@ -30,7 +30,6 @@ div:global(#root) {
 *::before,
 *::after {
   box-sizing: border-box;
-  cursor: default;
 }
 
 :where(:focus-visible) {

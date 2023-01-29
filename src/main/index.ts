@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, protocol } from 'electron';
+import { app, BrowserWindow, ipcMain, protocol, shell } from 'electron';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
@@ -61,6 +61,12 @@ const createWindow = (): void => {
         mainWindow.webContents.openDevTools();
       }
     }
+  });
+
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    // open url in a browser and prevent default
+    shell.openExternal(url);
+    return { action: 'deny' };
   });
 
   createStore(mainWindow);

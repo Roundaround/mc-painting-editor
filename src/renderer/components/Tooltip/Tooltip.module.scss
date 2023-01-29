@@ -20,7 +20,7 @@
   width: 0;
   top: 50%;
   left: 50%;
-  z-index: 10;
+  z-index: 1001;
 }
 
 .tooltip {
@@ -37,6 +37,9 @@
   padding-inline: var(--size-3);
   padding-block: var(--size-2);
   box-shadow: var(--shadow-3);
+  width: max-content;
+  max-width: 32ch;
+  text-align: center;
 
   &::before {
     content: ' ';
@@ -105,8 +108,4 @@
 
 .tooltip--nowrap {
   white-space: nowrap;
-}
-
-.tooltip--wide {
-  min-width: 32ch;
 }

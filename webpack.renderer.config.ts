@@ -34,6 +34,18 @@ export const rendererConfig: Configuration = {
           },
         ],
       },
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: [
+          {
+            loader: '@svgr/webpack',
+            options: {
+              typescript: true,
+            },
+          },
+        ],
+      },
       ...rules,
     ],
   },
@@ -63,6 +75,7 @@ export const rendererConfig: Configuration = {
       '.ttf',
       '.eot',
       '.json',
+      '.svg',
     ],
   },
 };
