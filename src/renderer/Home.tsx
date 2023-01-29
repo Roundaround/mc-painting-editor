@@ -1,8 +1,8 @@
+import { AboutModal } from '@/components/modals/AboutModal';
+import { SplitModal } from '@/components/modals/SplitModal';
 import { Footer } from '@/components/sections/Footer';
 import { MetadataEditor } from '@/components/sections/MetadataEditor';
 import { MigrationList } from '@/components/sections/MigrationList';
-import { AboutModal } from '@/components/modals/AboutModal';
-import { SplitModal } from '@/components/modals/SplitModal';
 import { PaintingList } from '@/components/sections/PaintingList';
 import { HorizontalSplitPane, VerticalSplitPane } from '@/components/SplitPane';
 import { useSelector } from '@/utils/store';
@@ -44,7 +44,7 @@ export default function Home() {
       <fieldset disabled={hasOverlay} className={styles['page-wrapper']}>
         <HorizontalSplitPane>
           {hasMigrations ? (
-            <VerticalSplitPane titles={['Metadata', 'Migrations']}>
+            <VerticalSplitPane>
               <MetadataEditor />
               <MigrationList />
             </VerticalSplitPane>

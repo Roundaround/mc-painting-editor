@@ -7,6 +7,10 @@
   overflow-y: auto;
 }
 
+.title {
+  font-size: var(--font-size-2);
+}
+
 .divider {
   flex: 0 0 auto;
   height: 1px;

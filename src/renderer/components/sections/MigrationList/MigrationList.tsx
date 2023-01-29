@@ -18,6 +18,7 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
+      <div className={styles['title']}>Migrations</div>
       {migrations.map((migration, index) => (
         <Fragment key={migration.id}>
           <div>{migration.id}</div>

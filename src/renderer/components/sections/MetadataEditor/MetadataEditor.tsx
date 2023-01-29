@@ -26,6 +26,7 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
+      <div className={styles['title']}>Metadata</div>
       <TextInput
         id="id"
         label="ID"
