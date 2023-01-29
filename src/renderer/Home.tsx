@@ -25,7 +25,7 @@ export default function Home() {
     <>
       {!isLoading ? null : (
         <div className={styles['overlay']}>
-          <Blocks height={200} width={200} />
+          <Blocks height={200} width={200} wrapperClass={styles['loader']} />
         </div>
       )}
 

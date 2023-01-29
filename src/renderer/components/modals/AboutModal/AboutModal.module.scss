@@ -43,6 +43,7 @@ a.link {
   display: flex;
   justify-content: center;
   align-items: center;
+  transition: color 0.15s var(--ease-in-out-3);
 
   &:hover {
     color: var(--text-1);

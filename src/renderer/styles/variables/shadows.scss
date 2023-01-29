@@ -1,6 +1,6 @@
 :root {
-  --shadow-color: 220 3% 15%;
-  --shadow-strength: 1%;
+  --shadow-color: 220 40% 2%;
+  --shadow-strength: 25%;
 
   --shadow-1: 0 1px 2px -1px hsl(var(--shadow-color) /
         calc(var(--shadow-strength) + 9%));
@@ -46,6 +46,40 @@
     hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
   --inner-shadow-4: inset 0 2px 14px 0
     hsl(var(--shadow-color) / calc(var(--shadow-strength) + 9%));
+    
+  --filter-shadow-1: drop-shadow(0 1px 2px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 9%)));
+  --filter-shadow-2: drop-shadow(0 3px 5px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 7px 14px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)));
+  --filter-shadow-3: drop-shadow(0 -1px 3px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 2%)))
+    drop-shadow(0 1px 2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 2%)))
+    drop-shadow(0 2px 5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)))
+    drop-shadow(0 4px 12px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)))
+    drop-shadow(0 12px 15px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%)));
+  --filter-shadow-4: drop-shadow(0 -2px 5px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 2%)))
+    drop-shadow(0 1px 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 2px 2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 5px 5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)))
+    drop-shadow(0 9px 9px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)))
+    drop-shadow(0 16px 16px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%)));
+  --filter-shadow-5: drop-shadow(0 -1px 2px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 2%)))
+    drop-shadow(0 2px 1px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 5px 5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 10px 10px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)))
+    drop-shadow(0 20px 20px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)))
+    drop-shadow(0 40px 40px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%)));
+  --filter-shadow-6: drop-shadow(0 -1px 2px hsl(var(--shadow-color) /
+          calc(var(--shadow-strength) + 2%)))
+    drop-shadow(0 3px 2px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 7px 5px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 3%)))
+    drop-shadow(0 12px 10px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 4%)))
+    drop-shadow(0 22px 18px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 5%)))
+    drop-shadow(0 41px 33px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 6%)))
+    drop-shadow(0 100px 80px hsl(var(--shadow-color) / calc(var(--shadow-strength) + 7%)));
 }
 
 @media (prefers-color-scheme: dark) {
