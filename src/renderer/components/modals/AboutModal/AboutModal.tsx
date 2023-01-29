@@ -1,13 +1,13 @@
 import { Button } from '@/components/input/Button';
-import { useDispatch, useSelector } from '@/utils/store';
-import { editorActions } from '@common/store/editor';
-import { FC, HTMLProps, useEffect } from 'react';
+import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 import Github from '@/img/github.svg';
 import Kofi from '@/img/kofi.svg';
 import Modrinth from '@/img/modrinth.svg';
+import { useDispatch, useSelector } from '@/utils/store';
+import { editorActions } from '@common/store/editor';
+import { FC, HTMLProps, useEffect } from 'react';
 
 import styles from './AboutModal.module.scss';
-import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 
 const { clearOverlay } = editorActions;
 
@@ -43,6 +43,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
         <Tooltip
           content="Check out the source code on GitHub"
           direction={TooltipDirection.TOP}
+          directTabbable={false}
         >
           <a
             className={styles['link']}
@@ -55,6 +56,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
         <Tooltip
           content="View all my Minecraft mods on Modrinth"
           direction={TooltipDirection.TOP}
+          directTabbable={false}
         >
           <a
             className={styles['link']}
@@ -67,6 +69,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
         <Tooltip
           content="Support me by buying me a coffee!"
           direction={TooltipDirection.TOP}
+          directTabbable={false}
         >
           <a
             className={styles['link']}
