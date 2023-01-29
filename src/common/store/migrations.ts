@@ -7,15 +7,18 @@ import {
 
 export interface Migration {
   id: string;
+  description: string;
   pairs: [string, string][];
   uuid: string; // For maintaining tracking in React
 }
 
 export const getDefaultMigration = (
   id = '',
+  description = '',
   pairs: [string, string][] = []
 ): Migration => ({
   id: id,
+  description: description,
   pairs: pairs,
   uuid: nanoid(),
 });
@@ -31,10 +34,17 @@ export const migrationsSlice = createSlice({
     addMigration: migrationsAdapter.addOne,
     createMigration: (
       state,
-      action: PayloadAction<{ id: string; pairs: [string, string][] }>
+      action: PayloadAction<{
+        id: string;
+        description: string;
+        pairs: [string, string][];
+      }>
     ) => {
-      const { id, pairs } = action.payload;
-      return migrationsAdapter.addOne(state, getDefaultMigration(id, pairs));
+      const { id, description, pairs } = action.payload;
+      return migrationsAdapter.addOne(
+        state,
+        getDefaultMigration(id, description, pairs)
+      );
     },
     upsertMigration: migrationsAdapter.upsertOne,
     updateMigration: migrationsAdapter.updateOne,

@@ -9,7 +9,7 @@
 
 .title {
   font-size: var(--font-size-3);
-  margin-bottom: var(--size-1);
+  margin-bottom: var(--size-3);
 }
 
 .migration {
@@ -22,7 +22,32 @@
 .info {
   display: flex;
   flex-direction: column;
-  gap: var(--size-000);
+  line-height: 1.1;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--size-2);
+}
+
+.description {
+  background-color: var(--accent);
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-round);
+  width: 2rem;
+  padding: 0;
+  aspect-ratio: 1;
+  color: var(--text-1);
+
+  > svg {
+    width: 100%;
+  }
 }
 
 .delete-button {

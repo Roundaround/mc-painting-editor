@@ -3,6 +3,7 @@ import { metadataActions, MetadataState } from '@common/store/metadata';
 import {
   getDefaultMigration,
   migrationsActions,
+  migrationsSelectors,
 } from '@common/store/migrations';
 import {
   getDefaultPainting,
@@ -120,7 +121,11 @@ export async function openZipFile(parentWindow: BrowserWindow) {
         store.dispatch(
           setMigrations(
             pack.migrations.map((migration) =>
-              getDefaultMigration(migration.id, migration.pairs)
+              getDefaultMigration(
+                migration.id,
+                migration.description,
+                migration.pairs
+              )
             )
           )
         );
@@ -343,6 +348,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
       migrations: [
         {
           id: new Date().toISOString(),
+          description: `Split from "${baseMetadata.name}"`,
           pairs: paintings.map((painting) => [
             `${store.getState().metadata.id}:${painting.id}`,
             `${metadata.id}:${painting.id}`,
@@ -412,10 +418,12 @@ export async function saveZipFile(
     zip.addFile('pack.mcmeta', Buffer.from(JSON.stringify(mcmeta, null, 2)));
 
     const paintings = paintingsSelectors.selectAll(state);
+    const migrations = migrationsSelectors.selectAll(state);
     const pack = {
       id: state.metadata.id,
       name: state.metadata.name,
       paintings: paintings.map(({ uuid, path, ...painting }) => painting),
+      migrations: migrations.map(({ uuid, ...migration }) => migration),
     };
     zip.addFile(
       'custompaintings.json',

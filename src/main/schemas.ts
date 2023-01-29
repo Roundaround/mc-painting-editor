@@ -11,6 +11,7 @@ export const paintingSchema = z.object({
 
 export const migrationSchema = z.object({
   id: z.string().optional().default(''),
+  description: z.string().optional().default(''),
   pairs: z.array(z.tuple([z.string(), z.string()])).default([]),
 });
 

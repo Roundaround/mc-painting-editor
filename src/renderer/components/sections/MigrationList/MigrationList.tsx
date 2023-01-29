@@ -1,5 +1,5 @@
 import { Button, ButtonVariant } from '@/components/input/Button';
-import { TooltipDirection } from '@/components/Tooltip';
+import { Tooltip, TooltipDirection } from '@/components/Tooltip';
 import { useDispatch, useSelector } from '@/utils/store';
 import {
   migrationsActions,
@@ -36,21 +36,33 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
               <div>{migration.id}</div>
               <div>{migration.pairs.length} painting(s)</div>
             </div>
-            <Button
-              className={styles['delete-button']}
-              onClick={() => {
-                if (confirm('Are you sure? This cannot be undone.')) {
-                  dispatch(removeMigration(migration.uuid));
-                }
-              }}
-              variant={ButtonVariant.ICON}
-              tooltip={{
-                content: 'Remove',
-                direction: TooltipDirection.RIGHT,
-              }}
-            >
-              <FontAwesomeIcon icon="trash" />
-            </Button>
+            <div className={styles['actions']}>
+              {!migration.description ? null : (
+                <Tooltip
+                  content={migration.description}
+                  direction={TooltipDirection.RIGHT}
+                >
+                  <div className={styles['description']}>
+                    <FontAwesomeIcon icon="comment-dots" />
+                  </div>
+                </Tooltip>
+              )}
+              <Button
+                className={styles['delete-button']}
+                onClick={() => {
+                  if (confirm('Are you sure? This cannot be undone.')) {
+                    dispatch(removeMigration(migration.uuid));
+                  }
+                }}
+                variant={ButtonVariant.ICON}
+                tooltip={{
+                  content: 'Remove',
+                  direction: TooltipDirection.RIGHT,
+                }}
+              >
+                <FontAwesomeIcon icon="trash" />
+              </Button>
+            </div>
           </div>
           {index === migrations.length - 1 ? null : (
             <hr className={styles['divider']} />
