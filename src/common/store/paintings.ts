@@ -151,27 +151,53 @@ export function getIssuesForPainting(painting: Painting) {
     });
   }
 
+  const minWidth = painting.width * 16;
+  const minHeight = painting.height * 16;
+  const maxWidth = painting.width * 160;
+  const maxHeight = painting.height * 160;
+
   if (
     !!painting.path &&
-    (painting.pixelWidth < painting.width * 16 ||
-      painting.pixelHeight < painting.height * 16)
+    (painting.pixelWidth < minWidth || painting.pixelHeight < minHeight)
   ) {
     result.push({
       severity: 'warning',
       message:
-        'Image is too small. Min recommended resolution is 16 pixels per block.',
+        `Image is too small ` +
+        `(${painting.pixelWidth} x ${painting.pixelHeight}). ` +
+        `Min recommended resolution is 16 pixels per block ` +
+        `(${minWidth} x ${minHeight}).`,
     });
   }
 
   if (
     !!painting.path &&
-    (painting.pixelWidth > painting.width * 160 ||
+    (painting.pixelWidth > maxWidth ||
       painting.pixelHeight > painting.height * 160)
   ) {
     result.push({
       severity: 'warning',
       message:
-        'Image is unnecessarily large. Max recommended resolution is 160 pixels per block.',
+        `Image is unnecessarily large ` +
+        `(${painting.pixelWidth} x ${painting.pixelHeight}). ` +
+        `Max recommended resolution is 160 pixels per block ` +
+        `(${maxWidth} x ${maxHeight}).`,
+    });
+  }
+
+  // Hard cap at 2k resolution, because the game can't handle larger images
+  const hardMaxWidth = 2560;
+  const hardMaxHeight = 2560;
+  if (
+    !!painting.path &&
+    (painting.pixelWidth > hardMaxWidth || painting.pixelHeight > hardMaxHeight)
+  ) {
+    result.push({
+      severity: 'error',
+      message:
+        `Image is too large ` +
+        `(${painting.pixelWidth} x ${painting.pixelHeight}). ` +
+        `Max supported resolution is 2560 x 2560.`,
     });
   }
 
@@ -182,7 +208,9 @@ export function getIssuesForPainting(painting: Painting) {
   ) {
     result.push({
       severity: 'warning',
-      message: 'Image aspect ratio does not match painting aspect ratio.',
+      message:
+        'Image aspect ratio does not match painting aspect ratio. ' +
+        'This may cause the painting to be stretched or squished.',
     });
   }
 
