@@ -4,8 +4,10 @@ import { paintingsSelectors } from '@common/store/paintings';
 import { configureStore, PayloadAction } from '@reduxjs/toolkit';
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 
-export function createStore(mainWindow: BrowserWindow) {
-  const newStore = configureStore({
+export let store: MainStore;
+
+function createStore(mainWindow: BrowserWindow) {
+  return configureStore({
     reducer: { ...reducers },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware()
@@ -16,21 +18,28 @@ export function createStore(mainWindow: BrowserWindow) {
           })
         ),
   });
+}
 
+export function getOrCreateStore(mainWindow: BrowserWindow) {
+  if (store) {
+    return store;
+  }
+
+  store = createStore(mainWindow);
+  
   ipcMain.on(
     'reduxAction',
     (event, action: PayloadAction<unknown, string, any>) => {
-      newStore.dispatch(action);
+      store.dispatch(action);
     }
   );
 
-  store = newStore;
-  newStore.subscribe(() => {
+  store.subscribe(() => {
     updateTitleFromStore(mainWindow);
     updateBatchActionsFromStore();
   });
 
-  return newStore;
+  return store;
 }
 
 export function updateTitleFromStore(mainWindow: BrowserWindow) {
@@ -75,5 +84,3 @@ export function updateAppInfoInStore() {
 export type MainStore = ReturnType<typeof createStore>;
 export type RootState = ReturnType<MainStore['getState']>;
 export type Dispatch = MainStore['dispatch'];
-
-export let store: MainStore;

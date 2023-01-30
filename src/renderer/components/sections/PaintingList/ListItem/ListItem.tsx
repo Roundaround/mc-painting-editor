@@ -13,6 +13,7 @@ import {
   paintingsSelectors,
 } from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EntityId } from '@reduxjs/toolkit';
 import { HTMLProps, useMemo } from 'react';
 import { ImageInput } from './ImageInput';
 import styles from './ListItem.module.scss';
@@ -25,8 +26,8 @@ const {
   setPaintingMarked,
 } = paintingsActions;
 
-export interface ListItemProps extends HTMLProps<HTMLDivElement> {
-  id: string;
+export interface ListItemProps extends Omit<HTMLProps<HTMLDivElement>, 'id'> {
+  id: EntityId;
 }
 
 export function ListItem(props: ListItemProps) {

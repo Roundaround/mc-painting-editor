@@ -22,7 +22,7 @@ import url from 'url';
 import { mcmetaSchema, packSchema } from './schemas';
 import { store } from './store';
 
-const { setLoading, setFilename, clearOverlay } = editorActions;
+const { setLoading, setFilename, clearOverlay, setDirty } = editorActions;
 const { setIcon, setPackFormat, setDescription, setId, setName } =
   metadataActions;
 const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
@@ -395,12 +395,50 @@ export async function saveZipFile(
   }
 
   let filename = store.getState().editor.filename;
+  const prevFilename = filename;
+
   if (!filename || requestNewFilename) {
     filename = await getCurrentSaveFilename(parentWindow);
   }
 
   if (!filename) {
     return;
+  }
+
+  if (filename === prevFilename) {
+    // Attempting to overwrite, so warn user overwrite is permanent
+    const result = await dialog.showMessageBox(parentWindow, {
+      type: 'warning',
+      message: 'Overwrite file?',
+      detail: `Are you sure you want to overwrite "${filename}"? This cannot be undone.`,
+      buttons: ['Continue without backing up', 'Backup first', 'Cancel'],
+      defaultId: 0,
+      cancelId: 2,
+    });
+
+    if (result.response === 2) {
+      return;
+    }
+
+    if (result.response === 1) {
+      const backupFilename = `${filename}.bak`;
+      try {
+        await fs.copyFile(filename, backupFilename);
+      } catch (err) {
+        const result = await dialog.showMessageBox(parentWindow, {
+          type: 'error',
+          message: 'Backup failed',
+          detail: `Failed to backup file to "${backupFilename}". Continue without backup?`,
+          buttons: ['Continue', 'Cancel'],
+          defaultId: 0,
+          cancelId: 1,
+        });
+
+        if (result.response === 1) {
+          return;
+        }
+      }
+    }
   }
 
   try {
@@ -448,7 +486,8 @@ export async function saveZipFile(
 
     zip.writeZip(filename);
     store.dispatch(setFilename(filename));
-    store.dispatch(captureSnapshot(store.getState()));
+    store.dispatch(captureSnapshot(state));
+    store.dispatch(setDirty(false));
   } finally {
     store.dispatch(clearOverlay());
   }

@@ -14,7 +14,7 @@ import {
 } from './files';
 import { registerMenu } from './menu';
 import {
-  createStore,
+  getOrCreateStore,
   updateAppInfoInStore,
   updateTitleFromStore,
 } from './store';
@@ -69,7 +69,7 @@ const createWindow = (): void => {
     return { action: 'deny' };
   });
 
-  createStore(mainWindow);
+  getOrCreateStore(mainWindow);
 };
 
 // This method will be called when Electron has finished

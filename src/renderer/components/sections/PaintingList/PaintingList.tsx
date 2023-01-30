@@ -2,7 +2,11 @@ import { Button, ButtonVariant } from '@/components/input/Button';
 import { TooltipDirection } from '@/components/Tooltip';
 import { useDispatch, useSelector } from '@/utils/store';
 import { filtersActions, filtersSelectors } from '@/utils/store/filters';
-import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
+import {
+  getDefaultPainting,
+  paintingsActions,
+  paintingsSelectors,
+} from '@common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps, useState } from 'react';
 import { Filters } from './Filters';
@@ -76,7 +80,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           </Button>
           <Button
             onClick={() => {
-              dispatch(paintingsActions.createPainting());
+              dispatch(paintingsActions.addPainting(getDefaultPainting()));
             }}
             variant={ButtonVariant.ICON}
             tooltip={{

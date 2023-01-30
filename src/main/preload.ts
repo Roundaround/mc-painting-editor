@@ -1,4 +1,4 @@
-import { PayloadAction } from '@reduxjs/toolkit';
+import { EntityId, PayloadAction } from '@reduxjs/toolkit';
 import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
@@ -8,7 +8,7 @@ const api = {
   openIconFile(): Promise<void> {
     return ipcRenderer.invoke('openIconFile');
   },
-  openPaintingFile(paintingId: string): Promise<void> {
+  openPaintingFile(paintingId: EntityId): Promise<void> {
     return ipcRenderer.invoke('openPaintingFile', paintingId);
   },
   splitSelected(): Promise<void> {
