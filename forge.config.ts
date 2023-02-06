@@ -14,6 +14,7 @@ require('dotenv').config();
 
 const config: ForgeConfig = {
   packagerConfig: {
+    name: 'mc-painting-editor',
     icon: './icons/icon',
   },
   rebuildConfig: {},
