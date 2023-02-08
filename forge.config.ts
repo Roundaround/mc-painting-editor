@@ -20,7 +20,6 @@ const config: ForgeConfig = {
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
-      name: 'Custom Paintings Pack Editor',
       iconUrl:
         'https://raw.githubusercontent.com/Roundaround/mc-painting-editor/main/icons/icon.ico',
       setupIcon: './icons/icon.ico',
