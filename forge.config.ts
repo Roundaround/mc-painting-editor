@@ -14,29 +14,30 @@ require('dotenv').config();
 
 const config: ForgeConfig = {
   packagerConfig: {
-    name: 'mc-painting-editor',
-    icon: './icons/icon',
+    name: 'Custom Paintings Pack Editor',
+    icon: 'icons/icon',
   },
   rebuildConfig: {},
   makers: [
     new MakerSquirrel({
+      title: 'Custom Paintings Pack Editor',
       iconUrl:
         'https://raw.githubusercontent.com/Roundaround/mc-painting-editor/main/icons/icon.ico',
-      setupIcon: './icons/icon.ico',
+      setupIcon: 'icons/icon.ico',
     }),
     new MakerZIP({}, ['darwin']),
     new MakerRpm({
       options: {
-        icon: './icons/icon.png',
+        icon: 'icons/icon.png',
       },
     }),
     new MakerDeb({
       options: {
-        icon: './icons/icon.png',
+        icon: 'icons/icon.png',
       },
     }),
     new MakerDMG({
-      icon: './icons/icon.icns',
+      icon: 'icons/icon.icns',
     }),
   ],
   publishers: [
