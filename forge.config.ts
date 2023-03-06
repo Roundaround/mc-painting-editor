@@ -15,6 +15,7 @@ require('dotenv').config();
 const config: ForgeConfig = {
   packagerConfig: {
     name: 'Custom Paintings Pack Editor',
+    executableName: 'custom-paintings-pack-editor',
     icon: 'icons/icon',
   },
   rebuildConfig: {},
