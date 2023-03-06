@@ -531,8 +531,8 @@ function validate(metadata: MetadataState, paintings: Painting[]) {
     if (!painting.id) {
       return `Painting ${num} invalid: ID is required`;
     }
-    if (painting.id.length < 3 || painting.id.length > 32) {
-      return `Painting ${num} invalid: ID must be between 3 and 32 characters`;
+    if (painting.id.length < 2 || painting.id.length > 32) {
+      return `Painting ${num} invalid: ID must be between 2 and 32 characters`;
     }
     if (!/^[a-z0-9._-]+$/.test(painting.id)) {
       return `Painting ${num} invalid: ID can only contain lowercase letters, numbers, periods, underscores, and dashes`;
