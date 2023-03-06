@@ -27,7 +27,7 @@ const { setIcon, setPackFormat, setDescription, setId, setName } =
   metadataActions;
 const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
   paintingsActions;
-const { setMigrations } = migrationsActions;
+const { createMigration, setMigrations } = migrationsActions;
 const { captureSnapshot } = savedSnapshotActions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
@@ -113,6 +113,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
                 ...getDefaultPainting(),
                 ...painting,
                 uuid: paintingUuids[painting.id],
+                originalId: painting.id,
               };
             })
           )
@@ -165,6 +166,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
           upsertPainting({
             ...defaultPainting,
             id: key,
+            originalId: key,
           })
         );
       }
@@ -344,7 +346,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
     const pack = {
       id: metadata.id,
       name: metadata.name,
-      paintings: paintings.map(({ uuid, path, ...painting }) => painting),
+      paintings: paintings.map(({ uuid, originalId, path, marked, ...painting }) => painting),
       migrations: [
         {
           id: new Date().toISOString(),
@@ -391,6 +393,10 @@ export async function saveZipFile(
   const error = validateCurrentState();
   if (!!error) {
     dialog.showErrorBox('Validation error', error);
+    return;
+  }
+
+  if (!(await checkForPotentialMigration(parentWindow))) {
     return;
   }
 
@@ -460,7 +466,7 @@ export async function saveZipFile(
     const pack = {
       id: state.metadata.id,
       name: state.metadata.name,
-      paintings: paintings.map(({ uuid, path, ...painting }) => painting),
+      paintings: paintings.map(({ uuid, originalId, path, marked, ...painting }) => painting),
       migrations: migrations.map(({ uuid, ...migration }) => migration),
     };
     zip.addFile(
@@ -555,4 +561,43 @@ function validate(metadata: MetadataState, paintings: Painting[]) {
       return `Painting ${num} invalid: image is required`;
     }
   }
+}
+
+async function checkForPotentialMigration(parentWindow: BrowserWindow) {
+  const state = store.getState();
+  const paintings = paintingsSelectors.selectAll(state);
+
+  const changedIds = paintings.filter(
+    (p) => !!p.originalId && p.id !== p.originalId
+  );
+
+  if (changedIds.length === 0) {
+    return Promise.resolve(true);
+  }
+
+  // Prompt user to create migration
+  const result = await dialog.showMessageBox(parentWindow, {
+    type: 'question',
+    message: 'Create migration?',
+    detail: `We've detected that you've changed the ID of ${changedIds.length} painting(s). Would you like to create a migration to automatically update your paintings in-game?`,
+    buttons: ['Yes', 'No', 'Cancel'],
+    defaultId: 0,
+    cancelId: 2,
+  });
+
+  if (result.response === 2) {
+    return Promise.resolve(false);
+  }
+
+  if (result.response === 0) {
+    store.dispatch(
+      createMigration({
+        id: new Date().toISOString(),
+        description: `Changed IDs of ${changedIds.length} painting(s)`,
+        pairs: changedIds.map((painting) => [painting.originalId!, painting.id]),
+      })
+    );
+  }
+
+  return Promise.resolve(true);
 }

@@ -17,6 +17,7 @@ export interface Painting {
   pixelHeight: number;
   marked: boolean;
   uuid: string; // For maintaining tracking in React
+  originalId?: string; // So we can track if the ID has changed
 }
 
 export const getDefaultPainting = (): Painting => ({
