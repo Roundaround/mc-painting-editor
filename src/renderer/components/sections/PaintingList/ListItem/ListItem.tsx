@@ -1,10 +1,3 @@
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
-import { Checkbox } from '$renderer/components/input/Checkbox';
-import { NumberInput } from '$renderer/components/input/NumberInput';
-import { TextInput } from '$renderer/components/input/TextInput';
-import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { getPaintingImage } from '$renderer/utils/painting';
-import { useDispatch, useSelector } from '$renderer/utils/store';
 import {
   arePaintingsEqual,
   getDefaultPainting,
@@ -12,6 +5,13 @@ import {
   paintingsActions,
   paintingsSelectors,
 } from '$common/store/paintings';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Checkbox } from '$renderer/components/input/Checkbox';
+import { NumberInput } from '$renderer/components/input/NumberInput';
+import { TextInput } from '$renderer/components/input/TextInput';
+import { getPaintingImage } from '$renderer/utils/painting';
+import { useDispatch, useSelector } from '$renderer/utils/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EntityId } from '@reduxjs/toolkit';
 import { HTMLProps, useMemo } from 'react';
@@ -36,6 +36,7 @@ export function ListItem(props: ListItemProps) {
   const painting = useSelector(
     (state) => paintingsSelectors.selectById(state, id)!
   );
+  const targetScale = useSelector((state) => state.metadata.targetScale);
   const totalPaintings = useSelector(paintingsSelectors.selectTotal);
   const paintingIds = useSelector(paintingsSelectors.selectIds);
 
@@ -56,7 +57,7 @@ export function ListItem(props: ListItemProps) {
   }, [painting.width, painting.height, painting.path]);
 
   const issues = useMemo(() => {
-    return getIssuesForPainting(painting);
+    return getIssuesForPainting(painting, targetScale);
   }, [
     painting.id,
     painting.path,
@@ -64,6 +65,7 @@ export function ListItem(props: ListItemProps) {
     painting.height,
     painting.pixelWidth,
     painting.pixelHeight,
+    targetScale,
   ]);
 
   const dispatch = useDispatch();

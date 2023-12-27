@@ -25,8 +25,14 @@ import { mcmetaSchema, packSchema } from './schemas';
 import { store } from './store';
 
 const { setLoading, setFilename, clearOverlay, setDirty } = editorActions;
-const { setIcon, setPackFormat, setDescription, setId, setName } =
-  metadataActions;
+const {
+  setIcon,
+  setPackFormat,
+  setDescription,
+  setId,
+  setName,
+  setTargetScale,
+} = metadataActions;
 const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
   paintingsActions;
 const { createMigration, setMigrations } = migrationsActions;
@@ -106,6 +112,8 @@ export async function openZipFile(parentWindow: BrowserWindow) {
         if (pack.name) {
           packName = pack.name;
         }
+
+        store.dispatch(setTargetScale(pack.targetScale));
 
         store.dispatch(
           setPaintings(
@@ -314,6 +322,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
     description: `Split from "${baseMetadata.name}"`,
     id: editorState.split.id,
     name: editorState.split.name,
+    targetScale: baseMetadata.targetScale,
   };
 
   const paintings = paintingsSelectors

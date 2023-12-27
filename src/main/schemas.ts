@@ -18,6 +18,7 @@ export const migrationSchema = z.object({
 export const packSchema = z.object({
   id: z.string(),
   name: z.string().optional(),
+  targetScale: z.number().min(1).max(10).default(1),
   paintings: z.array(paintingSchema).default([]),
   migrations: z.array(migrationSchema).default([]),
 });

@@ -187,25 +187,26 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
       tabIndex={directTabbable ? 0 : -1}
     >
       {children}
-      {active &&
-        mounted &&
-        portalEl.current &&
-        createPortal(
-          <div className={styles['tooltip-wrapper']} style={{ top, left }}>
-            <div
-              className={classNames}
-              ref={contentRef}
-              style={
-                {
-                  '--tooltip-offset': `${offset}px`,
-                } as CSSProperties
-              }
-            >
-              {content}
-            </div>
-          </div>,
-          portalEl.current
-        )}
+      <>
+        {active && mounted && portalEl.current
+          ? createPortal(
+              <div className={styles['tooltip-wrapper']} style={{ top, left }}>
+                <div
+                  className={classNames}
+                  ref={contentRef}
+                  style={
+                    {
+                      '--tooltip-offset': `${offset}px`,
+                    } as CSSProperties
+                  }
+                >
+                  {content}
+                </div>
+              </div>,
+              portalEl.current
+            )
+          : null}
+      </>
     </div>
   );
 }

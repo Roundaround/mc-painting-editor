@@ -18,7 +18,33 @@
   gap: var(--size-3);
 }
 
-a.pack-format-help {
+.pack-format-help {
+  background-color: var(--accent);
+  flex: 0 0 auto;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--radius-round);
+  width: 2rem;
+  aspect-ratio: 1;
+  padding: 0;
+  margin: 0;
+
+  > svg {
+    width: 100%;
+    color: var(--text-1);
+  }
+}
+
+.target-scale {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--size-3);
+}
+
+.target-scale-help {
   background-color: var(--accent);
   flex: 0 0 auto;
   display: inline-flex;

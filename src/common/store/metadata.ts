@@ -6,6 +6,7 @@ export interface MetadataState {
   description: string;
   id: string;
   name: string;
+  targetScale: number;
 }
 
 export const metadataInitialState: MetadataState = {
@@ -14,6 +15,7 @@ export const metadataInitialState: MetadataState = {
   description: '',
   id: '',
   name: '',
+  targetScale: 1,
 };
 
 export const metadataSlice = createSlice({
@@ -34,6 +36,9 @@ export const metadataSlice = createSlice({
     },
     setName: (state, action: PayloadAction<string>) => {
       state.name = action.payload;
+    },
+    setTargetScale: (state, action: PayloadAction<number>) => {
+      state.targetScale = action.payload;
     },
   },
 });

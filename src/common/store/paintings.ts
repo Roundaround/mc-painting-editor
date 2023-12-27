@@ -104,11 +104,11 @@ const basePaintingsSelectors = paintingsAdapter.getSelectors<{
 export const paintingsSelectors = {
   ...basePaintingsSelectors,
   selectWithWarnings: createSelector(
-    [basePaintingsSelectors.selectAll],
-    (paintings) => {
+    [basePaintingsSelectors.selectAll, (state) => state.metadata.targetScale],
+    (paintings, targetScale) => {
       return paintings.filter(
         (painting) =>
-          getIssuesForPainting(painting).filter(
+          getIssuesForPainting(painting, targetScale).filter(
             (issue) => issue.severity === 'warning'
           ).length > 0
       );
@@ -138,7 +138,7 @@ export interface PaintingIssue {
   message: string;
 }
 
-export function getIssuesForPainting(painting: Painting) {
+export function getIssuesForPainting(painting: Painting, targetScale: number) {
   const result: PaintingIssue[] = [];
 
   if (!painting.id) {
@@ -155,22 +155,23 @@ export function getIssuesForPainting(painting: Painting) {
     });
   }
 
-  const minWidth = painting.width * 16;
-  const minHeight = painting.height * 16;
+  const recommendedWidth = painting.width * targetScale * 16;
+  const recommendedHeight = painting.height * targetScale * 16;
   const maxWidth = painting.width * 160;
   const maxHeight = painting.height * 160;
 
   if (
     !!painting.path &&
-    (painting.pixelWidth < minWidth || painting.pixelHeight < minHeight)
+    (Math.abs(painting.pixelWidth - recommendedWidth) > 0.01 ||
+      Math.abs(painting.pixelHeight - recommendedHeight) > 0.01)
   ) {
     result.push({
       severity: 'warning',
       message:
-        `Image is too small ` +
+        `Image is likely the wrong size ` +
         `(${painting.pixelWidth} x ${painting.pixelHeight}). ` +
-        `Min recommended resolution is 16 pixels per block ` +
-        `(${minWidth} x ${minHeight}).`,
+        `Current targeted resolution is ${targetScale * 16} pixels per block ` +
+        `(${recommendedWidth} x ${recommendedHeight}).`,
     });
   }
 
