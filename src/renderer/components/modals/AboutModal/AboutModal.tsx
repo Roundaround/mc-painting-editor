@@ -1,11 +1,12 @@
+import { FC, HTMLProps, useEffect } from 'react';
+
 import { Button } from '@/components/input/Button';
+import { Github } from '@/components/svg/Github';
+import { Kofi } from '@/components/svg/Kofi';
+import { Modrinth } from '@/components/svg/Modrinth';
 import { Tooltip, TooltipDirection } from '@/components/Tooltip';
-import Github from '@/img/github.svg';
-import Kofi from '@/img/kofi.svg';
-import Modrinth from '@/img/modrinth.svg';
 import { useDispatch, useSelector } from '@/utils/store';
 import { editorActions } from '@common/store/editor';
-import { FC, HTMLProps, useEffect } from 'react';
 
 import styles from './AboutModal.module.scss';
 
