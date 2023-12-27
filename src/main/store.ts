@@ -26,7 +26,7 @@ export function getOrCreateStore(mainWindow: BrowserWindow) {
   }
 
   store = createStore(mainWindow);
-  
+
   ipcMain.on(
     'reduxAction',
     (event, action: PayloadAction<unknown, string, any>) => {

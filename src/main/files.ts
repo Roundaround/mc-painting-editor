@@ -12,7 +12,7 @@ import {
   paintingsSelectors,
 } from '@common/store/paintings';
 import { savedSnapshotActions } from '@common/store/savedSnapshot';
-import { nanoid } from '@reduxjs/toolkit';
+import { EntityId, nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
 import fs from 'fs/promises';
@@ -76,7 +76,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     const zip = new AdmZip(filename);
     const entries = zip.getEntries();
 
-    const paintingUuids: { [key: string]: string } = {};
+    const paintingUuids: { [key: EntityId]: EntityId } = {};
     const paintingImages: IZipEntry[] = [];
 
     for (const entry of entries) {
@@ -346,7 +346,9 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
     const pack = {
       id: metadata.id,
       name: metadata.name,
-      paintings: paintings.map(({ uuid, originalId, path, marked, ...painting }) => painting),
+      paintings: paintings.map(
+        ({ uuid, originalId, path, marked, ...painting }) => painting
+      ),
       migrations: [
         {
           id: new Date().toISOString(),
@@ -466,7 +468,9 @@ export async function saveZipFile(
     const pack = {
       id: state.metadata.id,
       name: state.metadata.name,
-      paintings: paintings.map(({ uuid, originalId, path, marked, ...painting }) => painting),
+      paintings: paintings.map(
+        ({ uuid, originalId, path, marked, ...painting }) => painting
+      ),
       migrations: migrations.map(({ uuid, ...migration }) => migration),
     };
     zip.addFile(
@@ -594,7 +598,10 @@ async function checkForPotentialMigration(parentWindow: BrowserWindow) {
       createMigration({
         id: new Date().toISOString(),
         description: `Changed IDs of ${changedIds.length} painting(s)`,
-        pairs: changedIds.map((painting) => [painting.originalId!, painting.id]),
+        pairs: changedIds.map((painting) => [
+          painting.originalId!,
+          painting.id,
+        ]),
       })
     );
   }

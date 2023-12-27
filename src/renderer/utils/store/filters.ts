@@ -1,6 +1,7 @@
-import { Painting } from '@common/store/paintings';
-import { createSlice } from '@reduxjs/toolkit';
+import { Painting, paintingsSelectors } from '@common/store/paintings';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
 import fuzzysort from 'fuzzysort';
+import { RootState } from '.';
 
 export interface SizeFilter<T extends 'width' | 'height'> {
   readonly dimension: T;
@@ -107,50 +108,98 @@ function matchesSizeFilter<T extends 'width' | 'height'>(
   return true;
 }
 
-const selectMatchingPaintings = (
-  state: { filters: FiltersState },
-  paintings: Painting[]
-) => {
-  const { search, missingImage, missingId, width, height } = state.filters;
-  return paintings
-    .filter((painting) => {
-      if (missingImage && painting.path) {
-        return false;
-      }
-      if (missingId && painting.id) {
-        return false;
-      }
-      if (!matchesSizeFilter(painting, width)) {
-        return false;
-      }
-      if (!matchesSizeFilter(painting, height)) {
-        return false;
-      }
-      if (
-        search &&
-        fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
-          threshold: -10000,
-        }).length === 0
-      ) {
-        return false;
-      }
-      return true;
-    })
-    .map((painting) => painting.uuid);
-};
+const selectMatchingPaintings = createSelector(
+  [(state: RootState) => state.filters, paintingsSelectors.selectAll],
+  (filters, paintings) => {
+    const { search, missingImage, missingId, width, height } = filters;
+    return paintings
+      .filter((painting) => {
+        if (missingImage && painting.path) {
+          return false;
+        }
+        if (missingId && painting.id) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, width)) {
+          return false;
+        }
+        if (!matchesSizeFilter(painting, height)) {
+          return false;
+        }
+        if (
+          search &&
+          fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
+            threshold: -10000,
+          }).length === 0
+        ) {
+          return false;
+        }
+        return true;
+      })
+      .map((painting) => painting.uuid);
+  }
+);
 
-const selectHasFilters = (state: { filters: FiltersState }) => {
-  const { search, missingImage, missingId, width, height } = state.filters;
-  return (
-    search !== '' ||
-    missingImage ||
-    missingId ||
-    width.operator !== 'gt' ||
-    width.value !== 0 ||
-    height.operator !== 'gt' ||
-    height.value !== 0
-  );
-};
+// const selectMatchingPaintings = (
+//   state: { filters: FiltersState },
+//   paintings: Painting[]
+// ) => {
+//   const { search, missingImage, missingId, width, height } = state.filters;
+//   return paintings
+//     .filter((painting) => {
+//       if (missingImage && painting.path) {
+//         return false;
+//       }
+//       if (missingId && painting.id) {
+//         return false;
+//       }
+//       if (!matchesSizeFilter(painting, width)) {
+//         return false;
+//       }
+//       if (!matchesSizeFilter(painting, height)) {
+//         return false;
+//       }
+//       if (
+//         search &&
+//         fuzzysort.go(search, [painting.id, painting.name, painting.artist], {
+//           threshold: -10000,
+//         }).length === 0
+//       ) {
+//         return false;
+//       }
+//       return true;
+//     })
+//     .map((painting) => painting.uuid);
+// };
+
+const selectHasFilters = createSelector(
+  [(state: RootState) => state.filters],
+  (filters) => {
+    const { search, missingImage, missingId, width, height } = filters;
+    return (
+      search !== '' ||
+      missingImage ||
+      missingId ||
+      width.operator !== 'gt' ||
+      width.value !== 0 ||
+      height.operator !== 'gt' ||
+      height.value !== 0
+    );
+  }
+);
+
+// const selectHasFilters = (state: { filters: FiltersState }) => {
+//   const { search, missingImage, missingId, width, height } = state.filters;
+//   return (
+//     search !== '' ||
+//     missingImage ||
+//     missingId ||
+//     width.operator !== 'gt' ||
+//     width.value !== 0 ||
+//     height.operator !== 'gt' ||
+//     height.value !== 0
+//   );
+// };
 
 export const filtersSelectors = {
   selectMatchingPaintings,

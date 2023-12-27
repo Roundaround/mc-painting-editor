@@ -1,5 +1,6 @@
 import {
   createEntityAdapter,
+  createSelector,
   createSlice,
   EntityId,
   nanoid,
@@ -16,7 +17,7 @@ export interface Painting {
   pixelWidth: number;
   pixelHeight: number;
   marked: boolean;
-  uuid: string; // For maintaining tracking in React
+  uuid: EntityId; // For maintaining tracking in React
   originalId?: string; // So we can track if the ID has changed
 }
 
@@ -33,8 +34,8 @@ export const getDefaultPainting = (): Painting => ({
   uuid: nanoid(),
 });
 
-export const paintingsAdapter = createEntityAdapter<Painting>({
-  selectId: (painting) => painting.uuid,
+export const paintingsAdapter = createEntityAdapter({
+  selectId: (painting: Painting) => painting.uuid,
 });
 
 export const paintingsSlice = createSlice({
@@ -97,20 +98,22 @@ export const paintingsReducer = paintingsSlice.reducer;
 export const paintingsActions = paintingsSlice.actions;
 
 export const paintingsInitialState = paintingsAdapter.getInitialState();
+const basePaintingsSelectors = paintingsAdapter.getSelectors<{
+  paintings: PaintingsState;
+}>((state) => state.paintings);
 export const paintingsSelectors = {
-  ...paintingsAdapter.getSelectors<{
-    paintings: PaintingsState;
-  }>((state) => state.paintings),
-  selectWithWarnings: (state: { paintings: PaintingsState }) => {
-    return paintingsSelectors
-      .selectAll(state)
-      .filter(
+  ...basePaintingsSelectors,
+  selectWithWarnings: createSelector(
+    [basePaintingsSelectors.selectAll],
+    (paintings) => {
+      return paintings.filter(
         (painting) =>
           getIssuesForPainting(painting).filter(
             (issue) => issue.severity === 'warning'
           ).length > 0
       );
-  },
+    }
+  ),
 };
 
 export type PaintingsState = ReturnType<typeof paintingsReducer>;

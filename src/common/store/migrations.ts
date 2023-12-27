@@ -1,6 +1,7 @@
 import {
   createEntityAdapter,
   createSlice,
+  EntityId,
   nanoid,
   PayloadAction,
 } from '@reduxjs/toolkit';
@@ -9,7 +10,7 @@ export interface Migration {
   id: string;
   description: string;
   pairs: [string, string][];
-  uuid: string; // For maintaining tracking in React
+  uuid: EntityId; // For maintaining tracking in React
 }
 
 export const getDefaultMigration = (
@@ -23,8 +24,8 @@ export const getDefaultMigration = (
   uuid: nanoid(),
 });
 
-export const migrationsAdapter = createEntityAdapter<Migration>({
-  selectId: (migration) => migration.uuid,
+export const migrationsAdapter = createEntityAdapter({
+  selectId: (migration: Migration) => migration.uuid,
 });
 
 export const migrationsSlice = createSlice({

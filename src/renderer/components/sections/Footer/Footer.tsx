@@ -16,9 +16,7 @@ export const Footer: FC<FooterProps> = (props) => {
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
   const paintings = useSelector(paintingsSelectors.selectAll);
-  const filteredPaintings = useSelector((state) =>
-    selectMatchingPaintings(state, paintings)
-  );
+  const filteredPaintings = useSelector(selectMatchingPaintings);
   const paintingsWithWarnings = useSelector(
     paintingsSelectors.selectWithWarnings
   );

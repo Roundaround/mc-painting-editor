@@ -1,4 +1,4 @@
-import { Middleware, PayloadAction } from '@reduxjs/toolkit';
+import { isAction, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { produce } from 'immer';
 import { editorReducer, editorSlice, EditorState } from './editor';
 import { metadataReducer, metadataSlice, MetadataState } from './metadata';
@@ -31,6 +31,9 @@ export const SYNC_META = 'sync';
 export const LOCAL_META = 'local';
 export type ActionMeta = typeof SYNC_META | typeof LOCAL_META | undefined;
 export type PayloadActionWithMeta<T> = PayloadAction<T, string, ActionMeta>;
+type PayloadActionWithOptionalMeta<T> =
+  | PayloadAction<T, string>
+  | PayloadActionWithMeta<T>;
 
 export function asSyncAction<T>(
   action: PayloadActionWithMeta<T> | PayloadAction<T>
@@ -56,22 +59,32 @@ export function cleanActionMeta<T>(
   });
 }
 
-function isSyncAction<T>(action: PayloadActionWithMeta<T>) {
-  return action.meta === SYNC_META;
+function isSyncAction<T>(action: PayloadActionWithOptionalMeta<T>) {
+  return 'meta' in action && action.meta === SYNC_META;
 }
 
-function isLocalAction<T>(action: PayloadActionWithMeta<T>) {
+function isLocalAction<T>(action: PayloadActionWithOptionalMeta<T>) {
   return (
-    action.meta === LOCAL_META ||
+    ('meta' in action && action.meta === LOCAL_META) ||
     !Object.keys(reducers).some((key) => action.type.startsWith(`${key}/`))
   );
+}
+
+function isPayloadAction<T>(
+  action: unknown
+): action is PayloadActionWithOptionalMeta<T> {
+  return isAction(action) && 'payload' in action;
 }
 
 export const syncWithExternal =
   (syncFn: (action: PayloadActionWithMeta<any>) => void): Middleware =>
   () =>
   (next) =>
-  <T>(action: PayloadActionWithMeta<T>) => {
+  (action) => {
+    if (!isPayloadAction(action)) {
+      return next(action);
+    }
+
     if (!isSyncAction(action) && !isLocalAction(action)) {
       syncFn(asSyncAction(action));
     }
@@ -91,7 +104,11 @@ export const trackDirty: Middleware<
 > =
   ({ dispatch, getState }) =>
   (next) =>
-  <P>(action: PayloadActionWithMeta<P>) => {
+  (action) => {
+    if (!isPayloadAction(action)) {
+      return next(action);
+    }
+
     if (isSyncAction(action)) {
       return next(action);
     }
