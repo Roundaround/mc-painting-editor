@@ -67,7 +67,7 @@
     "electron-squirrel-startup": "^1.0.0",
     "fuzzysort": "^2.0.4",
     "image-size": "^1.0.2",
-    "immer": "^9.0.16",
+    "immer": "^10.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^5.3.4",

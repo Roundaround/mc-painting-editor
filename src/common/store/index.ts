@@ -1,5 +1,5 @@
 import { Middleware, PayloadAction } from '@reduxjs/toolkit';
-import produce from 'immer';
+import { produce } from 'immer';
 import { editorReducer, editorSlice, EditorState } from './editor';
 import { metadataReducer, metadataSlice, MetadataState } from './metadata';
 import {
@@ -24,7 +24,7 @@ export const reducers = {
 };
 
 export type RootState = {
-  [key in keyof typeof reducers]: ReturnType<typeof reducers[key]>;
+  [key in keyof typeof reducers]: ReturnType<(typeof reducers)[key]>;
 };
 
 export const SYNC_META = 'sync';
