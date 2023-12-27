@@ -34,7 +34,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 // Auto update
-require('update-electron-app')();
+const { updateElectronApp } = require('update-electron-app');
+updateElectronApp();
 
 const createWindow = (): void => {
   // Create the browser window.

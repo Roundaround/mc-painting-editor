@@ -73,7 +73,7 @@
     "react-loader-spinner": "^5.3.4",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.21.1",
-    "update-electron-app": "^2.0.1",
+    "update-electron-app": "^3.0.0",
     "zod": "^3.22.4"
   }
 }
