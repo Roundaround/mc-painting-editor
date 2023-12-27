@@ -1,4 +1,4 @@
-import { Painting, paintingsSelectors } from '@common/store/paintings';
+import { Painting, paintingsSelectors } from '$common/store/paintings';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import fuzzysort from 'fuzzysort';
 import { RootState } from '.';

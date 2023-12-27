@@ -1,17 +1,3 @@
-import { editorActions } from '@common/store/editor';
-import { metadataActions, MetadataState } from '@common/store/metadata';
-import {
-  getDefaultMigration,
-  migrationsActions,
-  migrationsSelectors,
-} from '@common/store/migrations';
-import {
-  getDefaultPainting,
-  Painting,
-  paintingsActions,
-  paintingsSelectors,
-} from '@common/store/paintings';
-import { savedSnapshotActions } from '@common/store/savedSnapshot';
 import { EntityId, nanoid } from '@reduxjs/toolkit';
 import AdmZip, { IZipEntry } from 'adm-zip';
 import { app, BrowserWindow, dialog } from 'electron';
@@ -19,6 +5,22 @@ import fs from 'fs/promises';
 import sizeOf from 'image-size';
 import path from 'path';
 import url from 'url';
+
+import { editorActions } from '$common/store/editor';
+import { metadataActions, MetadataState } from '$common/store/metadata';
+import {
+  getDefaultMigration,
+  migrationsActions,
+  migrationsSelectors,
+} from '$common/store/migrations';
+import {
+  getDefaultPainting,
+  Painting,
+  paintingsActions,
+  paintingsSelectors,
+} from '$common/store/paintings';
+import { savedSnapshotActions } from '$common/store/savedSnapshot';
+
 import { mcmetaSchema, packSchema } from './schemas';
 import { store } from './store';
 

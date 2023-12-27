@@ -1,7 +1,7 @@
-import { Button } from '@/components/input/Button';
-import { TextInput } from '@/components/input/TextInput';
-import { useDispatch, useSelector } from '@/utils/store';
-import { editorActions } from '@common/store/editor';
+import { Button } from '$renderer/components/input/Button';
+import { TextInput } from '$renderer/components/input/TextInput';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import { editorActions } from '$common/store/editor';
 import { FC, HTMLProps, useEffect } from 'react';
 
 import styles from './SplitModal.module.scss';

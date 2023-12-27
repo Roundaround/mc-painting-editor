@@ -1,7 +1,9 @@
-import { editorActions } from '@common/store/editor';
-import { paintingsActions, paintingsSelectors } from '@common/store/paintings';
 import { Menu, MenuItemConstructorOptions } from 'electron';
 import contextMenu from 'electron-context-menu';
+
+import { editorActions } from '$common/store/editor';
+import { paintingsActions, paintingsSelectors } from '$common/store/paintings';
+
 import { openZipFile, saveZipFile } from './files';
 import { store } from './store';
 
@@ -152,7 +154,7 @@ const helpTemplate: MenuItemConstructorOptions[] = [
           if (!focusedWindow) {
             return;
           }
-          
+
           store.dispatch(editorActions.openAboutModal());
         },
       },

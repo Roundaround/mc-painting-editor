@@ -1,17 +1,17 @@
-import { Button, ButtonVariant } from '@/components/input/Button';
-import { Checkbox } from '@/components/input/Checkbox';
-import { NumberInput } from '@/components/input/NumberInput';
-import { TextInput } from '@/components/input/TextInput';
-import { Tooltip, TooltipDirection } from '@/components/Tooltip';
-import { getPaintingImage } from '@/utils/painting';
-import { useDispatch, useSelector } from '@/utils/store';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Checkbox } from '$renderer/components/input/Checkbox';
+import { NumberInput } from '$renderer/components/input/NumberInput';
+import { TextInput } from '$renderer/components/input/TextInput';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
+import { getPaintingImage } from '$renderer/utils/painting';
+import { useDispatch, useSelector } from '$renderer/utils/store';
 import {
   arePaintingsEqual,
   getDefaultPainting,
   getIssuesForPainting,
   paintingsActions,
   paintingsSelectors,
-} from '@common/store/paintings';
+} from '$common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EntityId } from '@reduxjs/toolkit';
 import { HTMLProps, useMemo } from 'react';

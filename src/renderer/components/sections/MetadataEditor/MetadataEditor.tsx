@@ -1,9 +1,9 @@
-import { IconInput } from '@/components/input/IconInput';
-import { NumberInput } from '@/components/input/NumberInput';
-import { TextInput } from '@/components/input/TextInput';
-import { Tooltip, TooltipDirection } from '@/components/Tooltip';
-import { useDispatch, useSelector } from '@/utils/store';
-import { metadataActions } from '@common/store/metadata';
+import { IconInput } from '$renderer/components/input/IconInput';
+import { NumberInput } from '$renderer/components/input/NumberInput';
+import { TextInput } from '$renderer/components/input/TextInput';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import { metadataActions } from '$common/store/metadata';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
 import styles from './MetadataEditor.module.scss';

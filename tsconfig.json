@@ -18,14 +18,30 @@
     "noEmit": true,
     "outDir": "dist",
     "paths": {
-      "@common/*": ["./src/common/*"],
-      "@/*": ["./src/renderer/*"],
-      "*": ["./node_modules/*"]
+      "$src/*": [
+        "./src/*"
+      ],
+      "$main/*": [
+        "./src/main/*"
+      ],
+      "$renderer/*": [
+        "./src/renderer/*"
+      ],
+      "$common/*": [
+        "./src/common/*"
+      ],
+      "*": [
+        "./node_modules/*"
+      ]
     },
-    "plugins": [{ "name": "typescript-plugin-css-modules" }]
+    "plugins": [
+      {
+        "name": "typescript-plugin-css-modules"
+      }
+    ]
   },
   "include": [
-    "./src/renderer/declaration.d.ts",
     "./src/**/*",
+    "./src/**/*.d.ts",
   ]
 }

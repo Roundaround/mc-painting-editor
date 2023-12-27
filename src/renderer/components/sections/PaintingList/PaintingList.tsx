@@ -1,12 +1,12 @@
-import { Button, ButtonVariant } from '@/components/input/Button';
-import { TooltipDirection } from '@/components/Tooltip';
-import { useDispatch, useSelector } from '@/utils/store';
-import { filtersActions, filtersSelectors } from '@/utils/store/filters';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { TooltipDirection } from '$renderer/components/Tooltip';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import { filtersActions, filtersSelectors } from '$renderer/utils/store/filters';
 import {
   getDefaultPainting,
   paintingsActions,
   paintingsSelectors,
-} from '@common/store/paintings';
+} from '$common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps, useState } from 'react';
 import { Filters } from './Filters';

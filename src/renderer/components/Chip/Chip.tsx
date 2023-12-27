@@ -1,4 +1,4 @@
-import { Button, ButtonVariant } from '@/components/input/Button';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
 import styles from './Chip.module.scss';

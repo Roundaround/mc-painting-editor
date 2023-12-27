@@ -1,10 +1,10 @@
-import { Button, ButtonVariant } from '@/components/input/Button';
-import { Tooltip, TooltipDirection } from '@/components/Tooltip';
-import { useDispatch, useSelector } from '@/utils/store';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
+import { useDispatch, useSelector } from '$renderer/utils/store';
 import {
   migrationsActions,
   migrationsSelectors,
-} from '@common/store/migrations';
+} from '$common/store/migrations';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, Fragment, HTMLProps } from 'react';
 import styles from './MigrationList.module.scss';

@@ -17,7 +17,7 @@ html {
 }
 
 body,
-div:global(#root) {
+div#root {
   height: 100%;
   width: 100%;
   margin: 0;
@@ -228,7 +228,13 @@ fieldset {
 
 textarea,
 select,
-input:not(button, button[type], input[type='button'], input[type='submit'], input[type='reset']) {
+input:not(
+    button,
+    button[type],
+    input[type='button'],
+    input[type='submit'],
+    input[type='reset']
+  ) {
   cursor: auto;
   background-color: var(--input);
   border-radius: var(--radius-2);

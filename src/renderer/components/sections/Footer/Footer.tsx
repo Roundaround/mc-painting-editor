@@ -1,6 +1,6 @@
-import { useDispatch, useSelector } from '@/utils/store';
-import { filtersActions, filtersSelectors } from '@/utils/store/filters';
-import { paintingsSelectors } from '@common/store/paintings';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import { filtersActions, filtersSelectors } from '$renderer/utils/store/filters';
+import { paintingsSelectors } from '$common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps, useMemo } from 'react';
 import { InlineButton } from '../../InlineButton';

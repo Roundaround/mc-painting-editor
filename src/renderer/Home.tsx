@@ -1,12 +1,12 @@
-import { AboutModal } from '@/components/modals/AboutModal';
-import { SplitModal } from '@/components/modals/SplitModal';
-import { Footer } from '@/components/sections/Footer';
-import { MetadataEditor } from '@/components/sections/MetadataEditor';
-import { MigrationList } from '@/components/sections/MigrationList';
-import { PaintingList } from '@/components/sections/PaintingList';
-import { HorizontalSplitPane, VerticalSplitPane } from '@/components/SplitPane';
-import { useSelector } from '@/utils/store';
-import { migrationsSelectors } from '@common/store/migrations';
+import { AboutModal } from '$renderer/components/modals/AboutModal';
+import { SplitModal } from '$renderer/components/modals/SplitModal';
+import { Footer } from '$renderer/components/sections/Footer';
+import { MetadataEditor } from '$renderer/components/sections/MetadataEditor';
+import { MigrationList } from '$renderer/components/sections/MigrationList';
+import { PaintingList } from '$renderer/components/sections/PaintingList';
+import { HorizontalSplitPane, VerticalSplitPane } from '$renderer/components/SplitPane';
+import { useSelector } from '$renderer/utils/store';
+import { migrationsSelectors } from '$common/store/migrations';
 import { Blocks } from 'react-loader-spinner';
 import styles from './Home.module.scss';
 

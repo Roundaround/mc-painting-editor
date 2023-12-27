@@ -1,4 +1,4 @@
-import { useBoundingRect } from '@/utils/useBoundingRect';
+import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 import React, {
   BaseHTMLAttributes,
   FC,

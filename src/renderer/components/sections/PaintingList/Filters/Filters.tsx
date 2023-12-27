@@ -1,9 +1,9 @@
-import { Checkbox } from '@/components/input/Checkbox';
-import { CompareSelect } from '@/components/input/CompareSelect';
-import { NumberInput } from '@/components/input/NumberInput';
-import { TextInput } from '@/components/input/TextInput';
-import { useDispatch, useSelector } from '@/utils/store';
-import { filtersActions } from '@/utils/store/filters';
+import { Checkbox } from '$renderer/components/input/Checkbox';
+import { CompareSelect } from '$renderer/components/input/CompareSelect';
+import { NumberInput } from '$renderer/components/input/NumberInput';
+import { TextInput } from '$renderer/components/input/TextInput';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import { filtersActions } from '$renderer/utils/store/filters';
 import { FC, HTMLProps } from 'react';
 import styles from './Filters.module.scss';
 

@@ -1,4 +1,4 @@
-import { useSelector } from '@/utils/store';
+import { useSelector } from '$renderer/utils/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
 import styles from './IconInput.module.scss';

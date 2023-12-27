@@ -1,5 +1,6 @@
 import { isAction, Middleware, PayloadAction } from '@reduxjs/toolkit';
 import { produce } from 'immer';
+
 import { editorReducer, editorSlice, EditorState } from './editor';
 import { metadataReducer, metadataSlice, MetadataState } from './metadata';
 import {

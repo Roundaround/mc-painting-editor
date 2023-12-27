@@ -1,4 +1,4 @@
-import { Tooltip, TooltipProps } from '@/components/Tooltip';
+import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
 import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
