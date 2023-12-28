@@ -55,7 +55,7 @@
     "adm-zip": "^0.5.10",
     "electron-context-menu": "^3.6.1",
     "electron-squirrel-startup": "^1.0.0",
-    "fuzzysort": "^2.0.4",
+    "fuzzysort": "https://github.com/Roundaround/fuzzysort.git#v2.0.5",
     "image-size": "^1.0.2",
     "immer": "^10.0.3",
     "react": "^18.2.0",
