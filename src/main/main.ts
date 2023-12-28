@@ -1,6 +1,6 @@
 import {
-  BrowserWindow,
   app,
+  BrowserWindow,
   dialog,
   ipcMain,
   net,
@@ -13,7 +13,6 @@ import installExtension, {
 } from 'electron-devtools-installer';
 import fs from 'fs';
 import path from 'path';
-import url from 'url';
 
 import {
   appTempDir,
@@ -110,11 +109,7 @@ const createWindow = (): void => {
 app.whenReady().then(() => {
   // Register custom protocol for fetching files from the app's temp directory.
   protocol.handle('mc-painting-editor', (req) => {
-    return net.fetch(
-      url.fileURLToPath(
-        'file://' + req.url.slice('mc-painting-editor://'.length)
-      )
-    );
+    return net.fetch('file://' + req.url.slice('mc-painting-editor://'.length));
   });
 
   registerMenu();
