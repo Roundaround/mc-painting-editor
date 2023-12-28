@@ -129,7 +129,9 @@ export function arePaintingsEqual(a: Painting, b: Painting) {
     a.artist === b.artist &&
     a.height === b.height &&
     a.width === b.width &&
-    removeCacheBuster(a.path || '') === removeCacheBuster(b.path || '')
+    a.pixelHeight === b.pixelHeight &&
+    a.pixelWidth === b.pixelWidth &&
+    a.path === b.path
   );
 }
 
