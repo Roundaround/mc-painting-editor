@@ -18,9 +18,6 @@
     "noEmit": true,
     "outDir": "dist",
     "paths": {
-      "$src/*": [
-        "./src/*"
-      ],
       "$main/*": [
         "./src/main/*"
       ],

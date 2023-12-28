@@ -19,16 +19,15 @@ import {
   appTempDir,
   openIconFile,
   openPaintingFile,
-  openZipFile,
   saveSplitZipFile,
-} from './files';
-import { registerMenu } from './menu';
+} from '$main/files';
+import { registerMenu } from '$main/menu';
 import {
   getOrCreateStore,
   store,
   updateAppInfoInStore,
   updateTitleFromStore,
-} from './store';
+} from '$main/store';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -38,7 +37,7 @@ if (require('electron-squirrel-startup')) {
 }
 
 // Auto update
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'development') {
   const { updateElectronApp } = require('update-electron-app');
   updateElectronApp();
 }
@@ -161,14 +160,6 @@ app.on('before-quit', () => {
     // Directory either doesn't exist or no longer writable.
     // Either way, do nothing.
   }
-});
-
-ipcMain.handle('openZipFile', (event, args) => {
-  if (!mainWindow) {
-    return '';
-  }
-
-  return openZipFile(mainWindow);
 });
 
 ipcMain.handle('openIconFile', (event, args) => {

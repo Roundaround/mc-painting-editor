@@ -1,9 +1,9 @@
 import { configureStore, PayloadAction } from '@reduxjs/toolkit';
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 
+import { reducers, syncWithExternal, trackDirty } from '$common/store';
 import { editorActions } from '$common/store/editor';
 import { paintingsSelectors } from '$common/store/paintings';
-import { reducers, syncWithExternal, trackDirty } from '$src/common/store';
 
 export let store: MainStore;
 

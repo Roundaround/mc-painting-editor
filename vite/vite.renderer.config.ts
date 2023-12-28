@@ -19,8 +19,6 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       alias: {
-        $src: path.join(rootDir, 'src'),
-        $main: path.join(rootDir, 'src/main'),
         $renderer: path.join(rootDir, 'src/renderer'),
         $common: path.join(rootDir, 'src/common'),
       },

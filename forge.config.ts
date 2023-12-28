@@ -67,6 +67,10 @@ const config: ForgeConfig = {
           entry: path.join(rootDir, 'src/main/preload.ts'),
           config: path.join(rootDir, 'vite/vite.preload.config.ts'),
         },
+        {
+          entry: path.join(rootDir, 'src/worker/read-zip.ts'),
+          config: path.join(rootDir, 'vite/vite.read-zip.config.ts'),
+        },
       ],
       renderer: [
         {

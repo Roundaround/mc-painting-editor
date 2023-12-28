@@ -1,41 +1,29 @@
-import { EntityId, nanoid } from '@reduxjs/toolkit';
-import AdmZip, { IZipEntry } from 'adm-zip';
-import { app, BrowserWindow, dialog } from 'electron';
+import AdmZip from 'adm-zip';
+import { BrowserWindow, app, dialog, utilityProcess } from 'electron';
 import fs from 'fs/promises';
 import sizeOf from 'image-size';
 import path from 'path';
 import url from 'url';
 
 import { editorActions } from '$common/store/editor';
-import { metadataActions, MetadataState } from '$common/store/metadata';
+import { MetadataState, metadataActions } from '$common/store/metadata';
 import {
-  getDefaultMigration,
   migrationsActions,
   migrationsSelectors,
 } from '$common/store/migrations';
 import {
-  getDefaultPainting,
   Painting,
   paintingsActions,
   paintingsSelectors,
 } from '$common/store/paintings';
 import { savedSnapshotActions } from '$common/store/savedSnapshot';
-
-import { mcmetaSchema, packSchema } from './schemas';
-import { store } from './store';
+import { isC2PMessage } from '$common/worker/read-zip';
+import { store } from '$main/store';
 
 const { setLoading, setFilename, clearOverlay, setDirty } = editorActions;
-const {
-  setIcon,
-  setPackFormat,
-  setDescription,
-  setId,
-  setName,
-  setTargetScale,
-} = metadataActions;
-const { updatePainting, upsertPainting, setPaintings, removeManyPaintings } =
-  paintingsActions;
-const { createMigration, setMigrations } = migrationsActions;
+const { setIcon } = metadataActions;
+const { updatePainting, removeManyPaintings } = paintingsActions;
+const { createMigration } = migrationsActions;
 const { captureSnapshot } = savedSnapshotActions;
 
 export const appTempDir = path.join(app.getPath('temp'), 'mc-painting-editor');
@@ -69,147 +57,76 @@ export async function openZipFile(parentWindow: BrowserWindow) {
   });
 
   if (files.canceled) {
-    return '';
+    return;
   }
 
   store.dispatch(setLoading());
 
-  try {
-    const filename = files.filePaths[0];
-    let packName = filename.substring(
-      filename.lastIndexOf('/') + 1,
-      filename.lastIndexOf('.')
-    );
+  const filename = files.filePaths[0];
 
-    const zip = new AdmZip(filename);
-    const entries = zip.getEntries();
+  const workerFilePath =
+    process.env.NODE_ENV === 'development'
+      ? path.join(process.cwd(), '.vite/build/worker/read-zip.js')
+      : path.join(__dirname, 'worker/read-zip.js');
+  const childProcess = utilityProcess.fork(
+    workerFilePath,
+    [filename, appTempDir],
+    {
+      stdio: 'pipe',
+    }
+  );
 
-    const paintingUuids: { [key: EntityId]: EntityId } = {};
-    const paintingImages: IZipEntry[] = [];
-
-    for (const entry of entries) {
-      if (entry.isDirectory) {
-        continue;
-      }
-
-      if (entry.entryName === 'pack.mcmeta') {
-        const text = entry.getData().toString('utf8');
-        const mcmeta = mcmetaSchema.parse(JSON.parse(text));
-
-        store.dispatch(setPackFormat(mcmeta.pack.packFormat));
-        if (mcmeta.pack.description) {
-          store.dispatch(setDescription(mcmeta.pack.description));
-        }
-
-        continue;
-      }
-
-      if (entry.entryName === 'custompaintings.json') {
-        const text = entry.getData().toString('utf8');
-        const pack = packSchema.parse(JSON.parse(text));
-
-        store.dispatch(setId(pack.id));
-        if (pack.name) {
-          packName = pack.name;
-        }
-
-        store.dispatch(setTargetScale(pack.targetScale));
-
-        store.dispatch(
-          setPaintings(
-            pack.paintings.map((painting) => {
-              paintingUuids[painting.id] = nanoid();
-              return {
-                ...getDefaultPainting(),
-                ...painting,
-                uuid: paintingUuids[painting.id],
-                originalId: painting.id,
-              };
-            })
-          )
-        );
-
-        store.dispatch(
-          setMigrations(
-            pack.migrations.map((migration) =>
-              getDefaultMigration(
-                migration.id,
-                migration.description,
-                migration.pairs
-              )
-            )
-          )
-        );
-
-        continue;
-      }
-
-      if (entry.entryName === 'pack.png') {
-        zip.extractEntryTo(entry, appTempDir, false, true);
-        const filename = entry.entryName.substring(
-          entry.entryName.lastIndexOf('/') + 1
-        );
-        const filePath = path.join(appTempDir, filename);
-        store.dispatch(setIcon(fileUrl(filePath)));
-
-        continue;
-      } else if (entry.entryName.endsWith('.png')) {
-        paintingImages.push(entry);
-        continue;
-      }
+  childProcess.on('message', (message) => {
+    if (!isC2PMessage(message)) {
+      console.warn('Received an invalid message from the worker process!');
+      console.warn('Message:', message);
+      return;
     }
 
-    store.dispatch(setName(packName));
+    switch (message.type) {
+      case 'error':
+        console.error(message.content);
 
-    for (const entry of paintingImages) {
-      const filename = entry.entryName.substring(
-        entry.entryName.lastIndexOf('/') + 1
-      );
-      const key = filename.substring(0, filename.lastIndexOf('.'));
+        // TODO: Show error to user.
+        // dialog.showErrorBox('Error', message.content.toString());
 
-      const dir = path.join(appTempDir, 'paintings');
+        childProcess.kill();
 
-      if (!paintingUuids[key]) {
-        const defaultPainting = getDefaultPainting();
-        paintingUuids[key] = defaultPainting.uuid;
-        store.dispatch(
-          upsertPainting({
-            ...defaultPainting,
-            id: key,
-            originalId: key,
-          })
-        );
-      }
-
-      const uuid = paintingUuids[key];
-      const newFilename = `${uuid}.png`;
-
-      zip.extractEntryTo(entry, dir, false, true, false, newFilename);
-
-      const filePath = path.join(appTempDir, 'paintings', newFilename);
-      const { width, height } = sizeOf(filePath);
-
-      store.dispatch(
-        updatePainting({
-          id: uuid,
-          changes: {
-            path: fileUrl(filePath),
-            pixelWidth: width || 0,
-            pixelHeight: height || 0,
-          },
-        })
-      );
+        store.dispatch(clearOverlay());
+        store.dispatch(setFilename(''));
+        break;
+      case 'action':
+        store.dispatch(message.action);
+        break;
+      case 'done':
+        const finalFilename = message.filename;
+        store.dispatch(clearOverlay());
+        store.dispatch(setFilename(finalFilename));
+        store.dispatch(captureSnapshot(store.getState()));
+        childProcess.kill();
+        break;
     }
+  });
+  childProcess.stderr?.on('data', (data) => {
+    console.error(data.toString());
 
-    store.dispatch(clearOverlay());
-    store.dispatch(setFilename(filename));
-    store.dispatch(captureSnapshot(store.getState()));
-    return filename;
-  } catch (err) {
-    store.dispatch(clearOverlay());
-    store.dispatch(setFilename(''));
-    return '';
-  }
+    // TODO: Show error to user.
+    // dialog.showErrorBox(
+    //   'Error',
+    //   `Worker process experience a fatal error:\n${data.toString()}`
+    // );
+  });
+  childProcess.on('exit', (code) => {
+    if (code !== 0) {
+      console.error('Worker process exited with code:', code);
+
+      // TODO: Show error to user.
+      // dialog.showErrorBox('Error', `Worker process exited with code: ${code}`);
+
+      store.dispatch(clearOverlay());
+      store.dispatch(setFilename(''));
+    }
+  });
 }
 
 export async function openIconFile(parentWindow: BrowserWindow) {

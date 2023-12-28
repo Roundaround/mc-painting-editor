@@ -1,10 +1,12 @@
-import { reducers, syncWithExternal, trackDirty } from '$src/common/store';
 import { configureStore } from '@reduxjs/toolkit';
 import {
   TypedUseSelectorHook,
   useDispatch as useDispatchBase,
   useSelector as useSelectorBase,
 } from 'react-redux';
+
+import { reducers, syncWithExternal, trackDirty } from '$common/store';
+
 import { filtersReducer } from './filters';
 
 export const store = configureStore({

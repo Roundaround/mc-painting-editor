@@ -2,9 +2,6 @@ import { EntityId, PayloadAction } from '@reduxjs/toolkit';
 import { contextBridge, ipcRenderer } from 'electron';
 
 const api = {
-  openZipFile(): Promise<string> {
-    return ipcRenderer.invoke('openZipFile');
-  },
   openIconFile(): Promise<void> {
     return ipcRenderer.invoke('openIconFile');
   },

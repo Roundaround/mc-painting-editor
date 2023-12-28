@@ -3,9 +3,8 @@ import contextMenu from 'electron-context-menu';
 
 import { editorActions } from '$common/store/editor';
 import { paintingsActions, paintingsSelectors } from '$common/store/paintings';
-
-import { openZipFile, saveZipFile } from './files';
-import { store } from './store';
+import { openZipFile, saveZipFile } from '$main/files';
+import { store } from '$main/store';
 
 export const menuTemplate: MenuItemConstructorOptions[] = [
   {

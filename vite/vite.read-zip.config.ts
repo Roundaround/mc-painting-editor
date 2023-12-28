@@ -1,22 +1,22 @@
-import { defineConfig } from 'vite';
 import path from 'path';
+import { defineConfig } from 'vite';
 
 // Project root directory path.
 const rootDir = process.cwd();
 
 /**
- * Main process - Vite configuration
+ * Worker process for reading zip files - Vite configuration
  */
 export default defineConfig({
   build: {
     rollupOptions: {
-      // Provide native modules as externals eg: ['serialport', 'sqlite3']
-      external: [],
+      input: {
+        'worker/read-zip': path.join(rootDir, 'src/worker/read-zip.ts'),
+      },
     },
   },
   resolve: {
     alias: {
-      $main: path.join(rootDir, 'src/main'),
       $common: path.join(rootDir, 'src/common'),
     },
   },
