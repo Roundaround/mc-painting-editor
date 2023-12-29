@@ -1,3 +1,5 @@
+import { Blocks } from 'react-loader-spinner';
+
 import { AboutModal } from '$renderer/components/modals/AboutModal';
 import { SplitModal } from '$renderer/components/modals/SplitModal';
 import { Footer } from '$renderer/components/sections/Footer';
@@ -7,7 +9,7 @@ import { PaintingList } from '$renderer/components/sections/PaintingList';
 import { HorizontalSplitPane, VerticalSplitPane } from '$renderer/components/SplitPane';
 import { useSelector } from '$renderer/utils/store';
 import { migrationsSelectors } from '$common/store/migrations';
-import { Blocks } from 'react-loader-spinner';
+
 import styles from './Home.module.scss';
 
 export default function Home() {
@@ -53,7 +55,7 @@ export default function Home() {
           )}
           <PaintingList />
         </HorizontalSplitPane>
-        <Footer className={styles['footer']} />
+        <Footer className="flex-fixed" />
       </fieldset>
     </>
   );

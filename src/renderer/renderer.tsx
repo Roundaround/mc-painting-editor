@@ -6,10 +6,11 @@ import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 
+import Home from '$renderer/Home';
 import { store } from '$renderer/utils/store';
 
-import './global.scss';
-import Home from './Home';
+import './styles/globals.css';
+import './styles/index.scss';
 
 library.add(fas);
 library.add(far);
@@ -27,5 +28,5 @@ root.render(
         </Routes>
       </Router>
     </Provider>
-  </StrictMode>
+  </StrictMode>,
 );

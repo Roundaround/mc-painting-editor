@@ -34,7 +34,7 @@ export const editorSlice = createSlice({
   reducers: {
     setAppInfo: (
       state,
-      action: PayloadAction<{ name: string; version: string }>
+      action: PayloadAction<{ name: string; version: string }>,
     ) => {
       state.appInfo.name = action.payload.name;
       state.appInfo.version = action.payload.version;

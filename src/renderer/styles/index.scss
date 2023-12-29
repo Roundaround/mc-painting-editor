@@ -1,0 +1,10 @@
+@import './variables.scss';
+@import './theme.scss';
+@import './reset.scss';
+
+div#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

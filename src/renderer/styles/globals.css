@@ -1,0 +1,4 @@
+/* TODO: Re-enable after consolidating styles */
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;

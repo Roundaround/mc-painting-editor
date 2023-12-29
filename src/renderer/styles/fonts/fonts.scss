@@ -2,14 +2,14 @@
   font-family: 'Catamaran';
   font-style: normal;
   src: local(''),
-    url('./fonts/catamaran/Catamaran-VariableFont_wght.ttf') format('truetype');
+    url('$renderer/fonts/catamaran/Catamaran-VariableFont_wght.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Source Code Pro';
   font-style: normal;
   src: local(''),
-    url('./fonts/sourcecodepro/SourceCodePro-VariableFont_wght.ttf')
+    url('$renderer/fonts/sourcecodepro/SourceCodePro-VariableFont_wght.ttf')
       format('truetype');
 }
 
@@ -17,7 +17,7 @@
   font-family: 'Source Code Pro';
   font-style: italic;
   src: local(''),
-    url('./fonts/sourcecodepro/SourceCodePro-Italic-VariableFont_wght.ttf')
+    url('$renderer/fonts/sourcecodepro/SourceCodePro-Italic-VariableFont_wght.ttf')
       format('truetype');
 }
 
@@ -25,13 +25,13 @@
   font-family: 'Urbanist';
   font-style: normal;
   src: local(''),
-    url('./fonts/urbanist/Urbanist-VariableFont_wght.ttf') format('truetype');
+    url('$renderer/fonts/urbanist/Urbanist-VariableFont_wght.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'Urbanist';
   font-style: italic;
   src: local(''),
-    url('./fonts/urbanist/Urbanist-Italic-VariableFont_wght.ttf')
+    url('$renderer/fonts/urbanist/Urbanist-Italic-VariableFont_wght.ttf')
       format('truetype');
 }
