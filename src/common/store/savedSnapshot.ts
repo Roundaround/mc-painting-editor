@@ -1,17 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { metadataInitialState, MetadataState } from './metadata';
+
+import { editorActions } from '$common/store/editor';
+import { metadataInitialState, MetadataState } from '$common/store/metadata';
 import {
   areMigrationsEqual,
   migrationsInitialState,
   migrationsSelectors,
   MigrationsState,
-} from './migrations';
+} from '$common/store/migrations';
 import {
   arePaintingsEqual,
   paintingsInitialState,
   paintingsSelectors,
   PaintingsState,
-} from './paintings';
+} from '$common/store/paintings';
 
 export interface SavedSnapshotState {
   metadata: MetadataState;
@@ -34,6 +36,9 @@ export const savedSnapshotSlice = createSlice({
       state.paintings = action.payload.paintings;
       state.migrations = action.payload.migrations;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(editorActions.newFile, () => savedSnapshotInitialState);
   },
 });
 

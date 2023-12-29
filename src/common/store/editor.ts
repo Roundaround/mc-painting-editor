@@ -42,6 +42,10 @@ export const editorSlice = createSlice({
     setFilename: (state, action: PayloadAction<string>) => {
       state.filename = action.payload;
     },
+    newFile: (state) => {
+      state.filename = '';
+      state.dirty = false;
+    },
     setDirty: (state, action: PayloadAction<boolean>) => {
       state.dirty = action.payload;
     },

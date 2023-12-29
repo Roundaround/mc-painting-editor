@@ -6,6 +6,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
+import { editorActions } from '$common/store/editor';
+
 export interface Migration {
   id: string;
   description: string;
@@ -51,6 +53,9 @@ export const migrationsSlice = createSlice({
     updateMigration: migrationsAdapter.updateOne,
     setMigrations: migrationsAdapter.setAll,
     removeMigration: migrationsAdapter.removeOne,
+  },
+  extraReducers: (builder) => {
+    builder.addCase(editorActions.newFile, () => migrationsInitialState);
   },
 });
 

@@ -1,5 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+import { editorActions } from '$common/store/editor';
+
 export interface MetadataState {
   icon: string;
   packFormat: number;
@@ -40,6 +42,9 @@ export const metadataSlice = createSlice({
     setTargetScale: (state, action: PayloadAction<number>) => {
       state.targetScale = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(editorActions.newFile, () => metadataInitialState);
   },
 });
 

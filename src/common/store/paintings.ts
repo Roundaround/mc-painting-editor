@@ -7,6 +7,8 @@ import {
   PayloadAction,
 } from '@reduxjs/toolkit';
 
+import { editorActions } from '$common/store/editor';
+
 export interface Painting {
   id: string;
   name: string;
@@ -91,6 +93,9 @@ export const paintingsSlice = createSlice({
         }))
       );
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(editorActions.newFile, () => paintingsInitialState);
   },
 });
 

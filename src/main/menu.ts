@@ -3,13 +3,44 @@ import contextMenu from 'electron-context-menu';
 
 import { editorActions } from '$common/store/editor';
 import { paintingsActions, paintingsSelectors } from '$common/store/paintings';
-import { openZipFile, saveZipFile } from '$main/files';
+import { clearTempDir, openZipFile, saveZipFile } from '$main/files';
 import { store } from '$main/store';
 
 export const menuTemplate: MenuItemConstructorOptions[] = [
   {
     label: '&File',
     submenu: [
+      {
+        label: 'New',
+        accelerator: 'CmdOrCtrl+N',
+        click: async (menuItem, focusedWindow, event) => {
+          if (!focusedWindow) {
+            return;
+          }
+
+          if (!store.getState().editor.dirty) {
+            store.dispatch(editorActions.newFile());
+            clearTempDir();
+            return;
+          }
+
+          focusedWindow.webContents.ipc.once(
+            'confirmation',
+            (event, confirmed) => {
+              if (!confirmed) {
+                return;
+              }
+              store.dispatch(editorActions.newFile());
+              clearTempDir();
+            }
+          );
+          focusedWindow.webContents.send(
+            'confirmation',
+            'You have unsaved changes. ' +
+              'Are you sure you want to start a new file?'
+          );
+        },
+      },
       {
         label: 'Open',
         accelerator: 'CmdOrCtrl+O',
