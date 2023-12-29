@@ -60,6 +60,9 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     return;
   }
 
+  // We're not really concerned whether it completes or not, so we don't await
+  clearTempDir();
+
   store.dispatch(setLoading());
 
   const filename = files.filePaths[0];
@@ -535,4 +538,29 @@ async function checkForPotentialMigration(parentWindow: BrowserWindow) {
   }
 
   return Promise.resolve(true);
+}
+
+export function clearTempDir() {
+  return new Promise<void>((resolve, reject) => {
+    const childProcess = utilityProcess.fork(
+      path.join(__dirname, 'worker/clear-tmp.js'),
+      [appTempDir],
+      {
+        stdio: 'pipe',
+      }
+    );
+    childProcess.on('message', (message) => {
+      if (!isC2PMessage(message)) {
+        console.warn('Received an invalid message from the worker process!');
+        console.warn('Message:', message);
+        return;
+      }
+
+      if (message.type === 'error') {
+        reject(message.content);
+      } else if (message.type === 'done') {
+        resolve();
+      }
+    });
+  });
 }

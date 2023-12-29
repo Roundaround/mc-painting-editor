@@ -5,13 +5,14 @@ import { defineConfig } from 'vite';
 const rootDir = process.cwd();
 
 /**
- * Worker process for reading zip files - Vite configuration
+ * Worker processes - Vite configuration
  */
 export default defineConfig({
   build: {
     rollupOptions: {
       input: {
         'worker/read-zip': path.join(rootDir, 'src/worker/read-zip.ts'),
+        'worker/clear-tmp': path.join(rootDir, 'src/worker/clear-tmp.ts'),
       },
     },
   },

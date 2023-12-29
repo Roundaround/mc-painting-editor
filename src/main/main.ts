@@ -11,11 +11,10 @@ import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
-import fs from 'fs';
 import path from 'path';
 
 import {
-  appTempDir,
+  clearTempDir,
   openIconFile,
   openPaintingFile,
   saveSplitZipFile,
@@ -145,15 +144,18 @@ app.on('activate', () => {
   }
 });
 
-app.on('before-quit', () => {
-  try {
-    const files = fs.readdirSync(appTempDir);
-    for (const file of files) {
-      fs.rmSync(path.join(appTempDir, file), { recursive: true });
-    }
-  } catch (e) {
-    // Directory either doesn't exist or no longer writable.
-    // Either way, do nothing.
+let cleanupFinished = false;
+app.on('before-quit', async (e) => {
+  // Prevent the app from quitting before the temp directory is cleared. The
+  // app won't wait for this to finish despite using an async function, so we
+  // have to preventDefault immediately before kicking off our async work, then
+  // manually re-call quit() once the work is done.
+
+  if (!cleanupFinished) {
+    e.preventDefault();
+    await clearTempDir();
+    cleanupFinished = true;
+    app.quit();
   }
 });
 

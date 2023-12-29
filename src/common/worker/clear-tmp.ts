@@ -7,10 +7,7 @@ import { isAcceptedMessages } from '$common/worker/common';
 
 export type P2CMessage = never;
 
-export type C2PMessage =
-  | ErrorMessage
-  | ActionMessage
-  | DoneMessage<{ filename: string }>;
+export type C2PMessage = ErrorMessage | ActionMessage | DoneMessage<{}>;
 
 export function isP2CMessage(message: unknown): message is P2CMessage {
   return isAcceptedMessages(message, []);

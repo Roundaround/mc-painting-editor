@@ -13,7 +13,8 @@ import {
   migrationsActions,
 } from '$common/store/migrations';
 import { getDefaultPainting, paintingsActions } from '$common/store/paintings';
-import type { BasePayloadAction, C2PMessage } from '$common/worker/read-zip';
+import type { BasePayloadAction } from '$common/worker/common';
+import type { C2PMessage } from '$common/worker/read-zip';
 
 const {
   setIcon,
