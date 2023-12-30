@@ -18,19 +18,22 @@ const api = {
     ipcRenderer.send('reduxAction', action);
   },
   listenForReduxActions(
-    callback: (action: PayloadAction<unknown, string, any>) => void
+    callback: (action: PayloadAction<unknown, string, any>) => void,
   ) {
     ipcRenderer.on(
       'reduxAction',
       (event, action: PayloadAction<unknown, string, any>) => {
         callback(action);
-      }
+      },
     );
   },
   listenForRequestConfirmation() {
-    ipcRenderer.on('confirmation', async (event, message: string) => {
-      ipcRenderer.send('confirmation', confirm(message));
-    });
+    ipcRenderer.on(
+      'confirmation',
+      async (event, reqId: string, message: string) => {
+        ipcRenderer.send(`confirmation-${reqId}`, confirm(message));
+      },
+    );
   },
 } as const;
 

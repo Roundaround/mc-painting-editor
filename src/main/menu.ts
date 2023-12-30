@@ -5,6 +5,10 @@ import { editorActions } from '$common/store/editor';
 import { paintingsActions, paintingsSelectors } from '$common/store/paintings';
 import { clearTempDir, openZipFile, saveZipFile } from '$main/files';
 import { store } from '$main/store';
+import { sendMessageAndListenForResponse } from '$main/utils';
+
+type ConfirmationArgs = [string];
+type ConfirmationResponse = [boolean];
 
 export const menuTemplate: MenuItemConstructorOptions[] = [
   {
@@ -24,21 +28,21 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             return;
           }
 
-          focusedWindow.webContents.ipc.once(
+          const [confirmed] = await sendMessageAndListenForResponse<
+            ConfirmationArgs,
+            ConfirmationResponse
+          >(
+            focusedWindow,
             'confirmation',
-            (event, confirmed) => {
-              if (!confirmed) {
-                return;
-              }
-              store.dispatch(editorActions.newFile());
-              clearTempDir();
-            }
+            'You have unsaved changes. Are you sure you want to start a new file?',
           );
-          focusedWindow.webContents.send(
-            'confirmation',
-            'You have unsaved changes. ' +
-              'Are you sure you want to start a new file?'
-          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          store.dispatch(editorActions.newFile());
+          clearTempDir();
         },
       },
       {
@@ -54,20 +58,20 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             return;
           }
 
-          focusedWindow.webContents.ipc.once(
+          const [confirmed] = await sendMessageAndListenForResponse<
+            ConfirmationArgs,
+            ConfirmationResponse
+          >(
+            focusedWindow,
             'confirmation',
-            (event, confirmed) => {
-              if (!confirmed) {
-                return;
-              }
-              openZipFile(focusedWindow);
-            }
+            'You have unsaved changes. Are you sure you want to open another file?',
           );
-          focusedWindow.webContents.send(
-            'confirmation',
-            'You have unsaved changes. ' +
-              'Are you sure you want to open a new file?'
-          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          openZipFile(focusedWindow);
         },
       },
       {
@@ -121,7 +125,7 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
         label: 'Remove selected',
         id: 'remove-selected',
         enabled: false,
-        click: (menuItem, focusedWindow, event) => {
+        click: async (menuItem, focusedWindow, event) => {
           if (!focusedWindow) {
             return;
           }
@@ -134,19 +138,20 @@ export const menuTemplate: MenuItemConstructorOptions[] = [
             return;
           }
 
-          focusedWindow.webContents.ipc.once(
+          const [confirmed] = await sendMessageAndListenForResponse<
+            ConfirmationArgs,
+            ConfirmationResponse
+          >(
+            focusedWindow,
             'confirmation',
-            (event, confirmed) => {
-              if (!confirmed) {
-                return;
-              }
-              store.dispatch(paintingsActions.removeSelected());
-            }
+            `Are you sure you want to remove ${selected} paintings?`,
           );
-          focusedWindow.webContents.send(
-            'confirmation',
-            `Are you sure you want to remove ${selected} paintings?`
-          );
+
+          if (!confirmed) {
+            return;
+          }
+
+          store.dispatch(paintingsActions.removeSelected());
         },
       },
       {
