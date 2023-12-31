@@ -35,6 +35,7 @@ export default {
       },
       flex: {
         fixed: '0 0 auto',
+        full: '1 1 100%',
       },
       keyframes: {
         fadeIn: {

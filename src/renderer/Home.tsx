@@ -11,10 +11,7 @@ import { Footer } from '$renderer/components/sections/Footer';
 import { MetadataEditor } from '$renderer/components/sections/MetadataEditor';
 import { MigrationList } from '$renderer/components/sections/MigrationList';
 import { PaintingList } from '$renderer/components/sections/PaintingList';
-import { clsxm } from '$renderer/utils/clsxm';
 import { useSelector } from '$renderer/utils/store';
-
-import styles from './Home.module.scss';
 
 export default function Home() {
   const hasOverlay = useSelector((state) => !!state.editor.overlay);
@@ -27,13 +24,15 @@ export default function Home() {
   );
   const hasMigrations = useSelector(migrationsSelectors.selectTotal) > 0;
 
-  const overlayClasses = clsxm(styles['overlay'], 'bg-neutral-200/10');
+  const overlayClasses =
+    'bg-neutral-200/10 fixed top-0 left-0 h-full w-full flex flex-col justify-center items-center z-40';
+  const loaderClasses = 'drop-shadow-lg';
 
   return (
     <>
       {!isLoading ? null : (
         <div className={overlayClasses}>
-          <Blocks height={200} width={200} wrapperClass={styles['loader']} />
+          <Blocks height={200} width={200} wrapperClass={loaderClasses} />
         </div>
       )}
 
@@ -49,8 +48,11 @@ export default function Home() {
         </div>
       )}
 
-      <fieldset disabled={hasOverlay} className={styles['page-wrapper']}>
-        <HorizontalSplitPane>
+      <fieldset
+        disabled={hasOverlay}
+        className="flex h-full w-full flex-col rounded-none border-0 p-0"
+      >
+        <HorizontalSplitPane className="flex-full overflow-hidden">
           {hasMigrations ? (
             <VerticalSplitPane>
               <MetadataEditor />

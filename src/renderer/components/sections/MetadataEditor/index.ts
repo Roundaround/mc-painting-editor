@@ -1,1 +1,0 @@
-export { MetadataEditor } from './MetadataEditor';

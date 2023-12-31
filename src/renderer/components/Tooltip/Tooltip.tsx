@@ -193,7 +193,10 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
       <>
         {active && mounted && portalEl.current
           ? createPortal(
-              <div className={styles['tooltip-wrapper']} style={{ top, left }}>
+              <div
+                className={clsxm(styles['tooltip-wrapper'], 'z-50')}
+                style={{ top, left }}
+              >
                 <div
                   className={clsxm(
                     classNames,

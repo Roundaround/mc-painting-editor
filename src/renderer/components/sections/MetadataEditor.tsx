@@ -9,9 +9,6 @@ import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
 import { useDispatch, useSelector } from '$renderer/utils/store';
 
-import { clsxm } from '$renderer/utils/clsxm';
-import styles from './MetadataEditor.module.scss';
-
 const { setId, setName, setDescription, setPackFormat, setTargetScale } =
   metadataActions;
 
@@ -28,14 +25,10 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
-    .join(' ')
-    .trim();
+  const fieldClasses = 'flex flex-row items-end justify-between gap-4';
 
   return (
-    <div {...htmlProps} className={classNames}>
+    <div {...htmlProps} className="flex flex-col gap-4 overflow-y-auto p-2">
       <div className="text-xl">Metadata</div>
       <TextInput
         id="id"
@@ -59,7 +52,7 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
         value={description}
         onChange={(e) => dispatch(setDescription(e.target.value))}
       />
-      <div className={styles['pack-format']}>
+      <div className={fieldClasses}>
         <NumberInput
           id="pack-format"
           label="Pack Format"
@@ -77,18 +70,15 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
           directTabbable={false}
         >
           <a
-            className={clsxm(
-              styles['pack-format-help'],
-              'rounded-full bg-blue-600 text-gray-100',
-            )}
+            className="flex-fixed m-0 inline-flex aspect-square w-8 items-center justify-center rounded-full bg-blue-600 p-0 text-gray-100"
             href="https://minecraft.fandom.com/wiki/Pack_format#Resources"
             target="_blank"
           >
-            <FontAwesomeIcon icon="question" />
+            <FontAwesomeIcon icon="question" className="w-full" />
           </a>
         </Tooltip>
       </div>
-      <div className={styles['target-scale']}>
+      <div className={fieldClasses}>
         <NumberInput
           id="target-scale"
           label="Target Scale"
@@ -98,7 +88,6 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
           onChange={(e) => dispatch(setTargetScale(e.target.valueAsNumber))}
         />
         <Button
-          className={styles['target-scale-help']}
           variant={ButtonVariant.ICON}
           tooltip={{
             content:
@@ -116,3 +105,5 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
     </div>
   );
 };
+
+export default MetadataEditor;

@@ -102,3 +102,5 @@ export const Footer: FC<FooterProps> = ({ className, ...props }) => {
     </div>
   );
 };
+
+export default Footer;
