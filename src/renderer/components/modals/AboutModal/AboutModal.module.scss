@@ -28,32 +28,6 @@
   gap: var(--size-3);
 }
 
-.name {
-  font-size: var(--font-size-4);
-  font-weight: var(--font-weight-6);
-  white-space: nowrap;
-}
-
-a.link {
-  font-size: var(--font-size-4);
-  margin: 0;
-  padding: 0;
-  color: var(--text-2);
-  text-decoration: none;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: color 0.15s var(--ease-in-out-3);
-
-  &:hover {
-    color: var(--text-1);
-  }
-
-  > svg {
-    display: flex;
-  }
-}
-
 .tooltip {
   z-index: 10000;
 }

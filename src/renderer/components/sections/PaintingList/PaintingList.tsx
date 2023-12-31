@@ -1,14 +1,20 @@
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
-import { TooltipDirection } from '$renderer/components/Tooltip';
-import { useDispatch, useSelector } from '$renderer/utils/store';
-import { filtersActions, filtersSelectors } from '$renderer/utils/store/filters';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FC, Fragment, HTMLProps, useState } from 'react';
+
 import {
   getDefaultPainting,
   paintingsActions,
   paintingsSelectors,
 } from '$common/store/paintings';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, Fragment, HTMLProps, useState } from 'react';
+import { TooltipDirection } from '$renderer/components/Tooltip';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { clsxm } from '$renderer/utils/clsxm';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import {
+  filtersActions,
+  filtersSelectors,
+} from '$renderer/utils/store/filters';
+
 import { Filters } from './Filters';
 import { ListItem } from './ListItem';
 import styles from './PaintingList.module.scss';
@@ -44,7 +50,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
   return (
     <div {...htmlProps} className={classNames}>
       <div className={styles['header']}>
-        <span className={styles['title']}>Paintings</span>
+        <span className="text-xl">Paintings</span>
         <div className={styles['actions']}>
           {!hasFilters ? null : (
             <Button
@@ -91,7 +97,12 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         </div>
       </div>
       {!showFilters ? null : <Filters className={styles['filters']} />}
-      <div className={listClassNames}>
+      <div
+        className={clsxm(listClassNames, {
+          'items-center justify-center text-xl italic text-gray-300':
+            filteredPaintings.length === 0,
+        })}
+      >
         {paintingCount > 0 ? null : <div>No paintings...yet!</div>}
         {paintingCount === 0 || filteredPaintings.length > 0 ? null : (
           <div>No paintings found</div>

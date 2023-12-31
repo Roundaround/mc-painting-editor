@@ -1,9 +1,16 @@
-import { useDispatch, useSelector } from '$renderer/utils/store';
-import { filtersActions, filtersSelectors } from '$renderer/utils/store/filters';
-import { paintingsSelectors } from '$common/store/paintings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, HTMLProps, useMemo } from 'react';
-import { InlineButton } from '../../InlineButton';
+import type { FC, HTMLProps } from 'react';
+import { useMemo } from 'react';
+
+import { paintingsSelectors } from '$common/store/paintings';
+import { InlineButton } from '$renderer/components/InlineButton';
+import { clsxm } from '$renderer/utils/clsxm';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+import {
+  filtersActions,
+  filtersSelectors,
+} from '$renderer/utils/store/filters';
+
 import styles from './Footer.module.scss';
 
 const { selectMatchingPaintings } = filtersSelectors;
@@ -18,7 +25,7 @@ export const Footer: FC<FooterProps> = (props) => {
   const paintings = useSelector(paintingsSelectors.selectAll);
   const filteredPaintings = useSelector(selectMatchingPaintings);
   const paintingsWithWarnings = useSelector(
-    paintingsSelectors.selectWithWarnings
+    paintingsSelectors.selectWithWarnings,
   );
 
   const paintingsWithoutImage = useMemo(() => {
@@ -37,7 +44,7 @@ export const Footer: FC<FooterProps> = (props) => {
     .trim();
 
   return (
-    <div className={classNames} {...htmlProps}>
+    <div className={clsxm(classNames, 'text-sm')} {...htmlProps}>
       <span>Made with ❤️ by Roundaround</span>
       <span className={styles['spacer']}></span>
       {!paintingsWithoutId ? null : (

@@ -1,12 +1,15 @@
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
-import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { FC, HTMLProps } from 'react';
+import { Fragment } from 'react';
+
 import {
   migrationsActions,
   migrationsSelectors,
 } from '$common/store/migrations';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, Fragment, HTMLProps } from 'react';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { useDispatch, useSelector } from '$renderer/utils/store';
+
 import styles from './MigrationList.module.scss';
 
 const { removeMigration } = migrationsActions;
@@ -28,7 +31,7 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
-      <div className={styles['title']}>Migrations</div>
+      <div className="mb-4 text-xl">Migrations</div>
       {migrations.map((migration, index) => (
         <Fragment key={migration.id}>
           <div className={styles['migration']}>

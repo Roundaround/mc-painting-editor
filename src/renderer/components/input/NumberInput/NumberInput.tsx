@@ -32,7 +32,7 @@ export const NumberInput: FC<NumberInputProps> = (props: NumberInputProps) => {
   return (
     <div className={classNames} {...htmlProps}>
       {!label ? null : (
-        <label htmlFor={id} className={styles['label']}>
+        <label htmlFor={id} className="select-none text-xs">
           {label}
         </label>
       )}

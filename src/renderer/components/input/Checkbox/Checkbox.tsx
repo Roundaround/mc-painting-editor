@@ -31,7 +31,7 @@ export const Checkbox: FC<CheckboxProps> = (props) => {
     return (
       <div className={classNames}>
         {!label ? null : (
-          <label htmlFor={id} className={styles['label']}>
+          <label htmlFor={id} className="select-none text-xs">
             {label}
           </label>
         )}
@@ -53,7 +53,7 @@ export const Checkbox: FC<CheckboxProps> = (props) => {
 };
 
 function isTooltipProps(
-  tooltip: ReactNode | TooltipPropsSansChildren
+  tooltip: ReactNode | TooltipPropsSansChildren,
 ): tooltip is TooltipPropsSansChildren {
   return (tooltip as TooltipPropsSansChildren).content !== undefined;
 }

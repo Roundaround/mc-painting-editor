@@ -1,8 +1,7 @@
 import { FC, HTMLProps } from 'react';
 import styles from './CompareSelect.module.scss';
 
-interface CompareSelect
-  extends Omit<HTMLProps<HTMLFormElement>, 'onChange'> {
+interface CompareSelect extends Omit<HTMLProps<HTMLFormElement>, 'onChange'> {
   id: string;
   label?: string;
   onChange?: (value: 'gt' | 'lt' | 'eq' | 'ne' | undefined) => void;
@@ -26,10 +25,10 @@ export const CompareSelect: FC<CompareSelect> = (props) => {
 
   return (
     <form className={classNames} {...htmlProps}>
-      <label className={styles['label']}>{label}</label>
+      <label className="select-none text-xs">{label}</label>
 
       <div className={styles['option']}>
-        <label htmlFor={`${id}_gt`} className={styles['label']}>
+        <label htmlFor={`${id}_gt`} className="select-none text-xs">
           Greater than
         </label>
         <input
@@ -43,7 +42,7 @@ export const CompareSelect: FC<CompareSelect> = (props) => {
       </div>
 
       <div className={styles['option']}>
-        <label htmlFor={`${id}_lt`} className={styles['label']}>
+        <label htmlFor={`${id}_lt`} className="select-none text-xs">
           Less than
         </label>
         <input
@@ -57,7 +56,7 @@ export const CompareSelect: FC<CompareSelect> = (props) => {
       </div>
 
       <div className={styles['option']}>
-        <label htmlFor={`${id}_eq`} className={styles['label']}>
+        <label htmlFor={`${id}_eq`} className="select-none text-xs">
           Equal to
         </label>
         <input
@@ -71,7 +70,7 @@ export const CompareSelect: FC<CompareSelect> = (props) => {
       </div>
 
       <div className={styles['option']}>
-        <label htmlFor={`${id}_ne`} className={styles['label']}>
+        <label htmlFor={`${id}_ne`} className="select-none text-xs">
           Not equal to
         </label>
         <input

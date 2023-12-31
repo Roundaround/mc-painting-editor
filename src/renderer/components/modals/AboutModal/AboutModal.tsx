@@ -1,12 +1,12 @@
 import { FC, HTMLProps, useEffect } from 'react';
 
+import { editorActions } from '$common/store/editor';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Button } from '$renderer/components/input/Button';
 import { Github } from '$renderer/components/svg/Github';
 import { Kofi } from '$renderer/components/svg/Kofi';
 import { Modrinth } from '$renderer/components/svg/Modrinth';
-import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { useDispatch, useSelector } from '$renderer/utils/store';
-import { editorActions } from '$common/store/editor';
 
 import styles from './AboutModal.module.scss';
 
@@ -33,10 +33,15 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
     };
   }, [dispatch]);
 
+  const linkClasses =
+    'text-3xl text-gray-300 transition-colors duration-150 hover:text-white';
+
   return (
     <div className={styles['modal']}>
       <div className={styles['section']}>
-        <div className={styles['name']}>{appInfo.name}</div>
+        <div className="whitespace-nowrap text-2xl font-semibold">
+          {appInfo.name}
+        </div>
         <div>Version {appInfo.version}</div>
         <div>Made with ❤️ by Roundaround</div>
       </div>
@@ -47,7 +52,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
           directTabbable={false}
         >
           <a
-            className={styles['link']}
+            className={linkClasses}
             target="_blank"
             href="https://github.com/Roundaround/mc-painting-editor"
           >
@@ -60,7 +65,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
           directTabbable={false}
         >
           <a
-            className={styles['link']}
+            className={linkClasses}
             target="_blank"
             href="https://modrinth.com/user/Roundaround"
           >
@@ -73,7 +78,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
           directTabbable={false}
         >
           <a
-            className={styles['link']}
+            className={linkClasses}
             target="_blank"
             href="https://ko-fi.com/roundaround"
           >

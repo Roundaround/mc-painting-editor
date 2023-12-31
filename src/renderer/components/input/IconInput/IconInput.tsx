@@ -23,7 +23,7 @@ export const IconInput: FC<IconInputProps> = (props) => {
 
   return (
     <div {...htmlProps} className={wrapperClassNames}>
-      <div className={styles['label']}>Icon</div>
+      <div className="select-none text-xs">Icon</div>
       <div
         className={inputClassNames}
         onClick={() => {

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, HTMLProps } from 'react';
+import type { FC, HTMLProps } from 'react';
 
 import { metadataActions } from '$common/store/metadata';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
@@ -35,7 +35,7 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
-      <div className={styles['title']}>Metadata</div>
+      <div className="text-xl">Metadata</div>
       <TextInput
         id="id"
         label="ID"

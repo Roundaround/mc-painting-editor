@@ -2,5 +2,12 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.associations": {
     "*.css": "tailwindcss"
-  }
+  },
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "ngClass",
+    ".*Classes", // Match on custom vars following the pattern fooClasses
+    "classes" // Match on custom vars named classes
+  ]
 }

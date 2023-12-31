@@ -29,7 +29,7 @@ export const Chip: FC<ChipProps> = (props) => {
     .trim();
 
   return (
-    <span className={classNames} {...htmlProps}>
+    <span className={`${classNames} font-medium text-base`} {...htmlProps}>
       {label}
       {!onDelete ? null : (
         <Button

@@ -1,10 +1,13 @@
-import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
 import {
   ButtonHTMLAttributes,
   DetailedHTMLProps,
   ReactNode,
   useMemo,
 } from 'react';
+
+import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
+import { clsxm } from '$renderer/utils/clsxm';
+
 import styles from './Button.module.scss';
 
 type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
@@ -53,7 +56,10 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
 
     return (
       <button
-        className={classNames}
+        className={clsxm(classNames, 'text-base font-medium bg-blue-600', {
+          'text-2xl font-bold': variant === ButtonVariant.LARGE,
+          'text-xs': variant === ButtonVariant.ICON_TINY,
+        })}
         type="button"
         {...htmlProps}
       >
@@ -77,7 +83,7 @@ export const Button = (props: ButtonProps & typeof defaultProps) => {
 Button.defaultProps = defaultProps;
 
 function isTooltipProps(
-  tooltip: ReactNode | TooltipPropsSansChildren
+  tooltip: ReactNode | TooltipPropsSansChildren,
 ): tooltip is TooltipPropsSansChildren {
   return (tooltip as TooltipPropsSansChildren).content !== undefined;
 }
