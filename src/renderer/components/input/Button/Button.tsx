@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps, FC, ReactNode } from 'react';
+import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
 import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
@@ -15,24 +15,12 @@ export enum ButtonVariant {
   ICON_TINY = 'icon-tiny',
 }
 
-interface ButtonProps
-  extends Omit<
-    DetailedHTMLProps<
-      ButtonHTMLAttributes<HTMLButtonElement>,
-      HTMLButtonElement
-    >,
-    'variant'
-  > {
+type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'variant'> & {
   tooltip?: ReactNode | TooltipPropsSansChildren;
   variant?: ButtonVariant;
-}
+};
 
-const InnerButton: FC<ButtonProps> = ({
-  children,
-  variant,
-  className,
-  ...htmlProps
-}) => {
+const InnerButton: FC<ButtonProps> = ({ variant, className, ...props }) => {
   return (
     <button
       className={clsxm(
@@ -55,10 +43,8 @@ const InnerButton: FC<ButtonProps> = ({
         className,
       )}
       type="button"
-      {...htmlProps}
-    >
-      {children}
-    </button>
+      {...props}
+    />
   );
 };
 
