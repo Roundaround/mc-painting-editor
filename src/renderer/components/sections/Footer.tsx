@@ -60,6 +60,7 @@ export const Footer: FC<FooterProps> = ({ className, ...props }) => {
               `Click to automatically set your filters to see them.`,
           }}
         >
+        <FontAwesomeIcon icon={'triangle-exclamation'} className="absolute left-2 -mt-[1px] opacity-75 h-3 w-3 animate-ping" />
           <FontAwesomeIcon icon={'triangle-exclamation'} className="h-3 w-3" />
           <span>Needs ID:</span>
           <span className="font-mono">{paintingsWithoutId}</span>
@@ -67,7 +68,7 @@ export const Footer: FC<FooterProps> = ({ className, ...props }) => {
       )}
       {!paintingsWithoutImage ? null : (
         <InlineButton
-          className={errorStatClasses}
+          className={clsxm(errorStatClasses, 'relative overflow-hidden')}
           onClick={() => {
             dispatch(showMissingImage());
           }}
@@ -77,6 +78,7 @@ export const Footer: FC<FooterProps> = ({ className, ...props }) => {
               `Click to automatically set your filters to see them.`,
           }}
         >
+          <FontAwesomeIcon icon={'triangle-exclamation'} className="absolute left-2 -mt-[1px] opacity-75 h-3 w-3 animate-ping" />
           <FontAwesomeIcon icon={'triangle-exclamation'} className="h-3 w-3" />
           <span>Needs image:</span>
           <span className="font-mono">{paintingsWithoutImage}</span>
