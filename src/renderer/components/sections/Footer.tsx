@@ -68,7 +68,7 @@ export const Footer: FC<FooterProps> = ({ className, ...props }) => {
       )}
       {!paintingsWithoutImage ? null : (
         <InlineButton
-          className={clsxm(errorStatClasses, 'relative overflow-hidden')}
+          className={errorStatClasses}
           onClick={() => {
             dispatch(showMissingImage());
           }}
