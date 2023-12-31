@@ -8,8 +8,8 @@ import {
 } from '$common/store/migrations';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Button, ButtonVariant } from '$renderer/components/input/Button';
-import { useDispatch, useSelector } from '$renderer/utils/store';
 import { clsxm } from '$renderer/utils/clsxm';
+import { useDispatch, useSelector } from '$renderer/utils/store';
 
 import styles from './MigrationList.module.scss';
 
@@ -57,7 +57,7 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
                 </Tooltip>
               )}
               <Button
-                className={styles['delete-button']}
+                className="bg-red-900"
                 onClick={() => {
                   if (confirm('Are you sure? This cannot be undone.')) {
                     dispatch(removeMigration(migration.uuid));
@@ -74,7 +74,7 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
             </div>
           </div>
           {index === migrations.length - 1 ? null : (
-            <hr className={styles['divider']} />
+            <hr className="border-white/20" />
           )}
         </Fragment>
       ))}

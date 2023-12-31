@@ -6,14 +6,7 @@
   height: 1.6rem;
   border-radius: 0.8rem;
   padding-inline: 0.6rem;
-  background-color: var(--accent);
-  color: var(--text-1);
   white-space: nowrap;
-}
-
-.chip--outlined {
-  background-color: transparent;
-  border: 1px solid var(--surface-2);
 }
 
 .chip--deletable {
@@ -24,11 +17,9 @@
   position: absolute;
   right: 0.3rem;
   bottom: 0.3rem;
-  background-color: var(--surface-2);
 
   .chip--outlined & {
     right: calc(0.3rem - 1px);
     bottom: calc(0.3rem - 1px);
-    background-color: var(--accent);
   }
 }

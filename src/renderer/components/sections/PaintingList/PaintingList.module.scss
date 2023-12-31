@@ -13,8 +13,6 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--size-2) var(--size-3);
-  background-color: hsl(var(--surface-1-hsl) / 0.5);
-  border-bottom: 1px solid var(--surface-2);
 }
 
 .actions {
@@ -24,10 +22,6 @@
   gap: var(--size-3);
   align-items: center;
   justify-content: flex-end;
-}
-
-.filters {
-  flex: 0 0 auto;
 }
 
 .filter-chips {

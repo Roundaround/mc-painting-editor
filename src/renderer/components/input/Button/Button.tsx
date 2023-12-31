@@ -30,15 +30,14 @@ interface ButtonProps
 const InnerButton: FC<ButtonProps> = ({
   children,
   variant,
-  className: passedClassName,
+  className,
   ...htmlProps
 }) => {
   return (
     <button
       className={clsxm(
-        passedClassName,
         styles['button'],
-        'items-center justify-center rounded-md bg-blue-600 px-3 py-1 text-base font-medium text-gray-100 before:rounded-md',
+        'items-center justify-center rounded-md bg-blue-600 px-3 py-1 text-base font-medium text-gray-100 duration-75 before:rounded-md before:bg-neutral-200 before:opacity-0 before:transition-opacity hover:before:opacity-10 active:before:opacity-0',
         {
           'rounded-2xl px-8 py-5 text-2xl font-bold before:rounded-2xl':
             variant === ButtonVariant.LARGE,
@@ -53,6 +52,7 @@ const InnerButton: FC<ButtonProps> = ({
           'w-4 rounded-full text-xs before:rounded-full':
             variant === ButtonVariant.ICON_TINY,
         },
+        className,
       )}
       type="button"
       {...htmlProps}

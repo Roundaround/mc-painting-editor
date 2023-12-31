@@ -12,19 +12,6 @@
   image-rendering: pixelated;
   overflow: hidden;
   cursor: pointer;
-  background-color: var(--input);
-
-  --overlay-opacity: 0;
-  --icon-opacity: 0;
-
-  &--empty {
-    --icon-opacity: 1;
-  }
-
-  &:hover {
-    --overlay-opacity: 0.15;
-    --icon-opacity: 1;
-  }
 
   & * {
     pointer-events: none;
@@ -42,8 +29,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: hsl(var(--gray-0-hsl) / var(--overlay-opacity));
-  transition: background-color 0.075s var(--ease-in-out-2);
 }
 
 .overlay-icon {
@@ -54,8 +39,6 @@
   width: 3rem;
   padding: 0;
   aspect-ratio: 1;
-  opacity: var(--icon-opacity);
-  transition: opacity 0.075s var(--ease-in-out-2);
 
   > svg {
     width: 1.5rem;

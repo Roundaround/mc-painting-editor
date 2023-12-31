@@ -8,6 +8,10 @@
     "className",
     "ngClass",
     ".*Classes", // Match on custom vars following the pattern fooClasses
-    "classes" // Match on custom vars named classes
+    "classes", // Match on custom vars named classes
+    "clsxm" // Utility function, clsx + twMerge
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    ["clsxm?\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ]
 }

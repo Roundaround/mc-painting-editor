@@ -71,7 +71,7 @@ export function ListItem(props: ListItemProps) {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper', painting.marked ? 'marked' : '']
+  const classNames = ['wrapper']
     .map((name) => styles[name as keyof typeof styles])
     .concat(passedClassName || '')
     .join(' ')
@@ -82,7 +82,12 @@ export function ListItem(props: ListItemProps) {
   }
 
   return (
-    <div className={classNames} {...htmlProps}>
+    <div
+      className={clsxm(classNames, {
+        'bg-blue-600/20': painting.marked,
+      })}
+      {...htmlProps}
+    >
       {!issues.length ? null : (
         <div className={styles['icon-column']}>
           {issues.map((issue) => {
@@ -200,7 +205,7 @@ export function ListItem(props: ListItemProps) {
         />
 
         <Button
-          className={styles['delete-button']}
+          className="bg-red-900"
           onClick={() => {
             const isDefault = arePaintingsEqual(painting, getDefaultPainting());
             if (isDefault || confirm('Remove painting?')) {

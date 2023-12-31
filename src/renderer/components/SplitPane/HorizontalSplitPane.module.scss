@@ -30,28 +30,3 @@
     height: 100%;
   }
 }
-
-.divider {
-  position: relative;
-  height: 100%;
-  width: 1px;
-  background-color: var(--surface-2);
-}
-
-.divider__hitbox {
-  position: absolute;
-  cursor: col-resize;
-  height: 100%;
-  left: -2px;
-  right: -2px;
-  background-color: transparent;
-  transition: all 0.15s var(--ease-out-3);
-
-  &:hover {
-    background-color: hsl(var(--surface-2-hsl) / 0.5);
-  }
-}
-
-.divider__hitbox--dragging {
-  background-color: hsl(var(--surface-2-hsl) / 0.5);
-}

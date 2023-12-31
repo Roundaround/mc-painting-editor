@@ -1,3 +1,4 @@
+import { clsxm } from '$renderer/utils/clsxm';
 import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 import React, {
   BaseHTMLAttributes,
@@ -46,7 +47,7 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
       topRef.current.style.height = `${height}px`;
       updateTopRect();
     },
-    [topRef, updateTopRect]
+    [topRef, updateTopRect],
   );
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -84,7 +85,7 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
 
       setTopHeight(newTopHeight);
     },
-    [dragging, separatorYPosition, topHeight, setTopHeight]
+    [dragging, separatorYPosition, topHeight, setTopHeight],
   );
 
   const onMouseMove = useCallback(
@@ -94,7 +95,7 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
       }
       onMove(e.clientY);
     },
-    [dragging, onMove]
+    [dragging, onMove],
   );
 
   const onTouchMove = useCallback(
@@ -104,7 +105,7 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
       }
       onMove(e.touches[0].clientY);
     },
-    [dragging, onMove]
+    [dragging, onMove],
   );
 
   const onMouseUp = useCallback(() => {
@@ -127,21 +128,19 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
     .join(' ')
     .trim();
 
-  const hitboxClasses = [
-    styles['divider__hitbox'],
-    dragging ? styles['divider__hitbox--dragging'] : '',
-  ]
-    .join(' ')
-    .trim();
-
   return (
     <div className={wrapperClasses} ref={splitPaneRef}>
       <div className={styles['top-pane']} ref={topRef}>
         {top}
       </div>
-      <div className={styles['divider']}>
+      <div className="relative h-[1px] w-full bg-neutral-600">
         <div
-          className={hitboxClasses}
+          className={clsxm(
+            'absolute -bottom-[2px] -top-[2px] w-full cursor-row-resize bg-transparent transition-colors duration-150 hover:bg-neutral-600/50',
+            {
+              'bg-neutral-600/50': dragging,
+            },
+          )}
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         ></div>

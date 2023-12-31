@@ -1,3 +1,4 @@
+import { clsxm } from '$renderer/utils/clsxm';
 import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 import React, {
   BaseHTMLAttributes,
@@ -46,7 +47,7 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
       leftRef.current.style.width = `${width}px`;
       updateLeftRect();
     },
-    [leftRef, updateLeftRect]
+    [leftRef, updateLeftRect],
   );
 
   const onMouseDown = (e: React.MouseEvent) => {
@@ -84,7 +85,7 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
 
       setLeftWidth(newLeftWidth);
     },
-    [dragging, leftWidth, separatorXPosition, setLeftWidth]
+    [dragging, leftWidth, separatorXPosition, setLeftWidth],
   );
 
   const onMouseMove = useCallback(
@@ -94,7 +95,7 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
       }
       onMove(e.clientX);
     },
-    [dragging, onMove]
+    [dragging, onMove],
   );
 
   const onTouchMove = useCallback(
@@ -104,7 +105,7 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
       }
       onMove(e.touches[0].clientX);
     },
-    [dragging, onMove]
+    [dragging, onMove],
   );
 
   const onMouseUp = useCallback(() => {
@@ -127,21 +128,19 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
     .join(' ')
     .trim();
 
-  const hitboxClasses = [
-    styles['divider__hitbox'],
-    dragging ? styles['divider__hitbox--dragging'] : '',
-  ]
-    .join(' ')
-    .trim();
-
   return (
     <div className={wrapperClasses} ref={splitPaneRef}>
       <div className={styles['left-pane']} ref={leftRef}>
         {left}
       </div>
-      <div className={styles['divider']}>
+      <div className="relative h-full w-[1px] bg-neutral-600">
         <div
-          className={hitboxClasses}
+          className={clsxm(
+            'absolute -left-[2px] -right-[2px] h-full cursor-col-resize bg-transparent transition-colors duration-150 hover:bg-neutral-600/50',
+            {
+              'bg-neutral-600/50': dragging,
+            },
+          )}
           onMouseDown={onMouseDown}
           onTouchStart={onTouchStart}
         ></div>

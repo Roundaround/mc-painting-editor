@@ -1,10 +1,8 @@
 .wrapper {
   display: flex;
   flex-direction: row;
-  background-color: var(--accent);
   padding-inline: var(--size-2);
   align-items: stretch;
-  color: var(--text-1);
 
   > * {
     padding: 0 var(--size-2);
@@ -29,12 +27,4 @@
     width: 0.7rem;
     height: 0.7rem;
   }
-}
-
-.error {
-  background-color: var(--red-9);
-}
-
-.number {
-  font-family: var(--font-mono);
 }

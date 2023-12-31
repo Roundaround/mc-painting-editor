@@ -36,7 +36,7 @@ export const ImageInput = (props: ImageInputProps) => {
 
   return (
     <div
-      className={classNames}
+      className={clsxm(classNames, 'group border-[0.15rem] border-white')}
       style={
         {
           '--painting-grid-height': `${maxHeight * 2.4}rem`,
@@ -49,8 +49,21 @@ export const ImageInput = (props: ImageInputProps) => {
     >
       <div className={styles['background']}></div>
       <img src={image} className={styles['painting']} />
-      <div className={styles['overlay']}>
-        <div className={clsxm(styles['overlay-icon'], 'rounded-full bg-blue-600 text-gray-100')}>
+      <div
+        className={clsxm(
+          styles['overlay'],
+          'transition-colors duration-75 group-hover:bg-neutral-100/15 group-active:bg-transparent',
+        )}
+      >
+        <div
+          className={clsxm(
+            styles['overlay-icon'],
+            'rounded-full bg-blue-600 text-gray-100 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+            {
+              'opacity-100': !hasImage,
+            },
+          )}
+        >
           <FontAwesomeIcon icon="edit" />
         </div>
       </div>

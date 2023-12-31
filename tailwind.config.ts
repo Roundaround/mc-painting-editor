@@ -1,9 +1,38 @@
 import type { Config } from 'tailwindcss';
 
 export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', 'index.html'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          'Urbanist',
+          'Catamaran',
+          'system-ui',
+          '-apple-system',
+          'Segoe UI',
+          'Roboto',
+          'Ubuntu',
+          'Cantarell',
+          'Noto Sans',
+          'sans-serif',
+        ],
+        mono: [
+          'Source Code Pro',
+          'Dank Mono',
+          'Operator Mono',
+          'Inconsolata',
+          'Fira Mono',
+          'ui-monospace',
+          'SF Mono',
+          'Monaco',
+          'Droid Sans Mono',
+          'monospace',
+        ],
+      },
+      colors: {
+        app: '#1d1f20', // Between gray-900 and gray-800
+      },
       flex: {
         fixed: '0 0 auto',
       },

@@ -28,16 +28,24 @@ export const IconInput: FC<IconInputProps> = (props) => {
     <div {...htmlProps} className={wrapperClassNames}>
       <div className="select-none text-xs">Icon</div>
       <div
-        className={clsxm(inputClassNames, 'rounded-md')}
+        className={clsxm(inputClassNames, 'group rounded-md bg-neutral-700')}
         onClick={() => {
           window.electron.openIconFile();
         }}
       >
-        <div className={styles['overlay']}>
+        <div
+          className={clsxm(
+            styles['overlay'],
+            'transition-colors duration-75 group-hover:bg-gray-100/15 group-active:bg-transparent',
+          )}
+        >
           <div
             className={clsxm(
               styles['overlay-icon'],
-              'rounded-full bg-blue-600 text-gray-100',
+              'rounded-full bg-blue-600 text-gray-100 opacity-0 transition-opacity duration-200 group-hover:opacity-100',
+              {
+                'opacity-100': !icon,
+              },
             )}
           >
             <FontAwesomeIcon icon="edit" />

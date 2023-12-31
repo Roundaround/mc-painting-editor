@@ -47,15 +47,3 @@
     url('$renderer/fonts/urbanist/Urbanist-Italic-VariableFont_wght.ttf')
       format('truetype');
 }
-
-:root {
-  --font-sans: 'Urbanist', 'Catamaran', system-ui, -apple-system, Segoe UI,
-    Roboto, Ubuntu, Cantarell, Noto Sans, sans-serif;
-  --font-serif: ui-serif, serif;
-  --font-mono: 'Source Code Pro', Dank Mono, Operator Mono, Inconsolata,
-    Fira Mono, ui-monospace, SF Mono, Monaco, Droid Sans Mono, monospace;
-}
-
-html {
-  font-family: var(--font-sans);
-}

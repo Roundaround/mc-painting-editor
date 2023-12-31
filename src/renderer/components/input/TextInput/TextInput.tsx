@@ -5,6 +5,7 @@ import { BaseInput } from '$renderer/components/input/BaseInput/BaseInput';
 import { Button, ButtonVariant } from '$renderer/components/input/Button';
 
 import styles from './TextInput.module.scss';
+import { clsxm } from '$renderer/utils/clsxm';
 
 interface TextInputProps extends Omit<HTMLProps<HTMLDivElement>, 'label'> {
   label?: ReactNode;
@@ -70,7 +71,7 @@ export const TextInput: FC<TextInputProps> = (props) => {
         />
         {!onClear ? null : (
           <Button
-            className={styles['clear-button']}
+            className={clsxm(styles['clear-button'], 'bg-neutral-700')}
             variant={ButtonVariant.ICON_MINI}
             onClick={onClear}
           >

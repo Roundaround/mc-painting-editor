@@ -11,10 +11,6 @@
   }
 }
 
-.marked {
-  background-color: hsl(var(--accent-hsl) / 0.2);
-}
-
 .inputs {
   flex: 1 1 100%;
   display: flex;
@@ -44,8 +40,4 @@
   align-items: center;
   width: 2rem;
   height: 2rem;
-}
-
-.delete-button {
-  background-color: var(--red-9);
 }

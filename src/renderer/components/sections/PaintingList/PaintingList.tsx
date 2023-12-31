@@ -49,7 +49,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
 
   return (
     <div {...htmlProps} className={classNames}>
-      <div className={styles['header']}>
+      <div className={clsxm(styles['header'], 'border-b border-b-neutral-600')}>
         <span className="text-xl">Paintings</span>
         <div className={styles['actions']}>
           {!hasFilters ? null : (
@@ -96,7 +96,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           </Button>
         </div>
       </div>
-      {!showFilters ? null : <Filters className={styles['filters']} />}
+      {!showFilters ? null : <Filters className="flex-fixed" />}
       <div
         className={clsxm(listClassNames, {
           'items-center justify-center text-xl italic text-gray-300':
@@ -111,7 +111,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           <Fragment key={id}>
             <ListItem id={id} />
             {index === filteredPaintings.length - 1 ? null : (
-              <hr className="border-white/20" />
+              <hr className="border-neutral-600" />
             )}
           </Fragment>
         ))}

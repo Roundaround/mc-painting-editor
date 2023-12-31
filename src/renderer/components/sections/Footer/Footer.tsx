@@ -44,38 +44,41 @@ export const Footer: FC<FooterProps> = (props) => {
     .trim();
 
   return (
-    <div className={clsxm(classNames, 'text-sm')} {...htmlProps}>
+    <div
+      className={clsxm(classNames, 'bg-blue-600 text-sm text-gray-100')}
+      {...htmlProps}
+    >
       <span>Made with ❤️ by Roundaround</span>
       <span className={styles['spacer']}></span>
       {!paintingsWithoutId ? null : (
         <InlineButton
-          className={styles['stat'] + ' ' + styles['error']}
+          className={clsxm(styles['stat'], 'bg-red-900')}
           onClick={() => {
             dispatch(showMissingId());
           }}
         >
           <FontAwesomeIcon icon={'triangle-exclamation'} />
           <span>Needs ID:</span>
-          <span className={styles['number']}>{paintingsWithoutId}</span>
+          <span className="font-mono">{paintingsWithoutId}</span>
         </InlineButton>
       )}
       {!paintingsWithoutImage ? null : (
         <InlineButton
-          className={styles['stat'] + ' ' + styles['error']}
+          className={clsxm(styles['stat'], 'bg-red-900')}
           onClick={() => {
             dispatch(showMissingImage());
           }}
         >
           <FontAwesomeIcon icon={'triangle-exclamation'} />
           <span>Needs image:</span>
-          <span className={styles['number']}>{paintingsWithoutImage}</span>
+          <span className="font-mono">{paintingsWithoutImage}</span>
         </InlineButton>
       )}
       {paintingsWithWarnings.length === 0 ? null : (
         <span className={styles['stat']}>
           <FontAwesomeIcon icon={'triangle-exclamation'} />
           <span>With warnings:</span>
-          <span className={styles['number']}>
+          <span className="font-mono">
             {paintingsWithWarnings.length}
           </span>
         </span>
@@ -83,12 +86,12 @@ export const Footer: FC<FooterProps> = (props) => {
       {filteredPaintings.length === paintingCount ? null : (
         <span className={styles['stat']}>
           <span>Matching filters:</span>
-          <span className={styles['number']}>{filteredPaintings.length}</span>
+          <span className="font-mono">{filteredPaintings.length}</span>
         </span>
       )}
       <span className={styles['stat']}>
         <span>Total paintings:</span>
-        <span className={styles['number']}>{paintingCount}</span>
+        <span className="font-mono">{paintingCount}</span>
       </span>
     </div>
   );

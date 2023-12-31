@@ -1,10 +1,13 @@
+import { FC, HTMLProps } from 'react';
+
 import { Checkbox } from '$renderer/components/input/Checkbox';
 import { CompareSelect } from '$renderer/components/input/CompareSelect';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
+import { clsxm } from '$renderer/utils/clsxm';
 import { useDispatch, useSelector } from '$renderer/utils/store';
 import { filtersActions } from '$renderer/utils/store/filters';
-import { FC, HTMLProps } from 'react';
+
 import styles from './Filters.module.scss';
 
 const {
@@ -40,7 +43,13 @@ export const Filters: FC<FiltersProps> = (props) => {
     .trim();
 
   return (
-    <div {...htmlProps} className={classNames}>
+    <div
+      {...htmlProps}
+      className={clsxm(
+        classNames,
+        'border-b border-b-neutral-600 bg-gray-600/10',
+      )}
+    >
       <div className={styles['row']}>
         <TextInput
           id="search"

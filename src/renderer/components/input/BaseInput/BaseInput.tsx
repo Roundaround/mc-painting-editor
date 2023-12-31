@@ -9,7 +9,10 @@ type BaseInputProps = InputHTMLAttributes<HTMLInputElement> & {
 export const BaseInput: FC<BaseInputProps> = ({ className, ...props }) => {
   return (
     <input
-      className={clsxm('rounded-md bg-neutral-700 text-gray-200', className)}
+      className={clsxm(
+        'cursor-auto rounded-md bg-neutral-700 px-2 py-1 text-gray-200',
+        className,
+      )}
       {...props}
     />
   );

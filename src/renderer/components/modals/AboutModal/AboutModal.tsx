@@ -38,7 +38,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
     'text-3xl text-gray-300 transition-colors duration-150 hover:text-white';
 
   return (
-    <div className={clsxm(styles['modal'], 'rounded-md')}>
+    <div className={clsxm(styles['modal'], 'rounded-md bg-app')}>
       <div className={styles['section']}>
         <div className="whitespace-nowrap text-2xl font-semibold">
           {appInfo.name}

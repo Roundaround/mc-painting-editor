@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps, FC } from 'react';
 
+import { clsxm } from '$renderer/utils/clsxm';
 import styles from './InlineButton.module.scss';
 
 export interface InlineButtonProps
@@ -18,8 +19,17 @@ export const InlineButton: FC<InlineButtonProps> = (props) => {
     .trim();
 
   return (
-    <button onClick={onClick} className={classNames} {...htmlProps}>
-      <div className={styles['overlay']}></div>
+    <button
+      onClick={onClick}
+      className={clsxm(classNames, 'group')}
+      {...htmlProps}
+    >
+      <div
+        className={clsxm(
+          styles['overlay'],
+          'bg-transparent, transition-colors duration-75 hover:bg-neutral-200/10 group-hover:bg-neutral-200/10',
+        )}
+      ></div>
       {children}
     </button>
   );

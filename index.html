@@ -1,13 +1,18 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html class="m-0 h-full w-full p-0">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src mc-painting-editor: 'self' 'unsafe-inline' data:; script-src 'self' 'unsafe-eval' 'unsafe-inline' data:" /> -->
     <title>Custom Painting Editor</title>
   </head>
-  <body>
-    <div id="root"></div>
+  <body
+    class="bg-app m-0 h-full w-full p-0 font-sans text-gray-200 caret-blue-600 accent-blue-600"
+  >
+    <div
+      id="root"
+      class="m-0 flex h-full w-full flex-col items-center justify-center p-0"
+    ></div>
     <div id="tooltip-portal"></div>
     <script type="module" src="/src/renderer/renderer.tsx"></script>
   </body>

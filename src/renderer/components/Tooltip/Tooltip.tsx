@@ -1,5 +1,3 @@
-import { clsxm } from '$renderer/utils/clsxm';
-import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 import {
   CSSProperties,
   ReactNode,
@@ -9,6 +7,10 @@ import {
   useState,
 } from 'react';
 import { createPortal } from 'react-dom';
+
+import { clsxm } from '$renderer/utils/clsxm';
+import { useBoundingRect } from '$renderer/utils/useBoundingRect';
+
 import styles from './Tooltip.module.scss';
 
 export enum TooltipDirection {
@@ -193,7 +195,20 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
           ? createPortal(
               <div className={styles['tooltip-wrapper']} style={{ top, left }}>
                 <div
-                  className={clsxm(classNames, 'rounded-md')}
+                  className={clsxm(
+                    classNames,
+                    'rounded-md bg-neutral-800 text-gray-100',
+                    {
+                      'before:border-t-neutral-800':
+                        direction === TooltipDirection.TOP,
+                      'before:border-r-neutral-800':
+                        direction === TooltipDirection.RIGHT,
+                      'before:border-b-neutral-800':
+                        direction === TooltipDirection.BOTTOM,
+                      'before:border-l-neutral-800':
+                        direction === TooltipDirection.LEFT,
+                    },
+                  )}
                   ref={contentRef}
                   style={
                     {

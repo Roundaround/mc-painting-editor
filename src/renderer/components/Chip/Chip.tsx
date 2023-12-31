@@ -1,6 +1,9 @@
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
+
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { clsxm } from '$renderer/utils/clsxm';
+
 import styles from './Chip.module.scss';
 
 interface ChipProps extends HTMLProps<HTMLSpanElement> {
@@ -29,11 +32,22 @@ export const Chip: FC<ChipProps> = (props) => {
     .trim();
 
   return (
-    <span className={`${classNames} font-medium text-base`} {...htmlProps}>
+    <span
+      className={clsxm(
+        classNames,
+        'bg-blue-600 text-base font-medium text-gray-100',
+        {
+          'border border-neutral-700 bg-transparent': outline,
+        },
+      )}
+      {...htmlProps}
+    >
       {label}
       {!onDelete ? null : (
         <Button
-          className={styles['delete-button']}
+          className={clsxm(styles['delete-button'], 'bg-neutral-700', {
+            'bg-blue-600': outline,
+          })}
           variant={ButtonVariant.ICON_TINY}
           onClick={onDelete}
         >

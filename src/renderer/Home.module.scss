@@ -8,7 +8,6 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: hsl(var(--gray-0-hsl) / 0.2);
   z-index: 1000;
 }
 
@@ -28,20 +27,6 @@
   > * {
     flex: 1 1 100%;
     overflow: hidden;
-  }
-}
-
-.column {
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 100%;
-  justify-content: space-between;
-  align-items: stretch;
-  overflow: hidden;
-  background-color: hsl(var(--surface-1-hsl) / 0.25);
-
-  > * {
-    flex: 0 0 auto;
   }
 }
 
