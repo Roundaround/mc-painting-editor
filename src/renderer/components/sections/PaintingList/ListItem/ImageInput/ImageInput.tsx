@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CSSProperties, HTMLProps } from 'react';
+
+import { clsxm } from '$renderer/utils/clsxm';
+
 import styles from './ImageInput.module.scss';
 
 export interface ImageInputProps extends HTMLProps<HTMLDivElement> {
@@ -47,7 +50,7 @@ export const ImageInput = (props: ImageInputProps) => {
       <div className={styles['background']}></div>
       <img src={image} className={styles['painting']} />
       <div className={styles['overlay']}>
-        <div className={styles['overlay-icon']}>
+        <div className={clsxm(styles['overlay-icon'], 'rounded-full bg-blue-600 text-gray-100')}>
           <FontAwesomeIcon icon="edit" />
         </div>
       </div>

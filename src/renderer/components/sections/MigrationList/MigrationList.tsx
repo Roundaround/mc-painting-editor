@@ -9,6 +9,7 @@ import {
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Button, ButtonVariant } from '$renderer/components/input/Button';
 import { useDispatch, useSelector } from '$renderer/utils/store';
+import { clsxm } from '$renderer/utils/clsxm';
 
 import styles from './MigrationList.module.scss';
 
@@ -45,7 +46,12 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
                   content={migration.description}
                   direction={TooltipDirection.RIGHT}
                 >
-                  <div className={styles['description']}>
+                  <div
+                    className={clsxm(
+                      styles['description'],
+                      'rounded-full bg-blue-600 text-gray-100',
+                    )}
+                  >
                     <FontAwesomeIcon icon="comment-dots" />
                   </div>
                 </Tooltip>

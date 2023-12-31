@@ -65,35 +65,8 @@ abbr {
   text-decoration-color: var(--blue-5);
 }
 
-mark {
-  border-radius: var(--radius-2);
-  padding-inline: var(--size-1);
-}
-
 p {
   max-inline-size: var(--size-content-3);
-}
-
-blockquote {
-  display: grid;
-  gap: var(--size-3);
-  max-inline-size: var(--size-content-2);
-  padding-block: var(--size-3);
-  padding-inline: var(--size-4);
-  border-inline-start-width: var(--border-size-3);
-}
-
-details {
-  background: var(--surface-2);
-  border-radius: var(--radius-2);
-  padding-block: var(--size-2);
-  padding-inline: var(--size-3);
-}
-
-hr {
-  background-color: var(--surface-3);
-  height: var(--border-size-2);
-  margin-block: var(--size-4);
 }
 
 code,
@@ -103,51 +76,11 @@ pre {
   font-family: var(--font-mono);
 }
 
-kbd {
-  white-space: nowrap;
-}
-
-kbd,
-var {
-  border-color: var(--surface-4);
-  border-radius: var(--radius-2);
-  border-width: var(--border-size-1);
-  padding: var(--size-1) var(--size-2);
-}
-
-code {
-  :not(pre) > & {
-    white-space: nowrap;
-    background: var(--surface-2);
-    border-radius: var(--radius-2);
-    padding: var(--size-1) var(--size-2);
-  }
-}
-
 pre {
   display: inline-block;
   max-inline-size: max-content;
   min-inline-size: 0;
   white-space: pre;
-}
-
-fieldset {
-  border: var(--border-size-1) solid var(--surface-4);
-  border-radius: var(--radius-2);
-}
-
-textarea,
-select,
-input:not(
-    button,
-    button[type],
-    input[type='button'],
-    input[type='submit'],
-    input[type='reset']
-  ) {
-  cursor: auto;
-  background-color: var(--input);
-  border-radius: var(--radius-2);
 }
 
 input,
@@ -172,20 +105,4 @@ input[type='checkbox'],
 input[type='radio'] {
   block-size: var(--size-3);
   inline-size: var(--size-3);
-}
-
-input[type='file'] {
-  align-self: flex-start;
-  border: var(--border-size-1) solid var(--surface-2);
-  border-radius: var(--radius-2);
-  box-shadow: var(--inner-shadow-4);
-  color: var(--text-2);
-  cursor: auto;
-  max-inline-size: 100%;
-  padding: 0;
-}
-
-button * {
-  pointer-events: none;
-  cursor: inherit;
 }

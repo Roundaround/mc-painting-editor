@@ -1,3 +1,4 @@
+import { clsxm } from '$renderer/utils/clsxm';
 import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 import {
   CSSProperties,
@@ -178,7 +179,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   return (
     <div
       ref={anchorRef}
-      className={anchorClassNames}
+      className={clsxm(anchorClassNames, 'focus-visible:rounded-md')}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}
@@ -192,7 +193,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
           ? createPortal(
               <div className={styles['tooltip-wrapper']} style={{ top, left }}>
                 <div
-                  className={classNames}
+                  className={clsxm(classNames, 'rounded-md')}
                   ref={contentRef}
                   style={
                     {
@@ -203,7 +204,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
                   {content}
                 </div>
               </div>,
-              portalEl.current
+              portalEl.current,
             )
           : null}
       </>

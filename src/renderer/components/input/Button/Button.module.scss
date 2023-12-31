@@ -1,9 +1,6 @@
 .button {
-  position: relative;
   display: inline-block;
   padding: var(--size-2) var(--size-3);
-  border-radius: var(--radius-2);
-  cursor: pointer;
   transition: all 0.05s var(--ease-in-out-2);
   transition-property: box-shadow, transform;
 
@@ -14,7 +11,6 @@
     left: 0;
     height: 100%;
     width: 100%;
-    border-radius: var(--radius-2);
     background: var(--smoke);
     pointer-events: none;
     opacity: 0;
@@ -37,68 +33,5 @@
     &::before {
       opacity: 0;
     }
-  }
-}
-
-.button--large {
-  padding: var(--size-5) var(--size-8);
-  border-radius: var(--radius-3);
-
-  &::before {
-    border-radius: var(--radius-3);
-  }
-}
-
-.button--icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-round);
-  width: 2rem;
-  padding: 0;
-  aspect-ratio: 1;
-
-  > svg {
-    width: 100%;
-  }
-
-  &::before {
-    border-radius: var(--radius-round);
-  }
-}
-
-.button--icon-mini {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-round);
-  width: 1.5rem;
-  padding: 0;
-  aspect-ratio: 1;
-
-  > svg {
-    width: 100%;
-  }
-
-  &::before {
-    border-radius: var(--radius-round);
-  }
-}
-
-.button--icon-tiny {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-round);
-  width: 1rem;
-  padding: 0;
-  aspect-ratio: 1;
-
-  > svg {
-    width: 100%;
-  }
-
-  &::before {
-    border-radius: var(--radius-round);
   }
 }

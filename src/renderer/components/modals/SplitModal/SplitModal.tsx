@@ -1,8 +1,10 @@
+import { FC, HTMLProps, useEffect } from 'react';
+
+import { editorActions } from '$common/store/editor';
 import { Button } from '$renderer/components/input/Button';
 import { TextInput } from '$renderer/components/input/TextInput';
+import { clsxm } from '$renderer/utils/clsxm';
 import { useDispatch, useSelector } from '$renderer/utils/store';
-import { editorActions } from '$common/store/editor';
-import { FC, HTMLProps, useEffect } from 'react';
 
 import styles from './SplitModal.module.scss';
 
@@ -33,7 +35,7 @@ export const SplitModal: FC<SplitModalProps> = (props) => {
   }, [dispatch]);
 
   return (
-    <div className={styles['modal']}>
+    <div className={clsxm(styles['modal'], 'rounded-md')}>
       <TextInput
         id="splitting-id"
         label="ID"

@@ -6,6 +6,7 @@ import { Button } from '$renderer/components/input/Button';
 import { Github } from '$renderer/components/svg/Github';
 import { Kofi } from '$renderer/components/svg/Kofi';
 import { Modrinth } from '$renderer/components/svg/Modrinth';
+import { clsxm } from '$renderer/utils/clsxm';
 import { useDispatch, useSelector } from '$renderer/utils/store';
 
 import styles from './AboutModal.module.scss';
@@ -37,7 +38,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
     'text-3xl text-gray-300 transition-colors duration-150 hover:text-white';
 
   return (
-    <div className={styles['modal']}>
+    <div className={clsxm(styles['modal'], 'rounded-md')}>
       <div className={styles['section']}>
         <div className="whitespace-nowrap text-2xl font-semibold">
           {appInfo.name}

@@ -9,6 +9,7 @@ import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
 import { useDispatch, useSelector } from '$renderer/utils/store';
 
+import { clsxm } from '$renderer/utils/clsxm';
 import styles from './MetadataEditor.module.scss';
 
 const { setId, setName, setDescription, setPackFormat, setTargetScale } =
@@ -76,7 +77,10 @@ export const MetadataEditor: FC<MetadataEditorProps> = (props) => {
           directTabbable={false}
         >
           <a
-            className={styles['pack-format-help']}
+            className={clsxm(
+              styles['pack-format-help'],
+              'rounded-full bg-blue-600 text-gray-100',
+            )}
             href="https://minecraft.fandom.com/wiki/Pack_format#Resources"
             target="_blank"
           >

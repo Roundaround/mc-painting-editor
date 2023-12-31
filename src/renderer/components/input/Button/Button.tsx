@@ -1,9 +1,4 @@
-import {
-  ButtonHTMLAttributes,
-  DetailedHTMLProps,
-  ReactNode,
-  useMemo,
-} from 'react';
+import { ButtonHTMLAttributes, DetailedHTMLProps, FC, ReactNode } from 'react';
 
 import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
@@ -20,10 +15,6 @@ export enum ButtonVariant {
   ICON_TINY = 'icon-tiny',
 }
 
-const defaultProps = {
-  variant: ButtonVariant.DEFAULT,
-};
-
 interface ButtonProps
   extends Omit<
     DetailedHTMLProps<
@@ -36,51 +27,53 @@ interface ButtonProps
   variant?: ButtonVariant;
 }
 
-export const Button = (props: ButtonProps & typeof defaultProps) => {
-  const {
-    children,
-    variant,
-    tooltip,
-    className: passedClassName,
-    ...htmlProps
-  } = props;
+const InnerButton: FC<ButtonProps> = ({
+  children,
+  variant,
+  className: passedClassName,
+  ...htmlProps
+}) => {
+  return (
+    <button
+      className={clsxm(
+        passedClassName,
+        styles['button'],
+        'items-center justify-center rounded-md bg-blue-600 px-3 py-1 text-base font-medium text-gray-100 before:rounded-md',
+        {
+          'rounded-2xl px-8 py-5 text-2xl font-bold before:rounded-2xl':
+            variant === ButtonVariant.LARGE,
+          'inline-flex aspect-square p-0 [&>svg]:w-full':
+            variant === ButtonVariant.ICON ||
+            variant === ButtonVariant.ICON_MINI ||
+            variant === ButtonVariant.ICON_TINY,
+          'w-8 rounded-full before:rounded-full':
+            variant === ButtonVariant.ICON,
+          'w-6 rounded-full before:rounded-full':
+            variant === ButtonVariant.ICON_MINI,
+          'w-4 rounded-full text-xs before:rounded-full':
+            variant === ButtonVariant.ICON_TINY,
+        },
+      )}
+      type="button"
+      {...htmlProps}
+    >
+      {children}
+    </button>
+  );
+};
 
-  const button = useMemo(() => {
-    const classNames = [
-      styles['button'],
-      variant === ButtonVariant.DEFAULT ? '' : styles[`button--${variant}`],
-    ]
-      .concat(passedClassName || '')
-      .join(' ')
-      .trim();
-
-    return (
-      <button
-        className={clsxm(classNames, 'text-base font-medium bg-blue-600', {
-          'text-2xl font-bold': variant === ButtonVariant.LARGE,
-          'text-xs': variant === ButtonVariant.ICON_TINY,
-        })}
-        type="button"
-        {...htmlProps}
-      >
-        {children}
-      </button>
-    );
-  }, [children, variant, passedClassName, htmlProps]);
-
+export const Button = ({ tooltip, ...props }: ButtonProps) => {
   if (tooltip === undefined) {
-    return button;
+    return <InnerButton {...props} />;
   }
 
   const tooltipProps = isTooltipProps(tooltip) ? tooltip : { content: tooltip };
   return (
     <Tooltip directTabbable={false} {...tooltipProps}>
-      {button}
+      <InnerButton {...props} />
     </Tooltip>
   );
 };
-
-Button.defaultProps = defaultProps;
 
 function isTooltipProps(
   tooltip: ReactNode | TooltipPropsSansChildren,

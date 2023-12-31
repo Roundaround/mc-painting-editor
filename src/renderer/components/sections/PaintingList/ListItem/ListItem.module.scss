@@ -37,30 +37,6 @@
   flex: 1 1 100%;
 }
 
-.issue-icon {
-  flex: 0 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: var(--radius-round);
-  width: 2rem;
-  padding: 0;
-  aspect-ratio: 1;
-  color: var(--text-1);
-
-  > svg {
-    width: 100%;
-  }
-}
-
-.warning {
-  background-color: var(--accent);
-}
-
-.error {
-  background-color: var(--red-9);
-}
-
 .mark-checkbox {
   flex: 0 0 auto;
   display: flex;

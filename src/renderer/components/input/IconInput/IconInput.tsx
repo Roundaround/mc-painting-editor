@@ -1,6 +1,9 @@
-import { useSelector } from '$renderer/utils/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FC, HTMLProps } from 'react';
+
+import { clsxm } from '$renderer/utils/clsxm';
+import { useSelector } from '$renderer/utils/store';
+
 import styles from './IconInput.module.scss';
 
 interface IconInputProps extends HTMLProps<HTMLDivElement> {}
@@ -25,13 +28,18 @@ export const IconInput: FC<IconInputProps> = (props) => {
     <div {...htmlProps} className={wrapperClassNames}>
       <div className="select-none text-xs">Icon</div>
       <div
-        className={inputClassNames}
+        className={clsxm(inputClassNames, 'rounded-md')}
         onClick={() => {
           window.electron.openIconFile();
         }}
       >
         <div className={styles['overlay']}>
-          <div className={styles['overlay-icon']}>
+          <div
+            className={clsxm(
+              styles['overlay-icon'],
+              'rounded-full bg-blue-600 text-gray-100',
+            )}
+          >
             <FontAwesomeIcon icon="edit" />
           </div>
         </div>

@@ -1,13 +1,8 @@
 .tooltip-anchor {
   --tooltip-display: block;
-  --tooltip-anchor-border-radius: var(--radius-2);
 
   display: var(--tooltip-display);
   position: relative;
-
-  &:focus-visible {
-    border-radius: var(--tooltip-anchor-border-radius);
-  }
 }
 
 .tooltip-anchor--inline {
@@ -31,7 +26,6 @@
   --tooltip-offset: 0px;
 
   position: absolute;
-  border-radius: var(--radius-2);
   background-color: var(--tooltip-background-color);
   color: var(--tooltip-foreground-color);
   padding-inline: var(--size-3);

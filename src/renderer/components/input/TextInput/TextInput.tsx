@@ -1,6 +1,9 @@
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { CSSProperties, FC, HTMLProps, ReactNode } from 'react';
+import type { FC, HTMLProps, ReactNode } from 'react';
+
+import { BaseInput } from '$renderer/components/input/BaseInput/BaseInput';
+import { Button, ButtonVariant } from '$renderer/components/input/Button';
+
 import styles from './TextInput.module.scss';
 
 interface TextInputProps extends Omit<HTMLProps<HTMLDivElement>, 'label'> {
@@ -12,8 +15,7 @@ interface TextInputProps extends Omit<HTMLProps<HTMLDivElement>, 'label'> {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
   onClear?: () => void;
-  style?: CSSProperties;
-  inputProps?: HTMLProps<HTMLInputElement>;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const TextInput: FC<TextInputProps> = (props) => {
@@ -27,7 +29,6 @@ export const TextInput: FC<TextInputProps> = (props) => {
     onBlur,
     onEnter,
     onClear,
-    inputProps,
     className: passedClassName,
     ...htmlProps
   } = props;
@@ -52,8 +53,9 @@ export const TextInput: FC<TextInputProps> = (props) => {
       )}
       <div className={styles['input-container']}>
         {!prefix ? null : <div className={styles['prefix']}>{prefix}</div>}
-        <input
+        <BaseInput
           id={id}
+          ref={props.inputRef}
           className={inputClassNames}
           value={value}
           onChange={onChange}
@@ -65,7 +67,6 @@ export const TextInput: FC<TextInputProps> = (props) => {
               onClear();
             }
           }}
-          {...inputProps}
         />
         {!onClear ? null : (
           <Button

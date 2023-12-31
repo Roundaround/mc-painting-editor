@@ -111,7 +111,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
           <Fragment key={id}>
             <ListItem id={id} />
             {index === filteredPaintings.length - 1 ? null : (
-              <hr className={styles['divider']} />
+              <hr className="border-white/20" />
             )}
           </Fragment>
         ))}

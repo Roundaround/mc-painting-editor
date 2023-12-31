@@ -10,6 +10,7 @@ import { Button, ButtonVariant } from '$renderer/components/input/Button';
 import { Checkbox } from '$renderer/components/input/Checkbox';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
+import { clsxm } from '$renderer/utils/clsxm';
 import { getPaintingImage } from '$renderer/utils/painting';
 import { useDispatch, useSelector } from '$renderer/utils/store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -34,7 +35,7 @@ export function ListItem(props: ListItemProps) {
   const { id, className: passedClassName, ...htmlProps } = props;
 
   const painting = useSelector(
-    (state) => paintingsSelectors.selectById(state, id)!
+    (state) => paintingsSelectors.selectById(state, id)!,
   );
   const targetScale = useSelector((state) => state.metadata.targetScale);
   const totalPaintings = useSelector(paintingsSelectors.selectTotal);
@@ -85,7 +86,7 @@ export function ListItem(props: ListItemProps) {
       {!issues.length ? null : (
         <div className={styles['icon-column']}>
           {issues.map((issue) => {
-            const classes = ['issue-icon', issue.severity]
+            const classes = [, issue.severity]
               .map((name) => styles[name as keyof typeof styles])
               .join(' ');
 
@@ -96,7 +97,14 @@ export function ListItem(props: ListItemProps) {
                 noWrap={issue.message.length < 20}
                 key={issue.message}
               >
-                <div className={classes}>
+                <div
+                  className={clsxm(
+                    'flex-fixed flex aspect-square w-8 items-center justify-center rounded-full bg-blue-600 p-0 text-gray-100 [&>svg]:w-full',
+                    {
+                      'bg-red-900': issue.severity === 'error',
+                    },
+                  )}
+                >
                   <FontAwesomeIcon icon={'triangle-exclamation'} />
                 </div>
               </Tooltip>
@@ -130,7 +138,7 @@ export function ListItem(props: ListItemProps) {
           value={painting.artist}
           onChange={(e) => {
             dispatch(
-              updatePainting({ id, changes: { artist: e.target.value } })
+              updatePainting({ id, changes: { artist: e.target.value } }),
             );
           }}
         />
@@ -145,7 +153,7 @@ export function ListItem(props: ListItemProps) {
               updatePainting({
                 id,
                 changes: { width: parseInt(e.target.value, 10) },
-              })
+              }),
             );
           }}
         />
@@ -160,7 +168,7 @@ export function ListItem(props: ListItemProps) {
               updatePainting({
                 id,
                 changes: { height: parseInt(e.target.value, 10) },
-              })
+              }),
             );
           }}
         />
@@ -180,7 +188,7 @@ export function ListItem(props: ListItemProps) {
           className={styles['mark-checkbox']}
           onChange={(e) => {
             dispatch(
-              setPaintingMarked({ id, marked: e.currentTarget.checked })
+              setPaintingMarked({ id, marked: e.currentTarget.checked }),
             );
           }}
           checked={painting.marked}

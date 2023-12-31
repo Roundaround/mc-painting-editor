@@ -1,4 +1,7 @@
 import { FC, HTMLProps, ReactNode } from 'react';
+
+import { BaseInput } from '$renderer/components/input/BaseInput/BaseInput';
+
 import styles from './NumberInput.module.scss';
 
 export interface NumberInputProps
@@ -11,6 +14,7 @@ export interface NumberInputProps
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   onEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  inputRef?: React.Ref<HTMLInputElement>;
 }
 
 export const NumberInput: FC<NumberInputProps> = (props: NumberInputProps) => {
@@ -37,8 +41,9 @@ export const NumberInput: FC<NumberInputProps> = (props: NumberInputProps) => {
         </label>
       )}
       <div className={styles['input-container']}>
-        <input
+        <BaseInput
           id={id}
+          ref={props.inputRef}
           className={styles['input']}
           type="number"
           value={value}
