@@ -10,7 +10,6 @@ import Home from '$renderer/Home';
 import { store } from '$renderer/utils/store/root';
 
 import './styles/globals.css';
-import './styles/index.scss';
 
 library.add(fas);
 library.add(far);

@@ -1,3 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { EntityId } from '@reduxjs/toolkit';
+import type { FC, HTMLAttributes } from 'react';
+import { useMemo } from 'react';
+
 import {
   arePaintingsEqual,
   getDefaultPainting,
@@ -5,18 +10,16 @@ import {
   paintingsActions,
   paintingsSelectors,
 } from '$common/store/paintings';
-import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Button, ButtonVariant } from '$renderer/components/Button';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Checkbox } from '$renderer/components/input/Checkbox';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
+import { ImageInput } from '$renderer/components/sections/PaintingList/ListItem/ImageInput';
 import { clsxm } from '$renderer/utils/clsxm';
 import { getPaintingImage } from '$renderer/utils/painting';
 import { useDispatch, useSelector } from '$renderer/utils/store/root';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { EntityId } from '@reduxjs/toolkit';
-import { HTMLProps, useMemo } from 'react';
-import { ImageInput } from './ImageInput';
+
 import styles from './ListItem.module.scss';
 
 const {
@@ -27,23 +30,25 @@ const {
   setPaintingMarked,
 } = paintingsActions;
 
-export interface ListItemProps extends Omit<HTMLProps<HTMLDivElement>, 'id'> {
-  id: EntityId;
-}
+type ListItemProps = HTMLAttributes<HTMLDivElement> & {
+  entityId: EntityId;
+};
 
-export function ListItem(props: ListItemProps) {
-  const { id, className: passedClassName, ...htmlProps } = props;
-
+export const ListItem: FC<ListItemProps> = ({
+  entityId,
+  className,
+  ...props
+}) => {
   const painting = useSelector(
-    (state) => paintingsSelectors.selectById(state, id)!,
+    (state) => paintingsSelectors.selectById(state, entityId)!,
   );
   const targetScale = useSelector((state) => state.metadata.targetScale);
   const totalPaintings = useSelector(paintingsSelectors.selectTotal);
   const paintingIds = useSelector(paintingsSelectors.selectIds);
 
   const currentIndex = useMemo(() => {
-    return paintingIds.indexOf(id);
-  }, [paintingIds, id]);
+    return paintingIds.indexOf(entityId);
+  }, [paintingIds, entityId]);
 
   const canMoveUp = useMemo(() => {
     return currentIndex > 0;
@@ -71,30 +76,27 @@ export function ListItem(props: ListItemProps) {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
-    .join(' ')
-    .trim();
-
   if (!painting) {
     return null;
   }
 
+  const iconColumnClasses = clsxm(styles['icon-column'], 'gap-2');
+
   return (
     <div
-      className={clsxm(classNames, {
-        'bg-blue-600/20': painting.marked,
-      })}
-      {...htmlProps}
+      className={clsxm(
+        styles['wrapper'],
+        'gap-5 p-4',
+        {
+          'bg-blue-600/20': painting.marked,
+        },
+        className,
+      )}
+      {...props}
     >
       {!issues.length ? null : (
-        <div className={styles['icon-column']}>
+        <div className={iconColumnClasses}>
           {issues.map((issue) => {
-            const classes = [, issue.severity]
-              .map((name) => styles[name as keyof typeof styles])
-              .join(' ');
-
             return (
               <Tooltip
                 content={issue.message}
@@ -117,38 +119,48 @@ export function ListItem(props: ListItemProps) {
           })}
         </div>
       )}
-      <div className={styles['inputs']}>
+      <div className={clsxm(styles['inputs'], 'gap-4')}>
         <TextInput
-          id={`painting-id-${id}`}
+          id={`painting-id-${entityId}`}
           label="ID"
           maxLength={32}
           value={painting.id}
           onChange={(e) => {
-            dispatch(updatePainting({ id, changes: { id: e.target.value } }));
+            dispatch(
+              updatePainting({ id: entityId, changes: { id: e.target.value } }),
+            );
           }}
         />
         <TextInput
-          id={`painting-name-${id}`}
+          id={`painting-name-${entityId}`}
           label="Name"
           maxLength={32}
           value={painting.name}
           onChange={(e) => {
-            dispatch(updatePainting({ id, changes: { name: e.target.value } }));
+            dispatch(
+              updatePainting({
+                id: entityId,
+                changes: { name: e.target.value },
+              }),
+            );
           }}
         />
         <TextInput
-          id={`painting-artist-${id}`}
+          id={`painting-artist-${entityId}`}
           label="Artist"
           maxLength={32}
           value={painting.artist}
           onChange={(e) => {
             dispatch(
-              updatePainting({ id, changes: { artist: e.target.value } }),
+              updatePainting({
+                id: entityId,
+                changes: { artist: e.target.value },
+              }),
             );
           }}
         />
         <NumberInput
-          id={`painting-width-${id}`}
+          id={`painting-width-${entityId}`}
           label="Width"
           min={1}
           max={8}
@@ -156,14 +168,14 @@ export function ListItem(props: ListItemProps) {
           onChange={(e) => {
             dispatch(
               updatePainting({
-                id,
+                id: entityId,
                 changes: { width: parseInt(e.target.value, 10) },
               }),
             );
           }}
         />
         <NumberInput
-          id={`painting-height-${id}`}
+          id={`painting-height-${entityId}`}
           label="Height"
           min={1}
           max={8}
@@ -171,7 +183,7 @@ export function ListItem(props: ListItemProps) {
           onChange={(e) => {
             dispatch(
               updatePainting({
-                id,
+                id: entityId,
                 changes: { height: parseInt(e.target.value, 10) },
               }),
             );
@@ -179,7 +191,7 @@ export function ListItem(props: ListItemProps) {
         />
       </div>
       <ImageInput
-        onClick={() => window.electron.openPaintingFile(id)}
+        onClick={() => window.electron.openPaintingFile(entityId)}
         maxHeight={8}
         maxWidth={8}
         hasImage={painting.path !== undefined && painting.path !== ''}
@@ -187,13 +199,16 @@ export function ListItem(props: ListItemProps) {
         height={painting.height}
         width={painting.width}
       />
-      <div className={styles['icon-column']}>
+      <div className={iconColumnClasses}>
         <Checkbox
-          id={`marked-${id}`}
+          id={`marked-${entityId}`}
           className={styles['mark-checkbox']}
           onChange={(e) => {
             dispatch(
-              setPaintingMarked({ id, marked: e.currentTarget.checked }),
+              setPaintingMarked({
+                id: entityId,
+                marked: e.currentTarget.checked,
+              }),
             );
           }}
           checked={painting.marked}
@@ -209,7 +224,7 @@ export function ListItem(props: ListItemProps) {
           onClick={() => {
             const isDefault = arePaintingsEqual(painting, getDefaultPainting());
             if (isDefault || confirm('Remove painting?')) {
-              dispatch(removePainting(id));
+              dispatch(removePainting(entityId));
             }
           }}
           variant={ButtonVariant.ICON}
@@ -221,12 +236,12 @@ export function ListItem(props: ListItemProps) {
           <FontAwesomeIcon icon="trash" />
         </Button>
 
-        <div className={styles['icon-column-gap']}></div>
+        <div className={iconColumnClasses}></div>
 
         {!canMoveUp ? null : (
           <Button
             onClick={() => {
-              dispatch(movePaintingUp(id));
+              dispatch(movePaintingUp(entityId));
             }}
             variant={ButtonVariant.ICON}
             tooltip={{
@@ -250,7 +265,7 @@ export function ListItem(props: ListItemProps) {
         {!canMoveDown ? null : (
           <Button
             onClick={() => {
-              dispatch(movePaintingDown(id));
+              dispatch(movePaintingDown(entityId));
             }}
             variant={ButtonVariant.ICON}
             tooltip={{
@@ -265,4 +280,6 @@ export function ListItem(props: ListItemProps) {
       </div>
     </div>
   );
-}
+};
+
+export default ListItem;

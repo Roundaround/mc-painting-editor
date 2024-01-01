@@ -1,14 +1,3 @@
-.tooltip-anchor {
-  --tooltip-display: block;
-
-  display: var(--tooltip-display);
-  position: relative;
-}
-
-.tooltip-anchor--inline {
-  --tooltip-display: inline-block;
-}
-
 .tooltip-wrapper {
   position: fixed;
   height: 0;
@@ -18,13 +7,11 @@
 }
 
 .tooltip {
-  --tooltip-margin: var(--size-3);
-  --tooltip-arrow: var(--size-2);
+  --tooltip-margin: 1rem;
+  --tooltip-arrow: 0.5rem;
   --tooltip-offset: 0px;
 
   position: absolute;
-  padding-inline: var(--size-3);
-  padding-block: var(--size-2);
   width: max-content;
   max-width: 32ch;
   text-align: center;
@@ -88,8 +75,4 @@
     top: calc(50% - var(--tooltip-offset));
     transform: translateX(0) translateY(-50%);
   }
-}
-
-.tooltip--nowrap {
-  white-space: nowrap;
 }

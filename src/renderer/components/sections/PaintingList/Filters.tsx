@@ -8,8 +8,6 @@ import { clsxm } from '$renderer/utils/clsxm';
 import { filtersActions } from '$renderer/utils/store/filters';
 import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
-import styles from './Filters.module.scss';
-
 const {
   setSearch,
   clearSearch,
@@ -34,21 +32,17 @@ export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(className || '')
-    .join(' ')
-    .trim();
+  const rowClasses = 'flex flex-row items-center justify-start gap-4';
 
   return (
     <div
       {...props}
       className={clsxm(
-        classNames,
-        'border-b border-b-neutral-600 bg-gray-600/10',
+        'flex flex-col items-stretch gap-5 border-b border-b-neutral-600 bg-gray-600/10 px-2 py-4',
+        className,
       )}
     >
-      <div className={styles['row']}>
+      <div className={rowClasses}>
         <TextInput
           id="search"
           label="Search"
@@ -61,7 +55,7 @@ export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
           }}
         />
       </div>
-      <div className={styles['row']}>
+      <div className={rowClasses}>
         <Checkbox
           id="missing-image"
           label="Missing an image"
@@ -81,7 +75,7 @@ export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
           }}
         />
       </div>
-      <div className={styles['row']}>
+      <div className={rowClasses}>
         <NumberInput
           id="width"
           label={
@@ -103,7 +97,7 @@ export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
           }}
         />
       </div>
-      <div className={styles['row']}>
+      <div className={rowClasses}>
         <NumberInput
           id="height"
           label={
@@ -128,3 +122,5 @@ export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
     </div>
   );
 };
+
+export default Filters;

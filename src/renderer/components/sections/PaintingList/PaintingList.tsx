@@ -1,30 +1,31 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, Fragment, HTMLProps, useState } from 'react';
+import { FC, Fragment, HTMLAttributes, useState } from 'react';
 
 import {
   getDefaultPainting,
   paintingsActions,
   paintingsSelectors,
 } from '$common/store/paintings';
-import { TooltipDirection } from '$renderer/components/Tooltip';
 import { Button, ButtonVariant } from '$renderer/components/Button';
+import { TooltipDirection } from '$renderer/components/Tooltip';
+import { Filters } from '$renderer/components/sections/PaintingList/Filters';
+import { ListItem } from '$renderer/components/sections/PaintingList/ListItem';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store/root';
 import {
   filtersActions,
   filtersSelectors,
 } from '$renderer/utils/store/filters';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
-import { Filters } from './Filters';
-import { ListItem } from './ListItem';
 import styles from './PaintingList.module.scss';
 
 const { resetAll } = filtersActions;
 const { selectHasFilters, selectMatchingPaintings } = filtersSelectors;
 
-export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
-  const { className: passedClassName, ...htmlProps } = props;
-
+export const PaintingList: FC<HTMLAttributes<HTMLDivElement>> = ({
+  className,
+  ...props
+}) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const paintingCount = useSelector(paintingsSelectors.selectTotal);
@@ -33,25 +34,16 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
-    .join(' ')
-    .trim();
-
-  const listClassNames = [
-    'list',
-    filteredPaintings.length === 0 ? 'list--empty' : '',
-  ]
-    .map((name) => styles[name as keyof typeof styles])
-    .join(' ')
-    .trim();
-
   return (
-    <div {...htmlProps} className={classNames}>
-      <div className={clsxm(styles['header'], 'border-b border-b-neutral-600')}>
+    <div {...props} className={clsxm(styles['wrapper'], className)}>
+      <div
+        className={clsxm(
+          styles['header'],
+          'gap-5 border-b border-b-neutral-600 px-4 py-2',
+        )}
+      >
         <span className="text-xl">Paintings</span>
-        <div className={styles['actions']}>
+        <div className={clsxm(styles['actions'], 'gap-4')}>
           {!hasFilters ? null : (
             <Button
               onClick={() => {
@@ -98,7 +90,7 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
       </div>
       {!showFilters ? null : <Filters className="flex-fixed" />}
       <div
-        className={clsxm(listClassNames, {
+        className={clsxm(styles['list'], {
           'items-center justify-center text-xl italic text-gray-300':
             filteredPaintings.length === 0,
         })}
@@ -107,9 +99,9 @@ export const PaintingList: FC<HTMLProps<HTMLDivElement>> = (props) => {
         {paintingCount === 0 || filteredPaintings.length > 0 ? null : (
           <div>No paintings found</div>
         )}
-        {filteredPaintings.map((id, index) => (
-          <Fragment key={id}>
-            <ListItem id={id} />
+        {filteredPaintings.map((entityId, index) => (
+          <Fragment key={entityId}>
+            <ListItem entityId={entityId} />
             {index === filteredPaintings.length - 1 ? null : (
               <hr className="border-neutral-600" />
             )}

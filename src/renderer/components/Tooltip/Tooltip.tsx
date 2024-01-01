@@ -75,27 +75,10 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
     updateContentRect();
   }, [active]);
 
-  const anchorClassNames = useMemo(() => {
-    const result: (keyof typeof styles)[] = ['tooltip-anchor'];
-    if (inline) {
-      result.push('tooltip-anchor--inline');
-    }
-    return result.map((name) => styles[name]).join(' ');
-  }, [inline]);
-
-  const classNames = useMemo(() => {
-    const result: (keyof typeof styles)[] = [
-      'tooltip',
-      `tooltip--${direction}`,
-    ];
-    if (noWrap) {
-      result.push('tooltip--nowrap');
-    }
-    return result
-      .map((name) => styles[name])
-      .join(' ')
-      .trim();
-  }, [direction, noWrap]);
+  const classNames = ['tooltip', `tooltip--${direction}`]
+    .map((name) => styles[name as keyof typeof styles])
+    .join(' ')
+    .trim();
 
   const { top, left } = useMemo(() => {
     if (!boundingRect) {
@@ -177,7 +160,9 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   return (
     <div
       ref={anchorRef}
-      className={clsxm(anchorClassNames, 'focus-visible:rounded-md')}
+      className={clsxm('relative block focus-visible:rounded-md', {
+        'inline-block': inline,
+      })}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}
@@ -196,7 +181,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
                 <div
                   className={clsxm(
                     classNames,
-                    'rounded-md bg-neutral-800 text-gray-100 shadow-xl',
+                    'rounded-md bg-neutral-800 px-4 py-2 text-gray-100 shadow-xl',
                     {
                       'before:border-t-neutral-800':
                         direction === TooltipDirection.TOP,
@@ -206,6 +191,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
                         direction === TooltipDirection.BOTTOM,
                       'before:border-l-neutral-800':
                         direction === TooltipDirection.LEFT,
+                      'whitespace-nowrap': noWrap,
                     },
                   )}
                   ref={contentRef}

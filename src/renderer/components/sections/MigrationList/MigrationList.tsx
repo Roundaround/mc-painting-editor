@@ -6,8 +6,8 @@ import {
   migrationsActions,
   migrationsSelectors,
 } from '$common/store/migrations';
-import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { Button, ButtonVariant } from '$renderer/components/Button';
+import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
 import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
@@ -17,21 +17,16 @@ const { removeMigration } = migrationsActions;
 
 interface MigrationListProps extends HTMLProps<HTMLDivElement> {}
 
-export const MigrationList: FC<MigrationListProps> = (props) => {
-  const { className: passedClassName, ...htmlProps } = props;
-
+export const MigrationList: FC<MigrationListProps> = ({
+  className,
+  ...props
+}) => {
   const migrations = useSelector(migrationsSelectors.selectAll);
 
   const dispatch = useDispatch();
 
-  const classNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
-    .join(' ')
-    .trim();
-
   return (
-    <div {...htmlProps} className={classNames}>
+    <div {...props} className={clsxm(styles['wrapper'], 'p-2', className)}>
       <div className="mb-4 text-xl">Migrations</div>
       {migrations.map((migration, index) => (
         <Fragment key={migration.id}>
@@ -40,7 +35,7 @@ export const MigrationList: FC<MigrationListProps> = (props) => {
               <div>{migration.id}</div>
               <div>{migration.pairs.length} painting(s)</div>
             </div>
-            <div className={styles['actions']}>
+            <div className={clsxm(styles['actions'], 'gap-2')}>
               {!migration.description ? null : (
                 <Tooltip
                   content={migration.description}
