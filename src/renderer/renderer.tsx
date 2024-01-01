@@ -15,9 +15,14 @@ library.add(fas);
 library.add(far);
 
 window.electron.listenForRequestConfirmation();
+window.electron.listenForReduxActions((action) => {
+  store.dispatch(action);
+});
+window.electron.requestAppInfo();
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+
 root.render(
   <StrictMode>
     <Provider store={store}>
