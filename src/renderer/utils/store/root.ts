@@ -5,9 +5,8 @@ import {
   useSelector as useSelectorBase,
 } from 'react-redux';
 
-import { reducers, syncWithExternal, trackDirty } from '$common/store';
-
-import { filtersReducer } from './filters';
+import { reducers, syncWithExternal, trackDirty } from '$common/store/root';
+import { filtersReducer } from '$renderer/utils/store/filters';
 
 export const store = configureStore({
   reducer: {

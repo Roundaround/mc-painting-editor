@@ -6,13 +6,13 @@ import {
   paintingsSelectors,
 } from '$common/store/paintings';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Button, ButtonVariant } from '$renderer/components/Button';
 import { Checkbox } from '$renderer/components/input/Checkbox';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
 import { clsxm } from '$renderer/utils/clsxm';
 import { getPaintingImage } from '$renderer/utils/painting';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { EntityId } from '@reduxjs/toolkit';
 import { HTMLProps, useMemo } from 'react';

@@ -1,1 +1,3 @@
-export { IconInput } from './IconInput';
+import { IconInput } from './IconInput';
+
+export { IconInput };

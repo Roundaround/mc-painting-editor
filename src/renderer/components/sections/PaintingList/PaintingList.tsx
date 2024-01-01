@@ -7,9 +7,9 @@ import {
   paintingsSelectors,
 } from '$common/store/paintings';
 import { TooltipDirection } from '$renderer/components/Tooltip';
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Button, ButtonVariant } from '$renderer/components/Button';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 import {
   filtersActions,
   filtersSelectors,

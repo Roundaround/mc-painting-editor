@@ -1,1 +1,0 @@
-export { SplitModal } from './SplitModal';

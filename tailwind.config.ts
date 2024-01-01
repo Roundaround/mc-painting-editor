@@ -37,6 +37,9 @@ export default {
         fixed: '0 0 auto',
         full: '1 1 100%',
       },
+      gap: {
+        '1/10': '0.1rem',
+      },
       keyframes: {
         fadeIn: {
           from: { opacity: '0' },

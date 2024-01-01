@@ -1,1 +1,0 @@
-export { CompareSelect } from './CompareSelect';

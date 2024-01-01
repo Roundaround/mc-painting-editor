@@ -11,7 +11,7 @@ import { Footer } from '$renderer/components/sections/Footer';
 import { MetadataEditor } from '$renderer/components/sections/MetadataEditor';
 import { MigrationList } from '$renderer/components/sections/MigrationList';
 import { PaintingList } from '$renderer/components/sections/PaintingList';
-import { useSelector } from '$renderer/utils/store';
+import { useSelector } from '$renderer/utils/store/root';
 
 export default function Home() {
   const hasOverlay = useSelector((state) => !!state.editor.overlay);

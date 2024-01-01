@@ -1,34 +1,24 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FC, HTMLProps } from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import { clsxm } from '$renderer/utils/clsxm';
-import { useSelector } from '$renderer/utils/store';
+import { useSelector } from '$renderer/utils/store/root';
 
 import styles from './IconInput.module.scss';
 
-interface IconInputProps extends HTMLProps<HTMLDivElement> {}
+type IconInputProps = HTMLAttributes<HTMLDivElement>;
 
-export const IconInput: FC<IconInputProps> = (props) => {
-  const { className: passedClassName, ...htmlProps } = props;
-
+export const IconInput: FC<IconInputProps> = ({ className, ...props }) => {
   const icon = useSelector((state) => state.metadata.icon);
 
-  const wrapperClassNames = ['wrapper']
-    .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
-    .join(' ')
-    .trim();
-
-  const inputClassNames = ['input', !icon ? 'input--empty' : '']
-    .map((name) => styles[name as keyof typeof styles])
-    .join(' ')
-    .trim();
-
   return (
-    <div {...htmlProps} className={wrapperClassNames}>
+    <div
+      {...props}
+      className={clsxm('flex flex-col items-start gap-1', className)}
+    >
       <div className="select-none text-xs">Icon</div>
       <div
-        className={clsxm(inputClassNames, 'group rounded-md bg-neutral-700')}
+        className={clsxm(styles['input'], 'group rounded-md bg-neutral-700')}
         onClick={() => {
           window.electron.openIconFile();
         }}
@@ -56,3 +46,5 @@ export const IconInput: FC<IconInputProps> = (props) => {
     </div>
   );
 };
+
+export default IconInput;

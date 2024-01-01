@@ -1,12 +1,12 @@
-import { FC, HTMLProps } from 'react';
+import { FC, HTMLAttributes } from 'react';
 
 import { Checkbox } from '$renderer/components/input/Checkbox';
 import { CompareSelect } from '$renderer/components/input/CompareSelect';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
 import { filtersActions } from '$renderer/utils/store/filters';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
 import styles from './Filters.module.scss';
 
@@ -21,11 +21,9 @@ const {
   setHeightValue,
 } = filtersActions;
 
-interface FiltersProps extends HTMLProps<HTMLDivElement> {}
+type FiltersProps = HTMLAttributes<HTMLDivElement>;
 
-export const Filters: FC<FiltersProps> = (props) => {
-  const { className: passedClassName, ...htmlProps } = props;
-
+export const Filters: FC<FiltersProps> = ({ className, ...props }) => {
   const search = useSelector((state) => state.filters.search);
   const missingImage = useSelector((state) => state.filters.missingImage);
   const missingId = useSelector((state) => state.filters.missingId);
@@ -38,13 +36,13 @@ export const Filters: FC<FiltersProps> = (props) => {
 
   const classNames = ['wrapper']
     .map((name) => styles[name as keyof typeof styles])
-    .concat(passedClassName || '')
+    .concat(className || '')
     .join(' ')
     .trim();
 
   return (
     <div
-      {...htmlProps}
+      {...props}
       className={clsxm(
         classNames,
         'border-b border-b-neutral-600 bg-gray-600/10',

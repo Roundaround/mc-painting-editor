@@ -7,9 +7,9 @@ import {
   migrationsSelectors,
 } from '$common/store/migrations';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Button, ButtonVariant } from '$renderer/components/Button';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
 import styles from './MigrationList.module.scss';
 

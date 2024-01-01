@@ -1,11 +1,16 @@
-import { Painting, paintingsSelectors } from '$common/store/paintings';
 import { createSelector, createSlice } from '@reduxjs/toolkit';
 import fuzzysort from 'fuzzysort';
-import { RootState } from '.';
 
-export interface SizeFilter<T extends 'width' | 'height'> {
+import type { Painting } from '$common/store/paintings';
+import { paintingsSelectors } from '$common/store/paintings';
+import type { RootState } from '$renderer/utils/store/root';
+
+export type Dimension = 'width' | 'height';
+export type CompareOperator = 'gt' | 'lt' | 'eq' | 'ne';
+
+export interface SizeFilter<T extends Dimension> {
   readonly dimension: T;
-  operator: 'gt' | 'lt' | 'eq' | 'ne';
+  operator: CompareOperator;
   value: number;
 }
 
@@ -86,9 +91,9 @@ export const filtersSlice = createSlice({
 export const filtersReducer = filtersSlice.reducer;
 export const filtersActions = filtersSlice.actions;
 
-function matchesSizeFilter<T extends 'width' | 'height'>(
+function matchesSizeFilter<T extends Dimension>(
   painting: Painting,
-  filter: SizeFilter<T>
+  filter: SizeFilter<T>,
 ): boolean {
   const { operator, value } = filter;
 
@@ -137,7 +142,7 @@ const selectMatchingPaintings = createSelector(
         return true;
       })
       .map((painting) => painting.uuid);
-  }
+  },
 );
 
 // const selectMatchingPaintings = (
@@ -185,7 +190,7 @@ const selectHasFilters = createSelector(
       height.operator !== 'gt' ||
       height.value !== 0
     );
-  }
+  },
 );
 
 // const selectHasFilters = (state: { filters: FiltersState }) => {

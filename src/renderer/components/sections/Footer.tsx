@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { paintingsSelectors } from '$common/store/paintings';
 import { InlineButton } from '$renderer/components/InlineButton';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 import {
   filtersActions,
   filtersSelectors,

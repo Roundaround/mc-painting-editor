@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { Route, MemoryRouter as Router, Routes } from 'react-router-dom';
 
 import Home from '$renderer/Home';
-import { store } from '$renderer/utils/store';
+import { store } from '$renderer/utils/store/root';
 
 import './styles/globals.css';
 import './styles/index.scss';

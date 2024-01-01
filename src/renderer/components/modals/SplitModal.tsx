@@ -1,18 +1,16 @@
-import { FC, HTMLProps, useEffect } from 'react';
+import { FC, HTMLAttributes, useEffect } from 'react';
 
 import { editorActions } from '$common/store/editor';
-import { Button } from '$renderer/components/input/Button';
+import { Button } from '$renderer/components/Button';
 import { TextInput } from '$renderer/components/input/TextInput';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
-
-import styles from './SplitModal.module.scss';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
 const { setSplitId, setSplitName, clearOverlay } = editorActions;
 
-interface SplitModalProps extends HTMLProps<HTMLDivElement> {}
+type SplitModalProps = HTMLAttributes<HTMLDivElement>;
 
-export const SplitModal: FC<SplitModalProps> = (props) => {
+export const SplitModal: FC<SplitModalProps> = ({ className, ...props }) => {
   const splitId = useSelector((state) => state.editor.split.id);
   const splitName = useSelector((state) => state.editor.split.name);
 
@@ -35,7 +33,13 @@ export const SplitModal: FC<SplitModalProps> = (props) => {
   }, [dispatch]);
 
   return (
-    <div className={clsxm(styles['modal'], 'bg-app rounded-md shadow-2xl')}>
+    <div
+      className={clsxm(
+        'bg-app flex w-2/5 min-w-[30ch] max-w-[60ch] flex-col items-stretch justify-center gap-4 rounded-md p-5 shadow-2xl',
+        className,
+      )}
+      {...props}
+    >
       <TextInput
         id="splitting-id"
         label="ID"
@@ -55,7 +59,7 @@ export const SplitModal: FC<SplitModalProps> = (props) => {
           dispatch(setSplitName(e.target.value));
         }}
       />
-      <div className={styles['modal-buttons']}>
+      <div className="flex-fixed flex flex-row gap-4 *:flex-1">
         <Button
           onClick={() => {
             dispatch(clearOverlay());
@@ -74,3 +78,5 @@ export const SplitModal: FC<SplitModalProps> = (props) => {
     </div>
   );
 };
+
+export default SplitModal;

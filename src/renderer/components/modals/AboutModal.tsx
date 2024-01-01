@@ -1,21 +1,19 @@
-import { FC, HTMLProps, useEffect } from 'react';
+import { FC, HTMLAttributes, useEffect } from 'react';
 
 import { editorActions } from '$common/store/editor';
+import { Button } from '$renderer/components/Button';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { Button } from '$renderer/components/input/Button';
 import { Github } from '$renderer/components/svg/Github';
 import { Kofi } from '$renderer/components/svg/Kofi';
 import { Modrinth } from '$renderer/components/svg/Modrinth';
 import { clsxm } from '$renderer/utils/clsxm';
-import { useDispatch, useSelector } from '$renderer/utils/store';
-
-import styles from './AboutModal.module.scss';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
 const { clearOverlay } = editorActions;
 
-interface AboutModalProps extends HTMLProps<HTMLDivElement> {}
+type AboutModalProps = HTMLAttributes<HTMLDivElement>;
 
-export const AboutModal: FC<AboutModalProps> = (props) => {
+export const AboutModal: FC<AboutModalProps> = ({ className, ...props }) => {
   const appInfo = useSelector((state) => state.editor.appInfo);
 
   const dispatch = useDispatch();
@@ -34,19 +32,26 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
     };
   }, [dispatch]);
 
+  const sectionClasses = 'flex flex-col items-center justify-center';
   const linkClasses =
     'text-3xl text-gray-300 transition-colors duration-150 hover:text-white';
 
   return (
-    <div className={clsxm(styles['modal'], 'bg-app rounded-md shadow-2xl')}>
-      <div className={styles['section']}>
+    <div
+      className={clsxm(
+        'bg-app relative flex min-w-[30ch] max-w-[80%] flex-col items-center justify-center gap-4 rounded-md p-5 shadow-2xl',
+        className,
+      )}
+      {...props}
+    >
+      <div className={sectionClasses}>
         <div className="whitespace-nowrap text-2xl font-semibold">
           {appInfo.name}
         </div>
         <div>Version {appInfo.version}</div>
         <div>Made with ❤️ by Roundaround</div>
       </div>
-      <div className={styles['row']}>
+      <div className="flex flex-row items-center justify-center gap-4">
         <Tooltip
           content="Check out the source code on GitHub"
           direction={TooltipDirection.TOP}
@@ -87,7 +92,7 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
           </a>
         </Tooltip>
       </div>
-      <div className={styles['section']}>
+      <div className={sectionClasses}>
         <Button
           onClick={() => {
             dispatch(clearOverlay());
@@ -99,3 +104,5 @@ export const AboutModal: FC<AboutModalProps> = (props) => {
     </div>
   );
 };
+
+export default AboutModal;

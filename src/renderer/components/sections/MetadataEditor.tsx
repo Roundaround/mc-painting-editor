@@ -3,11 +3,11 @@ import type { FC, HTMLProps } from 'react';
 
 import { metadataActions } from '$common/store/metadata';
 import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
-import { Button, ButtonVariant } from '$renderer/components/input/Button';
+import { Button, ButtonVariant } from '$renderer/components/Button';
 import { IconInput } from '$renderer/components/input/IconInput';
 import { NumberInput } from '$renderer/components/input/NumberInput';
 import { TextInput } from '$renderer/components/input/TextInput';
-import { useDispatch, useSelector } from '$renderer/utils/store';
+import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
 const { setId, setName, setDescription, setPackFormat, setTargetScale } =
   metadataActions;
