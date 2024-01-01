@@ -22,6 +22,7 @@ export const TextInput: FC<TextInputProps> = ({
   suffix,
   onEnter,
   onClear,
+  onKeyDown,
   className,
   inputRef,
   ...props
@@ -51,6 +52,7 @@ export const TextInput: FC<TextInputProps> = ({
             } else if (onClear && event.key === 'Escape') {
               onClear();
             }
+            onKeyDown?.(event);
           }}
           {...props}
         />
