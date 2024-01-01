@@ -196,7 +196,7 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
                 <div
                   className={clsxm(
                     classNames,
-                    'rounded-md bg-neutral-800 text-gray-100',
+                    'rounded-md bg-neutral-800 text-gray-100 shadow-xl',
                     {
                       'before:border-t-neutral-800':
                         direction === TooltipDirection.TOP,

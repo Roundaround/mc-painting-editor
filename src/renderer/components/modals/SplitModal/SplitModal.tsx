@@ -35,7 +35,7 @@ export const SplitModal: FC<SplitModalProps> = (props) => {
   }, [dispatch]);
 
   return (
-    <div className={clsxm(styles['modal'], 'rounded-md bg-app')}>
+    <div className={clsxm(styles['modal'], 'bg-app rounded-md shadow-2xl')}>
       <TextInput
         id="splitting-id"
         label="ID"
