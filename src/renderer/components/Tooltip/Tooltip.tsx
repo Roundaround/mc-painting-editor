@@ -1,11 +1,5 @@
-import {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { clsxm } from '$renderer/utils/clsxm';
@@ -38,6 +32,8 @@ export interface TooltipProps {
   noWrap?: boolean;
   force?: boolean;
 }
+
+export type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
 
 export function Tooltip(props: TooltipProps & typeof defaultProps) {
   const {
@@ -231,3 +227,11 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
 }
 
 Tooltip.defaultProps = defaultProps;
+
+export function isTooltipProps(
+  tooltip: ReactNode | TooltipPropsSansChildren,
+): tooltip is TooltipPropsSansChildren {
+  return (tooltip as TooltipPropsSansChildren).content !== undefined;
+}
+
+export default Tooltip;

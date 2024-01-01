@@ -1,11 +1,10 @@
 import type { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
-import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
+import type { TooltipPropsSansChildren } from '$renderer/components/Tooltip';
+import { Tooltip, isTooltipProps } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
 
 import styles from './InlineButton.module.scss';
-
-type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   tooltip?: ReactNode | TooltipPropsSansChildren;
@@ -41,9 +40,3 @@ export const InlineButton: FC<ButtonProps> = ({ tooltip, ...props }) => {
     </Tooltip>
   );
 };
-
-function isTooltipProps(
-  tooltip: ReactNode | TooltipPropsSansChildren,
-): tooltip is TooltipPropsSansChildren {
-  return (tooltip as TooltipPropsSansChildren).content !== undefined;
-}

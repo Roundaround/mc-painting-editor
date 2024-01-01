@@ -1,1 +1,3 @@
-export { InlineButton } from './InlineButton';
+import { InlineButton } from './InlineButton';
+
+export { InlineButton };

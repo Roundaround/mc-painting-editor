@@ -1,11 +1,8 @@
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
+import type { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 
-import { Tooltip, TooltipProps } from '$renderer/components/Tooltip';
+import type { TooltipPropsSansChildren } from '$renderer/components/Tooltip';
+import { Tooltip, isTooltipProps } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
-
-import styles from './Button.module.scss';
-
-type TooltipPropsSansChildren = Omit<TooltipProps, 'children'>;
 
 export enum ButtonVariant {
   DEFAULT = 'default',
@@ -15,7 +12,7 @@ export enum ButtonVariant {
   ICON_TINY = 'icon-tiny',
 }
 
-type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'variant'> & {
+type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   tooltip?: ReactNode | TooltipPropsSansChildren;
   variant?: ButtonVariant;
 };
@@ -24,8 +21,7 @@ const InnerButton: FC<ButtonProps> = ({ variant, className, ...props }) => {
   return (
     <button
       className={clsxm(
-        styles['button'],
-        'items-center justify-center rounded-md bg-blue-600 px-3 py-1 text-base font-medium text-gray-100 duration-75 before:rounded-md before:bg-neutral-200 before:opacity-0 before:transition-opacity hover:before:opacity-10 active:before:opacity-0',
+        'inline-block items-center justify-center rounded-md bg-blue-600 px-2 py-1 text-base font-medium text-gray-100 transition-[shadow,transform] duration-75 before:pointer-events-none before:absolute before:left-0 before:top-0 before:h-full before:w-full before:rounded-md before:bg-neutral-200 before:opacity-0 before:transition-opacity hover:scale-105 hover:shadow-lg hover:before:opacity-10 active:scale-95 active:before:opacity-0',
         {
           'rounded-2xl px-8 py-5 text-2xl font-bold before:rounded-2xl':
             variant === ButtonVariant.LARGE,
@@ -61,8 +57,4 @@ export const Button = ({ tooltip, ...props }: ButtonProps) => {
   );
 };
 
-function isTooltipProps(
-  tooltip: ReactNode | TooltipPropsSansChildren,
-): tooltip is TooltipPropsSansChildren {
-  return (tooltip as TooltipPropsSansChildren).content !== undefined;
-}
+export default Button;
