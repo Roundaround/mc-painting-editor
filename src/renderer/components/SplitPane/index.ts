@@ -1,2 +1,4 @@
-export { HorizontalSplitPane } from './HorizontalSplitPane';
-export { VerticalSplitPane } from './VerticalSplitPane';
+import { HorizontalSplitPane } from './HorizontalSplitPane';
+import { VerticalSplitPane } from './VerticalSplitPane';
+
+export { HorizontalSplitPane, VerticalSplitPane };

@@ -1,16 +1,14 @@
-import { clsxm } from '$renderer/utils/clsxm';
-import { useBoundingRect } from '$renderer/utils/useBoundingRect';
-import React, {
+import type {
   BaseHTMLAttributes,
   FC,
   ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
 } from 'react';
-import styles from './HorizontalSplitPane.module.scss';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { clsxm } from '$renderer/utils/clsxm';
+import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 
 const MIN_WIDTH = 380;
 
@@ -18,12 +16,10 @@ interface HorizontalSplitPaneProps extends BaseHTMLAttributes<HTMLDivElement> {
   children: [ReactElement, ReactElement];
 }
 
-export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
-  const {
-    children: [left, right],
-    className: passedClassName,
-  } = props;
-
+export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = ({
+  children: [left, right],
+  className,
+}) => {
   const splitPaneRef = useRef<HTMLDivElement>(null);
   const [separatorXPosition, setSeparatorXPosition] = useState<
     undefined | number
@@ -50,12 +46,12 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
     [leftRef, updateLeftRect],
   );
 
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = (e: ReactMouseEvent) => {
     setSeparatorXPosition(e.clientX);
     setDragging(true);
   };
 
-  const onTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: ReactTouchEvent) => {
     setSeparatorXPosition(e.touches[0].clientX);
     setDragging(true);
   };
@@ -124,13 +120,15 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
     };
   }, [onMouseMove, onTouchMove, onMouseUp]);
 
-  const wrapperClasses = [styles['wrapper'], passedClassName || '']
-    .join(' ')
-    .trim();
-
   return (
-    <div className={wrapperClasses} ref={splitPaneRef}>
-      <div className={styles['left-pane']} ref={leftRef}>
+    <div
+      className={clsxm('flex h-full flex-row items-start', className)}
+      ref={splitPaneRef}
+    >
+      <div
+        className="flex h-full w-[380px] flex-col items-stretch justify-start *:h-full"
+        ref={leftRef}
+      >
         {left}
       </div>
       <div className="relative h-full w-[1px] bg-neutral-600">
@@ -145,7 +143,9 @@ export const HorizontalSplitPane: FC<HorizontalSplitPaneProps> = (props) => {
           onTouchStart={onTouchStart}
         ></div>
       </div>
-      <div className={styles['right-pane']}>{right}</div>
+      <div className="flex h-full flex-auto flex-col items-stretch justify-start *:h-full">
+        {right}
+      </div>
     </div>
   );
 };

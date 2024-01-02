@@ -1,16 +1,14 @@
-import { clsxm } from '$renderer/utils/clsxm';
-import { useBoundingRect } from '$renderer/utils/useBoundingRect';
-import React, {
+import type {
   BaseHTMLAttributes,
   FC,
   ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
 } from 'react';
-import styles from './VerticalSplitPane.module.scss';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+
+import { clsxm } from '$renderer/utils/clsxm';
+import { useBoundingRect } from '$renderer/utils/useBoundingRect';
 
 const MIN_HEIGHT = 100;
 
@@ -18,12 +16,10 @@ interface VerticalSplitPaneProps extends BaseHTMLAttributes<HTMLDivElement> {
   children: [ReactElement, ReactElement];
 }
 
-export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
-  const {
-    children: [top, bottom],
-    className: passedClassName,
-  } = props;
-
+export const VerticalSplitPane: FC<VerticalSplitPaneProps> = ({
+  children: [top, bottom],
+  className,
+}) => {
   const splitPaneRef = useRef<HTMLDivElement>(null);
   const [separatorYPosition, setSeparatorYPosition] = useState<
     undefined | number
@@ -50,12 +46,12 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
     [topRef, updateTopRect],
   );
 
-  const onMouseDown = (e: React.MouseEvent) => {
+  const onMouseDown = (e: ReactMouseEvent) => {
     setSeparatorYPosition(e.clientY);
     setDragging(true);
   };
 
-  const onTouchStart = (e: React.TouchEvent) => {
+  const onTouchStart = (e: ReactTouchEvent) => {
     setSeparatorYPosition(e.touches[0].clientY);
     setDragging(true);
   };
@@ -124,13 +120,15 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
     };
   }, [onMouseMove, onTouchMove, onMouseUp]);
 
-  const wrapperClasses = [styles['wrapper'], passedClassName || '']
-    .join(' ')
-    .trim();
-
   return (
-    <div className={wrapperClasses} ref={splitPaneRef}>
-      <div className={styles['top-pane']} ref={topRef}>
+    <div
+      className={clsxm('flex w-full flex-col items-start', className)}
+      ref={splitPaneRef}
+    >
+      <div
+        className="flex h-[calc(100%-100px)] w-full flex-col items-stretch justify-start *:w-full"
+        ref={topRef}
+      >
         {top}
       </div>
       <div className="relative h-[1px] w-full bg-neutral-600">
@@ -145,7 +143,9 @@ export const VerticalSplitPane: FC<VerticalSplitPaneProps> = (props) => {
           onTouchStart={onTouchStart}
         ></div>
       </div>
-      <div className={styles['bottom-pane']}>{bottom}</div>
+      <div className="flex w-full flex-auto flex-col items-stretch justify-start *:w-full">
+        {bottom}
+      </div>
     </div>
   );
 };
