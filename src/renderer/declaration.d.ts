@@ -1,4 +1,4 @@
-import { IpcApi } from '../main/preload';
+import { IpcApi } from '$main/preload';
 
 declare global {
   interface Window {
@@ -8,6 +8,12 @@ declare global {
   declare module '*.module.scss' {
     const classes: { [key: string]: string };
     export default classes;
+  }
+}
+
+declare module 'csstype' {
+  interface Properties {
+    [key: `--${string}`]: string | number | undefined;
   }
 }
 
