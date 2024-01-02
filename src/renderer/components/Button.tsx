@@ -30,13 +30,13 @@ const InnerButton: FC<ButtonProps> = ({
         {
           'rounded-2xl px-8 py-5 text-2xl font-bold':
             variant === ButtonVariant.LARGE,
-          'inline-flex aspect-square p-0 [&>svg]:w-full':
+          'inline-flex aspect-square rounded-full p-0 [&>svg]:w-full':
             variant === ButtonVariant.ICON ||
             variant === ButtonVariant.ICON_MINI ||
             variant === ButtonVariant.ICON_TINY,
-          'w-8 rounded-full': variant === ButtonVariant.ICON,
-          'w-6 rounded-full': variant === ButtonVariant.ICON_MINI,
-          'w-4 rounded-full text-xs': variant === ButtonVariant.ICON_TINY,
+          'w-8': variant === ButtonVariant.ICON,
+          'w-6': variant === ButtonVariant.ICON_MINI,
+          'w-4 text-xs': variant === ButtonVariant.ICON_TINY,
         },
         className,
       )}
