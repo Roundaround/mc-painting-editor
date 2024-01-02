@@ -20,8 +20,6 @@ import { clsxm } from '$renderer/utils/clsxm';
 import { getPaintingImage } from '$renderer/utils/painting';
 import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
-import styles from './ListItem.module.scss';
-
 const {
   updatePainting,
   movePaintingUp,
@@ -80,13 +78,13 @@ export const ListItem: FC<ListItemProps> = ({
     return null;
   }
 
-  const iconColumnClasses = clsxm(styles['icon-column'], 'gap-2');
+  const iconColumnClasses =
+    'gap-2 flex flex-col justify-start items-center h-full flex-fixed';
 
   return (
     <div
       className={clsxm(
-        styles['wrapper'],
-        'gap-5 p-4',
+        'flex flex-row items-center justify-start gap-5 p-4',
         {
           'bg-blue-600/20': painting.marked,
         },
@@ -106,7 +104,7 @@ export const ListItem: FC<ListItemProps> = ({
               >
                 <div
                   className={clsxm(
-                    'flex-fixed flex aspect-square w-8 items-center justify-center rounded-full bg-blue-600 p-0 text-gray-100 [&>svg]:w-full',
+                    'flex aspect-square w-8 flex-fixed items-center justify-center rounded-full bg-blue-600 p-0 text-gray-100 [&>svg]:w-full',
                     {
                       'bg-red-900': issue.severity === 'error',
                     },
@@ -119,7 +117,7 @@ export const ListItem: FC<ListItemProps> = ({
           })}
         </div>
       )}
-      <div className={clsxm(styles['inputs'], 'gap-4')}>
+      <div className="flex flex-full flex-col items-stretch justify-start gap-4">
         <TextInput
           id={`painting-id-${entityId}`}
           label="ID"
@@ -191,6 +189,7 @@ export const ListItem: FC<ListItemProps> = ({
         />
       </div>
       <ImageInput
+        className="flex-fixed"
         onClick={() => window.electron.openPaintingFile(entityId)}
         maxHeight={8}
         maxWidth={8}
@@ -202,7 +201,7 @@ export const ListItem: FC<ListItemProps> = ({
       <div className={iconColumnClasses}>
         <Checkbox
           id={`marked-${entityId}`}
-          className={styles['mark-checkbox']}
+          className="flex h-8 w-8 flex-fixed items-center justify-center"
           onChange={(e) => {
             dispatch(
               setPaintingMarked({
@@ -236,7 +235,7 @@ export const ListItem: FC<ListItemProps> = ({
           <FontAwesomeIcon icon="trash" />
         </Button>
 
-        <div className={iconColumnClasses}></div>
+        <div className="flex-full"></div>
 
         {!canMoveUp ? null : (
           <Button

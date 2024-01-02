@@ -1,1 +1,3 @@
-export { PaintingList } from './PaintingList';
+import { PaintingList } from './PaintingList';
+
+export { PaintingList };

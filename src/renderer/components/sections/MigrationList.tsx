@@ -11,8 +11,6 @@ import { Tooltip, TooltipDirection } from '$renderer/components/Tooltip';
 import { clsxm } from '$renderer/utils/clsxm';
 import { useDispatch, useSelector } from '$renderer/utils/store/root';
 
-import styles from './MigrationList.module.scss';
-
 const { removeMigration } = migrationsActions;
 
 interface MigrationListProps extends HTMLProps<HTMLDivElement> {}
@@ -26,28 +24,29 @@ export const MigrationList: FC<MigrationListProps> = ({
   const dispatch = useDispatch();
 
   return (
-    <div {...props} className={clsxm(styles['wrapper'], 'p-2', className)}>
+    <div
+      {...props}
+      className={clsxm(
+        'flex flex-col items-stretch justify-start overflow-y-auto p-2',
+        className,
+      )}
+    >
       <div className="mb-4 text-xl">Migrations</div>
       {migrations.map((migration, index) => (
         <Fragment key={migration.id}>
-          <div className={styles['migration']}>
-            <div className={styles['info']}>
+          <div className="flex flex-row items-center justify-between">
+            <div className="flex flex-col leading-[1.1]">
               <div>{migration.id}</div>
               <div>{migration.pairs.length} painting(s)</div>
             </div>
-            <div className={clsxm(styles['actions'], 'gap-2')}>
+            <div className="flex flex-row items-center justify-center gap-2">
               {!migration.description ? null : (
                 <Tooltip
                   content={migration.description}
                   direction={TooltipDirection.RIGHT}
                 >
-                  <div
-                    className={clsxm(
-                      styles['description'],
-                      'rounded-full bg-blue-600 text-gray-100',
-                    )}
-                  >
-                    <FontAwesomeIcon icon="comment-dots" />
+                  <div className="flex aspect-square w-8 flex-fixed items-center justify-center rounded-full bg-blue-600 p-0 text-gray-100">
+                    <FontAwesomeIcon icon="comment-dots" className="w-full" />
                   </div>
                 </Tooltip>
               )}

@@ -1,1 +1,0 @@
-export { MigrationList } from './MigrationList';
