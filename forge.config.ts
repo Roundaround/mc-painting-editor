@@ -64,7 +64,7 @@ const config: ForgeConfig = {
           config: path.join(rootDir, 'vite/vite.main.config.ts'),
         },
         {
-          entry: path.join(rootDir, 'src/main/preload.ts'),
+          entry: path.join(rootDir, 'src/preload/preload.ts'),
           config: path.join(rootDir, 'vite/vite.preload.config.ts'),
         },
         {
