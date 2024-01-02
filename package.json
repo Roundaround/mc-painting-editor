@@ -44,11 +44,9 @@
     "prettier": "^3.1.1",
     "prettier-plugin-tailwindcss": "^0.5.10",
     "rimraf": "^5.0.5",
-    "sass": "^1.69.5",
     "tailwindcss": "^3.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "typescript-plugin-css-modules": "^4.1.1",
     "vite": "^5.0.10"
   },
   "dependencies": {
