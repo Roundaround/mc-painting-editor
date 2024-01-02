@@ -1,5 +1,7 @@
 import type { Config } from 'tailwindcss';
 
+import imageRendering from './src/renderer/styles/image-rendering';
+
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}', 'index.html'],
   theme: {
@@ -72,5 +74,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [imageRendering],
 } satisfies Config;
