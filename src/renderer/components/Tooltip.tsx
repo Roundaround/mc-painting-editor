@@ -1,11 +1,9 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { clsxm } from '$renderer/utils/clsxm';
 import { useBoundingRect } from '$renderer/utils/useBoundingRect';
-
-import styles from './Tooltip.module.scss';
 
 export enum TooltipDirection {
   TOP = 'top',
@@ -74,11 +72,6 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   useEffect(() => {
     updateContentRect();
   }, [active]);
-
-  const classNames = ['tooltip', `tooltip--${direction}`]
-    .map((name) => styles[name as keyof typeof styles])
-    .join(' ')
-    .trim();
 
   const { top, left } = useMemo(() => {
     if (!boundingRect) {
@@ -174,34 +167,47 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
       <>
         {active && mounted && portalEl.current
           ? createPortal(
-              <div
-                className={clsxm(styles['tooltip-wrapper'], 'z-50')}
-                style={{ top, left }}
-              >
+              <div className="fixed z-50 h-0 w-0" style={{ top, left }}>
                 <div
                   className={clsxm(
-                    classNames,
-                    'rounded-md bg-neutral-800 px-4 py-2 text-gray-100 shadow-xl',
+                    'absolute w-max max-w-[32ch] rounded-md bg-neutral-800 px-4 py-2 text-center text-gray-100 shadow-xl',
                     {
-                      'before:border-t-neutral-800':
+                      '-top-4 left-[calc(100%+var(--tooltip-offset))] -translate-x-1/2 -translate-y-full':
                         direction === TooltipDirection.TOP,
-                      'before:border-r-neutral-800':
+                      'left-[calc(100%+1rem)] top-[calc(50%+var(--tooltip-offset))] -translate-y-1/2 translate-x-0':
                         direction === TooltipDirection.RIGHT,
-                      'before:border-b-neutral-800':
+                      '-bottom-4 left-[calc(100%+var(--tooltip-offset))] -translate-x-1/2 translate-y-full':
                         direction === TooltipDirection.BOTTOM,
-                      'before:border-l-neutral-800':
+                      'left-auto right-[calc(100%+1rem)] top-[calc(50%+var(--tooltip-offset))] -translate-y-1/2 translate-x-0':
                         direction === TooltipDirection.LEFT,
                       'whitespace-nowrap': noWrap,
                     },
                   )}
                   ref={contentRef}
-                  style={
-                    {
-                      '--tooltip-offset': `${offset}px`,
-                    } as CSSProperties
-                  }
+                  style={{
+                    '--tooltip-offset': `${offset}px`,
+                  }}
                 >
-                  {content}
+                  <>
+                    <div
+                      className={clsxm(
+                        'pointer-events-none absolute left-1/2 -ml-2 h-0 w-0 border-[0.5rem] border-solid border-transparent',
+                        {
+                          'left-[calc(50%-var(--tooltip-offset))] top-full border-t-neutral-800':
+                            direction === TooltipDirection.TOP,
+                          '-left-2 top-[calc(50%+var(--tooltip-offset))] -translate-y-1/2 translate-x-0 border-r-neutral-800':
+                            direction === TooltipDirection.RIGHT,
+                          'bottom-full left-[calc(50%-var(--tooltip-offset))] border-b-neutral-800':
+                            direction === TooltipDirection.BOTTOM,
+                          'left-auto right-[-1rem] top-[calc(50%-var(--tooltip-offset))] -translate-y-1/2 translate-x-0 border-l-neutral-800':
+                            direction === TooltipDirection.LEFT,
+                        },
+                      )}
+                    >
+                      &nbsp;
+                    </div>
+                    {content}
+                  </>
                 </div>
               </div>,
               portalEl.current,
