@@ -1,8 +1,8 @@
 import AdmZip from 'adm-zip';
 import { BrowserWindow, app, dialog, utilityProcess } from 'electron';
 import fs from 'fs/promises';
-import sizeOf from 'image-size';
 import path from 'path';
+import sharp from 'sharp';
 import url from 'url';
 
 import { editorActions } from '$common/store/editor';
@@ -41,7 +41,7 @@ export function fileUrl(filePath: string): string {
 
 export function filePath(fileUrl: string): string {
   return url.fileURLToPath(
-    fileUrl.replace(/^mc-painting-editor:\/\//, 'file://').split('?')[0]
+    fileUrl.replace(/^mc-painting-editor:\/\//, 'file://').split('?')[0],
   );
 }
 
@@ -76,7 +76,7 @@ export async function openZipFile(parentWindow: BrowserWindow) {
     [filename, appTempDir],
     {
       stdio: 'pipe',
-    }
+    },
   );
 
   childProcess.on('message', (message) => {
@@ -162,14 +162,14 @@ export async function openIconFile(parentWindow: BrowserWindow) {
 
 export async function openPaintingFile(
   parentWindow: BrowserWindow,
-  paintingId: string
+  paintingId: string,
 ) {
   const files = await dialog.showOpenDialog(parentWindow, {
     properties: ['openFile'],
     filters: [
       {
-        name: 'PNG Image Files',
-        extensions: ['png'],
+        name: 'Image Files',
+        extensions: ['png', 'jpg', 'jpeg', 'webp', 'tiff'],
       },
     ],
   });
@@ -188,9 +188,10 @@ export async function openPaintingFile(
         throw err;
       }
     });
-  await fs.copyFile(filename, newPath);
 
-  const { width, height } = sizeOf(newPath);
+  const { width, height } = await sharp(filename)
+    .toFormat('png')
+    .toFile(newPath);
 
   store.dispatch(
     updatePainting({
@@ -200,13 +201,13 @@ export async function openPaintingFile(
         pixelWidth: width || 0,
         pixelHeight: height || 0,
       },
-    })
+    }),
   );
 }
 
 async function getSaveFilename(
   parentWindow: BrowserWindow,
-  metadata: MetadataState
+  metadata: MetadataState,
 ) {
   let name = metadata.name;
   if (!name) {
@@ -278,7 +279,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
       id: metadata.id,
       name: metadata.name,
       paintings: paintings.map(
-        ({ uuid, originalId, path, marked, ...painting }) => painting
+        ({ uuid, originalId, path, marked, ...painting }) => painting,
       ),
       migrations: [
         {
@@ -293,7 +294,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
     };
     zip.addFile(
       'custompaintings.json',
-      Buffer.from(JSON.stringify(pack, null, 2))
+      Buffer.from(JSON.stringify(pack, null, 2)),
     );
 
     const iconPath = metadata.icon;
@@ -308,7 +309,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
       zip.addLocalFile(
         filePath(painting.path),
         `assets/${metadata.id}/textures/painting/`,
-        `${painting.id}.png`
+        `${painting.id}.png`,
       );
     }
 
@@ -321,7 +322,7 @@ export async function saveSplitZipFile(parentWindow: BrowserWindow) {
 
 export async function saveZipFile(
   parentWindow: BrowserWindow,
-  requestNewFilename = false
+  requestNewFilename = false,
 ) {
   const error = validateCurrentState();
   if (!!error) {
@@ -400,13 +401,13 @@ export async function saveZipFile(
       id: state.metadata.id,
       name: state.metadata.name,
       paintings: paintings.map(
-        ({ uuid, originalId, path, marked, ...painting }) => painting
+        ({ uuid, originalId, path, marked, ...painting }) => painting,
       ),
       migrations: migrations.map(({ uuid, ...migration }) => migration),
     };
     zip.addFile(
       'custompaintings.json',
-      Buffer.from(JSON.stringify(pack, null, 2))
+      Buffer.from(JSON.stringify(pack, null, 2)),
     );
 
     const iconPath = state.metadata.icon;
@@ -421,7 +422,7 @@ export async function saveZipFile(
       zip.addLocalFile(
         filePath(painting.path),
         `assets/${state.metadata.id}/textures/painting/`,
-        `${painting.id}.png`
+        `${painting.id}.png`,
       );
     }
 
@@ -503,7 +504,7 @@ async function checkForPotentialMigration(parentWindow: BrowserWindow) {
   const paintings = paintingsSelectors.selectAll(state);
 
   const changedIds = paintings.filter(
-    (p) => !!p.originalId && p.id !== p.originalId
+    (p) => !!p.originalId && p.id !== p.originalId,
   );
 
   if (changedIds.length === 0) {
@@ -533,7 +534,7 @@ async function checkForPotentialMigration(parentWindow: BrowserWindow) {
           painting.originalId!,
           painting.id,
         ]),
-      })
+      }),
     );
   }
 
@@ -547,7 +548,7 @@ export function clearTempDir() {
       [appTempDir],
       {
         stdio: 'pipe',
-      }
+      },
     );
     childProcess.on('message', (message) => {
       if (!isC2PMessage(message)) {
