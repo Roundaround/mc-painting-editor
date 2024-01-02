@@ -62,9 +62,9 @@ export function Tooltip(props: TooltipProps & typeof defaultProps) {
   useEffect(() => {
     if (force || hovered || focused) {
       updateBoundingRect();
-      timeout.current = setTimeout(() => {
+      timeout.current = window.setTimeout(() => {
         setActive(true);
-      }, delay) as unknown as number;
+      }, delay);
     } else {
       clearInterval(timeout.current);
       setActive(false);
